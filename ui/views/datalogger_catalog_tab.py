@@ -19,6 +19,7 @@ class DataloggerCatalogTab(QWidget):
         super().__init__()
         self.eq_ctrl = equip_ctrl
         self.current_dl = None
+        self._selected_dl_id = None
         self._setup_ui()
         self.refresh_list()
 
@@ -137,6 +138,7 @@ class DataloggerCatalogTab(QWidget):
 
     def _prepare_new_model(self):
         self.current_dl = Datalogger(manufacturer="", model="")
+        self._selected_dl_id = None
         self.mfg_input.clear(); self.model_input.clear(); self.desc_input.clear()
         self.gain_input.setValue(0.0); self.drift_input.setValue(0.0)
         self.stages_table.setRowCount(0); self.coeffs_edit.clear()
@@ -147,8 +149,18 @@ class DataloggerCatalogTab(QWidget):
 
     def _load_selected_dl(self, item):
         dl_brief = item.data(Qt.ItemDataRole.UserRole)
+        did = getattr(dl_brief, "id", None)
+        self._selected_dl_id = did
+        self.clone_btn.setEnabled(bool(did))
+        self.replace_btn.setEnabled(bool(did))
+        self.delete_btn.setEnabled(bool(did))
+
         self.current_dl = self.eq_ctrl.get_datalogger(dl_brief.id)
-        if not self.current_dl: return
+        if not self.current_dl:
+            self.clone_btn.setEnabled(False)
+            self.replace_btn.setEnabled(False)
+            self.delete_btn.setEnabled(False)
+            return
         self._fill_ui_from_datalogger(self.current_dl)
 
     def _on_stage_selected(self):
@@ -181,13 +193,41 @@ class DataloggerCatalogTab(QWidget):
             return
         FirPlotDialog(self.current_dl.model, plot_filters, self).exec()
 
+    def _select_dl_row_by_id(self, datalogger_id: int) -> None:
+        for i in range(self.model_list.count()):
+            it = self.model_list.item(i)
+            d = it.data(Qt.ItemDataRole.UserRole)
+            if d is not None and getattr(d, "id", None) == datalogger_id:
+                self.model_list.setCurrentItem(it)
+                self.model_list.scrollToItem(it)
+                return
+
     def _on_clone_clicked(self):
-        if not self.current_dl:
+        did = self._selected_dl_id
+        if did is None and self.current_dl and self.current_dl.id:
+            did = self.current_dl.id
+        if did is None:
+            QMessageBox.warning(self, "Clone", "Select a saved catalog datalogger first.")
             return
-        self.current_dl = self.eq_ctrl.clone_datalogger_model(self.current_dl)
-        self.model_input.setText(self.current_dl.model)
-        self.clone_btn.setEnabled(False); self.replace_btn.setEnabled(False); self.delete_btn.setEnabled(False)
-        QMessageBox.information(self, "Cloned", "Datalogger cloned! Edit and press 'Save'.")
+        src = self.eq_ctrl.get_datalogger(did)
+        if not src:
+            QMessageBox.warning(self, "Clone", "Datalogger not found in catalog.")
+            return
+        dup = self.eq_ctrl.clone_datalogger_model(src)
+        saved = self.eq_ctrl.save_datalogger(dup)
+        if not saved:
+            QMessageBox.warning(self, "Clone", "Could not save the duplicate (unique constraint?).")
+            return
+        self.refresh_list()
+        self._select_dl_row_by_id(saved.id)
+        self.current_dl = saved
+        self._selected_dl_id = saved.id
+        self._fill_ui_from_datalogger(saved)
+        self.clone_btn.setEnabled(True)
+        self.replace_btn.setEnabled(True)
+        self.delete_btn.setEnabled(True)
+        QMessageBox.information(self, "Cloned", f"Created in catalog: {saved.manufacturer} {saved.model}")
+        app_signals.equipment_updated.emit()
 
     def _on_import_arol_clicked(self):
         from utils.arol_client import AROLClient
@@ -263,11 +303,17 @@ class DataloggerCatalogTab(QWidget):
             except ValueError as e: QMessageBox.warning(self, "Cannot Delete", str(e))
 
     def _on_replace_clicked(self):
-        others = [d for d in self.eq_ctrl.get_all_dataloggers() if d.id != self.current_dl.id]
+        did = self._selected_dl_id or (self.current_dl.id if self.current_dl else None)
+        if not did:
+            return
+        others = [d for d in self.eq_ctrl.get_all_dataloggers() if d.id != did]
+        if not others:
+            QMessageBox.information(self, "Replace", "No other dataloggers in the catalog.")
+            return
         names = [f"{d.manufacturer} {d.model}" for d in others]
         target, ok = QInputDialog.getItem(self, "Replace", "Replace with:", names, 0, False)
         if ok and target:
-            if self.eq_ctrl.replace_equipment('datalogger', self.current_dl.id, others[names.index(target)].id):
+            if self.eq_ctrl.replace_equipment('datalogger', did, others[names.index(target)].id):
                 self._prepare_new_model(); self.refresh_list(); app_signals.equipment_updated.emit()
     
     def _fill_ui_from_datalogger(self, dl):
@@ -326,10 +372,7 @@ class DataloggerCatalogTab(QWidget):
         has_filters = len(dl.filters) > 0
         self.plot_btn.setEnabled(has_filters)
         self.export_btn.setEnabled(has_filters)
-        self.clone_btn.setEnabled(True)
-        self.replace_btn.setEnabled(True)
-        self.delete_btn.setEnabled(True)
-        
+
     def refresh_list(self):
         self.model_list.clear()
         for d in self.eq_ctrl.get_all_dataloggers():

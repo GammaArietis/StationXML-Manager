@@ -13,6 +13,7 @@ class PreamplifierCatalogTab:
         self.current_stage = None
         self.stages_data = []
         self._is_loading = False
+        self._selected_preamp_id = None
         
         self.s_zeros_ui = []
         self.s_poles_ui = []
@@ -120,8 +121,14 @@ class PreamplifierCatalogTab:
 
     def _load_selected_preamp(self, pid):
         try:
+            self._selected_preamp_id = int(pid)
+            self.clone_btn.enable()
+            self.delete_btn.enable()
+            self.replace_btn.enable()
+
             self.current_pre = self.eq_ctrl.get_preamplifier_by_id(int(pid))
-            if not self.current_pre: return
+            if not self.current_pre:
+                return
             self.mfg_input.value = str(self.current_pre.manufacturer or "")
             self.model_input.value = str(self.current_pre.model or "")
             self.desc_input.value = str(self.current_pre.description or "")
@@ -129,7 +136,6 @@ class PreamplifierCatalogTab:
             self.current_stage = None
             self._render_stages()
             self._clear_stage_editor()
-            self.clone_btn.enable(); self.delete_btn.enable(); self.replace_btn.enable()
             self._update_plot()
         except: traceback.print_exc()
 
@@ -246,31 +252,68 @@ class PreamplifierCatalogTab:
 
     def _prepare_new_model(self):
         self.current_pre = Preamplifier(manufacturer="", model="")
+        self._selected_preamp_id = None
         self.mfg_input.value = ""; self.model_input.value = ""; self.desc_input.value = ""
         self.stages_data = []
         self._render_stages(); self._clear_stage_editor(); self._update_plot()
         self.clone_btn.disable(); self.delete_btn.disable(); self.replace_btn.disable()
 
     def _on_clone_clicked(self):
-        if not self.current_pre: return
-        self.current_pre.id = None
-        self.model_input.value += " (Copy)"
-        ui.notify("Preamplifier cloned. Save to confirm.")
+        pid = self._selected_preamp_id
+        if pid is None and self.current_pre and getattr(self.current_pre, "id", None):
+            pid = int(self.current_pre.id)
+        if pid is None:
+            ui.notify("Seleziona un preamplificatore salvato nel catalogo.", type="warning")
+            return
+        try:
+            src = self.eq_ctrl.get_preamplifier_by_id(int(pid))
+            if not src:
+                ui.notify("Preamplifier non trovato.", type="negative")
+                return
+            dup = self.eq_ctrl.clone_preamplifier_model(src)
+            saved = self.eq_ctrl.save_preamplifier(dup)
+            if not saved:
+                ui.notify("Salvataggio del duplicato non riuscito.", type="negative")
+                return
+            self.refresh_list()
+            self._load_selected_preamp(saved.id)
+            ui.notify(f"Duplicato creato in catalogo: {saved.model}", type="positive")
+        except Exception as e:
+            traceback.print_exc()
+            ui.notify(f"Errore duplicazione: {e}", type="negative")
 
     def _on_delete_clicked(self):
-        if self.current_pre and self.current_pre.id:
-            if self.eq_ctrl.delete_preamplifier(self.current_pre.id):
-                ui.notify("Preamplifier deleted"); self._prepare_new_model(); self.refresh_list()
+        pid = self._selected_preamp_id or (int(self.current_pre.id) if self.current_pre and getattr(self.current_pre, "id", None) else None)
+        if not pid:
+            return
+        if self.eq_ctrl.delete_preamplifier(pid):
+            ui.notify("Preamplifier deleted")
+            self._prepare_new_model()
+            self.refresh_list()
 
     def _on_replace_clicked(self):
-        others = [p for p in self.eq_ctrl.get_all_preamplifiers() if p.id != self.current_pre.id]
+        pid = self._selected_preamp_id or (
+            int(self.current_pre.id) if self.current_pre and getattr(self.current_pre, "id", None) else None
+        )
+        if not pid:
+            ui.notify("Seleziona un preamplificatore salvato.", type="warning")
+            return
+        others = [p for p in self.eq_ctrl.get_all_preamplifiers() if p.id != pid]
         opts = {p.id: f"{p.manufacturer} {p.model}" for p in others}
+        if not opts:
+            ui.notify("Nessun altro preamplificatore nel catalogo.", type="warning")
+            return
         with ui.dialog() as d, ui.card().classes('w-96 p-6'):
             ui.label('Replace Preamplifier').classes('text-lg font-bold mb-4')
             sel = ui.select(opts, label="Select replacement").classes('w-full')
             with ui.row().classes('w-full justify-end mt-4'):
                 ui.button('Cancel', on_click=d.close).props('flat')
-                ui.button('Confirm', color='orange', on_click=lambda: (self.eq_ctrl.replace_equipment('preamplifier', self.current_pre.id, sel.value), d.close(), self.refresh_list()))
+                ui.button('Confirm', color='orange', on_click=lambda: (
+                    self.eq_ctrl.replace_equipment('preamplifier', pid, sel.value),
+                    d.close(),
+                    self.refresh_list(),
+                    self._prepare_new_model(),
+                ))
         d.open()
 
     def _clear_stage_editor(self):

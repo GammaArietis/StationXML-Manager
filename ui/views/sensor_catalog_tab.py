@@ -23,6 +23,7 @@ class SensorCatalogTab(QWidget):
         super().__init__()
         self.eq_ctrl = equip_ctrl
         self.current_sensor = None
+        self._selected_sensor_id = None
         self._setup_ui()
         self.refresh_list()
 
@@ -125,6 +126,7 @@ class SensorCatalogTab(QWidget):
 
     def _prepare_new_model(self):
         self.current_sensor = Sensor(manufacturer="", model="")
+        self._selected_sensor_id = None
         self.mfg_input.clear(); self.model_input.clear(); self.desc_input.clear()
         self.sens_input.setValue(0.0); self.freq_input.setValue(0.0)
         self.zt.setRowCount(0); self.pt.setRowCount(0); self.model_list.clearSelection()
@@ -133,11 +135,20 @@ class SensorCatalogTab(QWidget):
 
     def _load_selected_sensor(self, item):
         s_brief = item.data(Qt.ItemDataRole.UserRole)
+        sid = getattr(s_brief, "id", None)
+        self._selected_sensor_id = sid
+        self.clone_btn.setEnabled(bool(sid))
+        self.replace_btn.setEnabled(bool(sid))
+        self.delete_btn.setEnabled(bool(sid))
+
         self.current_sensor = self.eq_ctrl.get_sensor(s_brief.id)
-        if not self.current_sensor: return
-        
+        if not self.current_sensor:
+            self.clone_btn.setEnabled(False)
+            self.replace_btn.setEnabled(False)
+            self.delete_btn.setEnabled(False)
+            return
+
         self._fill_ui_from_sensor(self.current_sensor)
-        self.clone_btn.setEnabled(True); self.replace_btn.setEnabled(True); self.delete_btn.setEnabled(True)
 
     def _fill_ui_from_sensor(self, sensor):
         self.mfg_input.setText(sensor.manufacturer)
@@ -235,14 +246,40 @@ class SensorCatalogTab(QWidget):
             QMessageBox.information(self, "OK", "Sensor saved.")
             self.refresh_list(); self._update_plot(); app_signals.equipment_updated.emit()
 
+    def _select_sensor_row_by_id(self, sensor_id: int) -> None:
+        for i in range(self.model_list.count()):
+            it = self.model_list.item(i)
+            s = it.data(Qt.ItemDataRole.UserRole)
+            if s is not None and getattr(s, "id", None) == sensor_id:
+                self.model_list.setCurrentItem(it)
+                self.model_list.scrollToItem(it)
+                return
+
     def _on_clone_clicked(self):
-        if not self.current_sensor:
+        sid = self._selected_sensor_id
+        if sid is None and self.current_sensor and self.current_sensor.id:
+            sid = self.current_sensor.id
+        if sid is None:
+            QMessageBox.warning(self, "Clone", "Select a saved catalog sensor first.")
             return
-        self.current_sensor = self.eq_ctrl.clone_sensor_model(self.current_sensor)
-        self.model_input.setText(self.current_sensor.model)
-        self.clone_btn.setEnabled(False)
-        self.replace_btn.setEnabled(False)
-        self.delete_btn.setEnabled(False)
+        src = self.eq_ctrl.get_sensor(sid)
+        if not src:
+            QMessageBox.warning(self, "Clone", "Sensor not found in catalog.")
+            return
+        dup = self.eq_ctrl.clone_sensor_model(src)
+        saved = self.eq_ctrl.save_sensor(dup)
+        if not saved:
+            QMessageBox.warning(self, "Clone", "Could not save the duplicate (unique constraint?).")
+            return
+        self.refresh_list()
+        self._select_sensor_row_by_id(saved.id)
+        self.current_sensor = saved
+        self._selected_sensor_id = saved.id
+        self._fill_ui_from_sensor(saved)
+        self.clone_btn.setEnabled(True)
+        self.replace_btn.setEnabled(True)
+        self.delete_btn.setEnabled(True)
+        QMessageBox.information(self, "Cloned", f"Created in catalog: {saved.manufacturer} {saved.model}")
 
     def _on_delete_clicked(self):
         if self.current_sensor.id and QMessageBox.question(self, "Delete", "Remove?") == QMessageBox.StandardButton.Yes:
@@ -255,11 +292,17 @@ class SensorCatalogTab(QWidget):
                 QMessageBox.warning(self, "Cannot delete", str(e))
 
     def _on_replace_clicked(self):
-        others = [s for s in self.eq_ctrl.get_all_sensors() if s.id != self.current_sensor.id]
+        sid = self._selected_sensor_id or (self.current_sensor.id if self.current_sensor else None)
+        if not sid:
+            return
+        others = [s for s in self.eq_ctrl.get_all_sensors() if s.id != sid]
+        if not others:
+            QMessageBox.information(self, "Replace", "No other sensors in the catalog.")
+            return
         names = [f"{s.manufacturer} {s.model}" for s in others]
         t, ok = QInputDialog.getItem(self, "Replace", "Replace with:", names, 0, False)
         if ok and t:
-            if self.eq_ctrl.replace_equipment('sensor', self.current_sensor.id, others[names.index(t)].id):
+            if self.eq_ctrl.replace_equipment('sensor', sid, others[names.index(t)].id):
                 self._prepare_new_model(); self.refresh_list(); app_signals.equipment_updated.emit()
                 
     def refresh_list(self):

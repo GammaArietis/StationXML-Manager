@@ -85,13 +85,18 @@ class OperatorCatalogTab:
         try:
             if op_id is None:
                 return
+            self.btn_op_clone.enable()
+            self.btn_op_replace.enable()
+            self.btn_op_delete.enable()
             op = self.eq_ctrl.get_operator_by_id(int(op_id))
             if not op:
                 ui.notify("Operatore non trovato.", type="warning")
+                self._prepare_new_operator()
                 return
             self._apply_operator_to_form(op)
         except Exception as e:
             traceback.print_exc()
+            self._prepare_new_operator()
             ui.notify(f"Errore caricamento: {e}", type="negative")
 
     def _apply_operator_to_form(self, op: Operator):

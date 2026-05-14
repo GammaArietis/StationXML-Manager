@@ -50,6 +50,9 @@ class EquipmentController:
     def clone_datalogger_model(self, dl: Datalogger) -> Datalogger:
         return self._catalog.equipment.clone_datalogger(dl)
 
+    def clone_preamplifier_model(self, pa: Preamplifier) -> Preamplifier:
+        return self._catalog.equipment.clone_preamplifier(pa)
+
     def delete_sensor(self, sensor_id: int) -> bool:
         return self._catalog.delete_sensor(sensor_id)
 

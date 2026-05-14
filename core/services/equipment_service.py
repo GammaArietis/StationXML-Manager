@@ -8,7 +8,14 @@ from typing import List, Optional, Sequence, Tuple
 
 from pydantic import ValidationError
 
-from core.models.base_models import Datalogger, Operator, PoleZero, ResponseFilter, Sensor
+from core.models.base_models import (
+    Datalogger,
+    Operator,
+    PoleZero,
+    Preamplifier,
+    ResponseFilter,
+    Sensor,
+)
 from database.daos.equipment_dao import EquipmentDAO
 from utils.logging_config import log_pydantic_validation
 
@@ -164,6 +171,23 @@ class EquipmentService:
         if data.get("model"):
             data["model"] = f"{data['model']} (Copy)"
         return Datalogger.model_validate(data)
+
+    def clone_preamplifier(self, pa: Preamplifier) -> Preamplifier:
+        """Deep copy for a new catalog row (clears preamp and nested stage/PZ ids)."""
+        data = pa.model_dump()
+        data["id"] = None
+        if data.get("model"):
+            data["model"] = f"{data['model']} (Copy)"
+        for st in data.get("analog_stages") or []:
+            if isinstance(st, dict):
+                st["id"] = None
+                for pz in st.get("poles") or []:
+                    if isinstance(pz, dict):
+                        pz["id"] = None
+                for pz in st.get("zeros") or []:
+                    if isinstance(pz, dict):
+                        pz["id"] = None
+        return Preamplifier.model_validate(data)
 
     def merge_sensor_from_pyqt_editor(
         self,

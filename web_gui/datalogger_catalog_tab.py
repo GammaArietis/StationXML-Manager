@@ -14,6 +14,7 @@ class DataloggerCatalogTab:
         self.current_stage = None
         self.stages_data = []
         self._is_loading = False
+        self._selected_dl_id = None
         
         self.nrl_browser = NRLBrowser(self.eq_ctrl.nrl_manager, 'datalogger')
         self.arol_browser = AROLBrowser(self.eq_ctrl.arol_client, 'dataloggers')
@@ -63,10 +64,11 @@ class DataloggerCatalogTab:
 
                 with ui.row().classes('w-full justify-between items-center pt-6 mt-6 border-t shrink-0'):
                     with ui.row().classes('gap-2'):
-                        ui.button('👯 Clone', on_click=self._on_clone_clicked).props('outline color=purple')
-                        ui.button('🔄 Replace', on_click=self._on_replace_clicked).props('outline color=orange')
-                        ui.button('🗑️ Delete', on_click=self._on_delete_clicked).props('outline color=red')
+                        self.btn_dl_clone = ui.button('👯 Clone', on_click=self._on_clone_clicked).props('outline color=purple')
+                        self.btn_dl_replace = ui.button('🔄 Replace', on_click=self._on_replace_clicked).props('outline color=orange')
+                        self.btn_dl_delete = ui.button('🗑️ Delete', on_click=self._on_delete_clicked).props('outline color=red')
                     ui.button('💾 SAVE DATALOGGER', on_click=self._on_save_clicked, color='green').classes('px-10 h-12 font-bold shadow-md')
+                self._set_dl_action_buttons(False)
 
             # --- COLONNA 3: DSP ---
             with ui.column().classes('p-6 bg-slate-50 border-l overflow-y-auto'):
@@ -91,6 +93,13 @@ class DataloggerCatalogTab:
                 self.plot_container = ui.column().classes('w-full items-center mt-6 shrink-0')
                 self.stage_panel.set_visibility(False)
 
+    def _set_dl_action_buttons(self, enabled: bool) -> None:
+        for b in (self.btn_dl_clone, self.btn_dl_replace, self.btn_dl_delete):
+            if enabled:
+                b.enable()
+            else:
+                b.disable()
+
     # --- WIRING AL NUOVO SERVICE LAYER ---
     def refresh_list(self):
         self.model_list.clear()
@@ -104,14 +113,20 @@ class DataloggerCatalogTab:
 
     def _load_dl(self, dl_id):
         try:
-            if dl_id is None: return
+            if dl_id is None:
+                return
+            self._selected_dl_id = int(dl_id)
+            self._set_dl_action_buttons(True)
             self._is_loading = True
             self.current_dl = self.eq_ctrl.get_datalogger(int(dl_id))
             if self.current_dl:
                 self._populate_ui_from_dl(self.current_dl)
+            else:
+                self._set_dl_action_buttons(False)
             self._is_loading = False
         except Exception as e:
             traceback.print_exc()
+            self._set_dl_action_buttons(False)
             ui.notify(f"Errore caricamento: {e}", type="negative")
 
     def _populate_ui_from_dl(self, dl):
@@ -151,45 +166,47 @@ class DataloggerCatalogTab:
 
     def _prepare_new(self):
         self.current_dl = Datalogger(manufacturer="", model="")
+        self._selected_dl_id = None
+        self._set_dl_action_buttons(False)
         self._populate_ui_from_dl(self.current_dl)
 
     def _on_clone_clicked(self):
-        if not self.current_dl:
-            ui.notify("Nessun datalogger da duplicare.", type="warning")
+        did = self._selected_dl_id
+        if did is None and self.current_dl and getattr(self.current_dl, "id", None):
+            did = int(self.current_dl.id)
+        if did is None:
+            ui.notify("Seleziona un datalogger salvato nel catalogo.", type="warning")
             return
         try:
-            merged_dl = self.eq_ctrl.equipment_service.merge_datalogger_from_web_fields(
-                base=self.current_dl,
-                manufacturer=self.mfg_input.value,
-                model=self.model_input.value,
-                description=self.desc_input.value,
-                gain=float(self.gain_input.value or 0.0),
-                max_clock_drift=float(self.drift_input.value or 0.0),
-                base_hardware_delay=float(self.delay_input.value or 0.0),
-                filters=list(self.stages_data),
-            )
-            dup = self.eq_ctrl.clone_datalogger_model(merged_dl)
+            src = self.eq_ctrl.get_datalogger(int(did))
+            if not src:
+                ui.notify("Datalogger non trovato.", type="negative")
+                return
+            dup = self.eq_ctrl.clone_datalogger_model(src)
             saved = self.eq_ctrl.save_datalogger(dup)
             if not saved:
                 ui.notify("Salvataggio del duplicato non riuscito.", type="negative")
                 return
-            self.current_dl = saved
-            self._populate_ui_from_dl(saved)
             self.refresh_list()
-            self._update_plot()
-            ui.notify(f"Duplicato salvato in catalogo: {saved.model}", type="positive")
+            self._load_dl(saved.id)
+            ui.notify(f"Duplicato creato in catalogo: {saved.model}", type="positive")
         except Exception as e:
             traceback.print_exc()
             ui.notify(f"Errore duplicazione: {e}", type="negative")
 
     def _on_replace_clicked(self):
-        if not self.current_dl or not self.current_dl.id: return
-        others = {d.id: f"{d.manufacturer} {d.model}" for d in self.eq_ctrl.get_all_dataloggers() if d.id != self.current_dl.id}
+        did = self._selected_dl_id or (int(self.current_dl.id) if self.current_dl and self.current_dl.id else None)
+        if not did:
+            return
+        others = {d.id: f"{d.manufacturer} {d.model}" for d in self.eq_ctrl.get_all_dataloggers() if d.id != did}
+        if not others:
+            ui.notify("Nessun altro datalogger nel catalogo.", type="warning")
+            return
         with ui.dialog() as d, ui.card().classes('w-96 p-6'):
             ui.label('Replace Datalogger').classes('text-lg font-bold mb-4')
             sel = ui.select(others, label="Select replacement").classes('w-full')
             ui.button('Confirm Replace', color='orange', on_click=lambda: (
-                self.eq_ctrl.replace_equipment('datalogger', self.current_dl.id, sel.value),
+                self.eq_ctrl.replace_equipment('datalogger', did, sel.value),
                 d.close(),
                 self.refresh_list(),
                 self._prepare_new()
@@ -197,17 +214,9 @@ class DataloggerCatalogTab:
         d.open()
 
     def _on_delete_clicked(self):
-        if not self.current_dl:
+        did = self._selected_dl_id or (int(self.current_dl.id) if self.current_dl and getattr(self.current_dl, "id", None) else None)
+        if did is None:
             ui.notify("Nessun datalogger selezionato.", type="warning")
-            return
-        raw_id = getattr(self.current_dl, "id", None)
-        if raw_id is None:
-            ui.notify("Impossibile eliminare: modello nuovo non ancora salvato nel catalogo.", type="warning")
-            return
-        try:
-            did = int(raw_id)
-        except (TypeError, ValueError):
-            ui.notify("ID datalogger non valido.", type="negative")
             return
         try:
             ok = self.eq_ctrl.delete_datalogger(did)

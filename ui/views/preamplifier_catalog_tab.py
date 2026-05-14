@@ -19,6 +19,7 @@ class PreamplifierCatalogTab(QWidget):
         super().__init__()
         self.eq_ctrl = equip_ctrl
         self.current_preamp = None
+        self._selected_preamp_id = None
         self._setup_ui()
         self.refresh_list()
 
@@ -126,6 +127,7 @@ class PreamplifierCatalogTab(QWidget):
 
     def _prepare_new_model(self):
         self.current_preamp = Preamplifier(manufacturer="", model="")
+        self._selected_preamp_id = None
         self.mfg_input.clear(); self.model_input.clear(); self.desc_input.clear()
         self.stage_combo.clear(); self.zt.setRowCount(0); self.pt.setRowCount(0)
         self.clone_btn.setEnabled(False); self.replace_btn.setEnabled(False); self.delete_btn.setEnabled(False)
@@ -133,14 +135,17 @@ class PreamplifierCatalogTab(QWidget):
 
     def _load_selected_preamp(self, item):
         p_brief = item.data(Qt.ItemDataRole.UserRole)
+        pid = getattr(p_brief, "id", None)
+        self._selected_preamp_id = pid
+        self.clone_btn.setEnabled(bool(pid))
+        self.replace_btn.setEnabled(bool(pid))
+        self.delete_btn.setEnabled(bool(pid))
+
         self.current_preamp = self.eq_ctrl.get_preamplifier_by_id(p_brief.id)
         self.mfg_input.setText(self.current_preamp.manufacturer)
         self.model_input.setText(self.current_preamp.model)
         self.desc_input.setText(self.current_preamp.description or "")
         self._refresh_stage_combo()
-        self.clone_btn.setEnabled(True)
-        self.replace_btn.setEnabled(True)
-        self.delete_btn.setEnabled(True)
         self._update_total_plot()
 
     def _on_stage_selection_changed(self, idx):
@@ -165,12 +170,41 @@ class PreamplifierCatalogTab(QWidget):
         for i, s in enumerate(self.current_preamp.analog_stages): self.stage_combo.addItem(f"Stage {i+1}")
         self.stage_combo.blockSignals(False); self.stage_combo.setCurrentIndex(0); self._on_stage_selection_changed(0)
 
+    def _select_preamp_row_by_id(self, preamp_id: int) -> None:
+        for i in range(self.model_list.count()):
+            it = self.model_list.item(i)
+            p = it.data(Qt.ItemDataRole.UserRole)
+            if p is not None and getattr(p, "id", None) == preamp_id:
+                self.model_list.setCurrentItem(it)
+                self.model_list.scrollToItem(it)
+                return
+
     def _on_clone_clicked(self):
-        if not self.current_preamp: return
-        self.current_preamp.id = None 
-        self.model_input.setText(self.model_input.text() + " (Copy)")
-        self.clone_btn.setEnabled(False); self.replace_btn.setEnabled(False); self.delete_btn.setEnabled(False)
-        QMessageBox.information(self, "Info", "Model cloned in memory. Edit and press Save.")
+        pid = self._selected_preamp_id
+        if pid is None and self.current_preamp and self.current_preamp.id:
+            pid = self.current_preamp.id
+        if pid is None:
+            QMessageBox.warning(self, "Clone", "Select a saved catalog preamplifier first.")
+            return
+        src = self.eq_ctrl.get_preamplifier_by_id(pid)
+        if not src:
+            QMessageBox.warning(self, "Clone", "Preamplifier not found in catalog.")
+            return
+        dup = self.eq_ctrl.clone_preamplifier_model(src)
+        saved = self.eq_ctrl.save_preamplifier(dup)
+        if not saved:
+            QMessageBox.warning(self, "Clone", "Could not save the duplicate (unique constraint?).")
+            return
+        self.refresh_list()
+        self._select_preamp_row_by_id(saved.id)
+        self.current_preamp = saved
+        self._selected_preamp_id = saved.id
+        self._refresh_stage_combo()
+        self.clone_btn.setEnabled(True)
+        self.replace_btn.setEnabled(True)
+        self.delete_btn.setEnabled(True)
+        QMessageBox.information(self, "Cloned", f"Created in catalog: {saved.manufacturer} {saved.model}")
+        app_signals.equipment_updated.emit()
 
     def _on_save_clicked(self):
         if not self.current_preamp: return
@@ -184,20 +218,41 @@ class PreamplifierCatalogTab(QWidget):
         self.current_preamp.manufacturer = self.mfg_input.text()
         self.current_preamp.model = self.model_input.text()
         if self.eq_ctrl.save_preamplifier(self.current_preamp):
-            self.refresh_list(); self._update_total_plot()
+            self.refresh_list()
+            self._update_total_plot()
+            app_signals.equipment_updated.emit()
 
     def _on_delete_clicked(self):
-        if self.current_preamp.id and self.eq_ctrl.delete_preamplifier(self.current_preamp.id):
-            self.refresh_list(); self._prepare_new_model()
+        pid = self._selected_preamp_id or (
+            self.current_preamp.id if self.current_preamp and self.current_preamp.id else None
+        )
+        if not pid:
+            return
+        if QMessageBox.question(self, "Confirm", "Delete this preamplifier?") != QMessageBox.StandardButton.Yes:
+            return
+        if self.eq_ctrl.delete_preamplifier(pid):
+            self.refresh_list()
+            self._prepare_new_model()
+            app_signals.equipment_updated.emit()
 
     def _on_replace_clicked(self):
-        others = [p for p in self.eq_ctrl.get_all_preamplifiers() if p.id != self.current_preamp.id]
+        pid = self._selected_preamp_id or (
+            self.current_preamp.id if self.current_preamp and self.current_preamp.id else None
+        )
+        if not pid:
+            return
+        others = [p for p in self.eq_ctrl.get_all_preamplifiers() if p.id != pid]
+        if not others:
+            QMessageBox.information(self, "Replace", "No other preamplifiers in the catalog.")
+            return
         names = [f"{p.manufacturer} {p.model}" for p in others]
         target, ok = QInputDialog.getItem(self, "Replace", "Replace with:", names, 0, False)
         if ok and target:
             new_id = others[names.index(target)].id
-            if self.eq_ctrl.replace_equipment('preamplifier', self.current_preamp.id, new_id):
-                self.refresh_list(); self._prepare_new_model()
+            if self.eq_ctrl.replace_equipment('preamplifier', pid, new_id):
+                self.refresh_list()
+                self._prepare_new_model()
+                app_signals.equipment_updated.emit()
 
     def _update_total_plot(self):
         self.ax_mag.clear(); self.ax_phase.clear()

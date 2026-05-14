@@ -10,6 +10,7 @@ class SensorCatalogTab:
     def __init__(self, eq_ctrl):
         self.eq_ctrl = eq_ctrl
         self.current_sensor = None
+        self._selected_sensor_id = None
         self.zeros_inputs = []
         self.poles_inputs = []
         self._is_loading = False
@@ -69,15 +70,23 @@ class SensorCatalogTab:
                 
                 with ui.row().classes('w-full justify-between items-center pt-6 mt-6 border-t shrink-0'):
                     with ui.row().classes('gap-2'):
-                        ui.button('👯 Clone', on_click=self._on_clone_clicked).props('outline color=purple')
-                        ui.button('🔄 Replace', on_click=self._on_replace_clicked).props('outline color=orange')
-                        ui.button('🗑️ Delete', on_click=self._on_delete_clicked).props('outline color=red')
+                        self.btn_sens_clone = ui.button('👯 Clone', on_click=self._on_clone_clicked).props('outline color=purple')
+                        self.btn_sens_replace = ui.button('🔄 Replace', on_click=self._on_replace_clicked).props('outline color=orange')
+                        self.btn_sens_delete = ui.button('🗑️ Delete', on_click=self._on_delete_clicked).props('outline color=red')
                     ui.button('💾 SAVE SENSOR', on_click=self._on_save_clicked, color='green').classes('px-10 h-12 font-bold shadow-md')
+                self._set_sensor_action_buttons(False)
 
             # --- COLONNA 3: PLOT ---
             with ui.column().classes('p-6 bg-slate-50 border-l overflow-y-auto'):
                 ui.label('Frequency Response (Bode Plot)').classes('font-bold text-slate-500 uppercase text-xs mb-4')
                 self.plot_container = ui.column().classes('w-full items-center mt-2')
+
+    def _set_sensor_action_buttons(self, enabled: bool) -> None:
+        for b in (self.btn_sens_clone, self.btn_sens_replace, self.btn_sens_delete):
+            if enabled:
+                b.enable()
+            else:
+                b.disable()
 
     def refresh_list(self):
         self.model_list.clear()
@@ -91,15 +100,21 @@ class SensorCatalogTab:
 
     def _load_sensor(self, sid):
         try:
-            if sid is None: return
+            if sid is None:
+                return
+            self._selected_sensor_id = int(sid)
+            self._set_sensor_action_buttons(True)
             self._is_loading = True
             self.current_sensor = self.eq_ctrl.get_sensor(int(sid))
             if self.current_sensor:
                 self._populate_ui_from_sensor(self.current_sensor)
+            else:
+                self._set_sensor_action_buttons(False)
             self._is_loading = False
             self._update_plot()
         except Exception as e:
             traceback.print_exc()
+            self._set_sensor_action_buttons(False)
             ui.notify(f"Errore caricamento: {e}", type="negative")
 
     def _populate_ui_from_sensor(self, sensor):
@@ -169,48 +184,42 @@ class SensorCatalogTab:
             ui.notify(f"Save Error: {e}", type='negative')
 
     def _on_clone_clicked(self):
-        if not self.current_sensor:
-            ui.notify("Nessun sensore da duplicare.", type="warning")
+        sid = self._selected_sensor_id
+        if sid is None and self.current_sensor and getattr(self.current_sensor, "id", None):
+            sid = int(self.current_sensor.id)
+        if sid is None:
+            ui.notify("Seleziona un sensore salvato nel catalogo.", type="warning")
             return
         try:
-            pole_pairs = [(float(r.value or 0), float(i.value or 0)) for r, i in self.poles_inputs]
-            zero_pairs = [(float(r.value or 0), float(i.value or 0)) for r, i in self.zeros_inputs]
-            merged = self.eq_ctrl.equipment_service.merge_sensor_from_web_fields(
-                base=self.current_sensor,
-                manufacturer=self.mfg_input.value,
-                model=self.model_input.value,
-                type_=self.type_input.value,
-                description=self.desc_input.value,
-                sensitivity=float(self.sens_input.value or 0.0),
-                frequency=float(self.freq_input.value or 1.0),
-                input_units=self.in_units.value,
-                output_units=self.out_units.value,
-                pz_transfer_function_type=self.pz_type.value,
-                zero_pairs=zero_pairs,
-                pole_pairs=pole_pairs,
-            )
-            dup = self.eq_ctrl.clone_sensor_model(merged)
+            src = self.eq_ctrl.get_sensor(int(sid))
+            if not src:
+                ui.notify("Sensore non trovato.", type="negative")
+                return
+            dup = self.eq_ctrl.clone_sensor_model(src)
             saved = self.eq_ctrl.save_sensor(dup)
             if not saved:
                 ui.notify("Salvataggio del duplicato non riuscito.", type="negative")
                 return
-            self.current_sensor = saved
-            self._populate_ui_from_sensor(saved)
             self.refresh_list()
-            self._update_plot()
-            ui.notify(f"Duplicato salvato in catalogo: {saved.model}", type="positive")
+            self._load_sensor(saved.id)
+            ui.notify(f"Duplicato creato in catalogo: {saved.model}", type="positive")
         except Exception as e:
             traceback.print_exc()
             ui.notify(f"Errore duplicazione: {e}", type="negative")
 
     def _on_replace_clicked(self):
-        if not self.current_sensor or not self.current_sensor.id: return
-        others = {s.id: f"{s.manufacturer} {s.model}" for s in self.eq_ctrl.get_all_sensors() if s.id != self.current_sensor.id}
+        sid = self._selected_sensor_id or (int(self.current_sensor.id) if self.current_sensor and self.current_sensor.id else None)
+        if not sid:
+            return
+        others = {s.id: f"{s.manufacturer} {s.model}" for s in self.eq_ctrl.get_all_sensors() if s.id != sid}
+        if not others:
+            ui.notify("Nessun altro sensore nel catalogo.", type="warning")
+            return
         with ui.dialog() as d, ui.card().classes('w-96 p-6'):
             ui.label('Replace Sensor').classes('text-lg font-bold mb-4')
             sel = ui.select(others, label="Select replacement").classes('w-full')
             ui.button('Confirm Replace', color='orange', on_click=lambda: (
-                self.eq_ctrl.replace_equipment('sensor', self.current_sensor.id, sel.value),
+                self.eq_ctrl.replace_equipment('sensor', sid, sel.value),
                 d.close(),
                 self.refresh_list(),
                 self._prepare_new()
@@ -218,17 +227,9 @@ class SensorCatalogTab:
         d.open()
 
     def _on_delete_clicked(self):
-        if not self.current_sensor:
+        sid = self._selected_sensor_id or (int(self.current_sensor.id) if self.current_sensor and getattr(self.current_sensor, "id", None) else None)
+        if sid is None:
             ui.notify("Nessun sensore selezionato.", type="warning")
-            return
-        raw_id = getattr(self.current_sensor, "id", None)
-        if raw_id is None:
-            ui.notify("Impossibile eliminare: modello nuovo non ancora salvato nel catalogo.", type="warning")
-            return
-        try:
-            sid = int(raw_id)
-        except (TypeError, ValueError):
-            ui.notify("ID sensore non valido.", type="negative")
             return
         try:
             ok = self.eq_ctrl.delete_sensor(sid)
@@ -248,6 +249,8 @@ class SensorCatalogTab:
 
     def _prepare_new(self):
         self.current_sensor = Sensor(manufacturer="", model="")
+        self._selected_sensor_id = None
+        self._set_sensor_action_buttons(False)
         self._populate_ui_from_sensor(self.current_sensor)
         self.plot_container.clear()
 

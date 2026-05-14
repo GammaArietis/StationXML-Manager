@@ -23,7 +23,7 @@ from controllers.equipment_controller import EquipmentController
 from web_gui.network_view import NetworkView
 from web_gui.station_view import StationView
 from web_gui.channel_view import ChannelView
-from web_gui.catalog_dialog import CatalogDialog
+from web_gui.catalog_dialog import CatalogDialog  # clone/replace/delete: web_gui/*_catalog_tab.py
 from web_gui.math_deduplicator_dialog import MathDeduplicatorDialog
 from web_gui.progress_utils import job_progress_fraction, job_progress_percent, yield_ui
 
