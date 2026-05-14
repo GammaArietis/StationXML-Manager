@@ -282,14 +282,51 @@ class PreamplifierCatalogTab:
             traceback.print_exc()
             ui.notify(f"Errore duplicazione: {e}", type="negative")
 
-    def _on_delete_clicked(self):
-        pid = self._selected_preamp_id or (int(self.current_pre.id) if self.current_pre and getattr(self.current_pre, "id", None) else None)
+    async def _on_delete_clicked(self):
+        pid = self._selected_preamp_id or (
+            int(self.current_pre.id) if self.current_pre and getattr(self.current_pre, "id", None) else None
+        )
         if not pid:
+            ui.notify("Nessun preamplificatore selezionato.", type="warning")
             return
-        if self.eq_ctrl.delete_preamplifier(pid):
-            ui.notify("Preamplifier deleted")
-            self._prepare_new_model()
-            self.refresh_list()
+        pa = (
+            self.current_pre
+            if (self.current_pre and getattr(self.current_pre, "id", None) == pid)
+            else self.eq_ctrl.get_preamplifier_by_id(int(pid))
+        )
+        display = (
+            f"{getattr(pa, 'manufacturer', '')} {getattr(pa, 'model', '')}".strip()
+            if pa
+            else f"ID {pid}"
+        )
+        if not display:
+            display = f"ID {pid}"
+
+        with ui.dialog() as dialog, ui.card().classes("w-full max-w-md p-6"):
+            ui.label("Conferma eliminazione").classes("text-lg font-bold text-slate-800")
+            ui.label(
+                f"Sei sicuro di voler eliminare {display}? Questa azione è irreversibile."
+            ).classes("text-sm text-slate-700 mt-2")
+            with ui.row().classes("w-full justify-end mt-6 gap-2"):
+                ui.button("Annulla", on_click=lambda: dialog.submit(False)).props("flat")
+                ui.button("Elimina", on_click=lambda: dialog.submit(True)).classes(
+                    "bg-red-600 text-white font-bold"
+                )
+
+        confirmed = await dialog
+        if not confirmed:
+            return
+
+        try:
+            if self.eq_ctrl.delete_preamplifier(int(pid)):
+                ui.notify("Preamplificatore eliminato dal catalogo.", type="info")
+                self._prepare_new_model()
+                self.refresh_list()
+        except ValueError as e:
+            ui.notify(str(e), type="negative")
+        except Exception as e:
+            traceback.print_exc()
+            ui.notify(f"Errore eliminazione: {e}", type="negative")
 
     def _on_replace_clicked(self):
         pid = self._selected_preamp_id or (

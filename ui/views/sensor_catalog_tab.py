@@ -282,14 +282,41 @@ class SensorCatalogTab(QWidget):
         QMessageBox.information(self, "Cloned", f"Created in catalog: {saved.manufacturer} {saved.model}")
 
     def _on_delete_clicked(self):
-        if self.current_sensor.id and QMessageBox.question(self, "Delete", "Remove?") == QMessageBox.StandardButton.Yes:
-            try:
-                if self.eq_ctrl.delete_sensor(self.current_sensor.id):
-                    self._prepare_new_model()
-                    self.refresh_list()
-                    app_signals.equipment_updated.emit()
-            except ValueError as e:
-                QMessageBox.warning(self, "Cannot delete", str(e))
+        sid = self._selected_sensor_id or (
+            self.current_sensor.id if self.current_sensor and self.current_sensor.id else None
+        )
+        if not sid:
+            QMessageBox.warning(self, "Elimina", "Seleziona un sensore salvato nel catalogo.")
+            return
+        ch = (
+            self.current_sensor
+            if (self.current_sensor and getattr(self.current_sensor, "id", None) == sid)
+            else self.eq_ctrl.get_sensor(sid)
+        )
+        display = (
+            f"{ch.manufacturer} {ch.model}".strip()
+            if ch
+            else str(sid)
+        )
+        msg = f"Sei sicuro di voler eliminare {display}? Questa azione è irreversibile."
+        if (
+            QMessageBox.question(
+                self,
+                "Conferma eliminazione",
+                msg,
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                QMessageBox.StandardButton.No,
+            )
+            != QMessageBox.StandardButton.Yes
+        ):
+            return
+        try:
+            if self.eq_ctrl.delete_sensor(sid):
+                self._prepare_new_model()
+                self.refresh_list()
+                app_signals.equipment_updated.emit()
+        except ValueError as e:
+            QMessageBox.warning(self, "Impossibile eliminare", str(e))
 
     def _on_replace_clicked(self):
         sid = self._selected_sensor_id or (self.current_sensor.id if self.current_sensor else None)

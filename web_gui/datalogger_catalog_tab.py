@@ -213,17 +213,47 @@ class DataloggerCatalogTab:
             )).classes('w-full mt-4')
         d.open()
 
-    def _on_delete_clicked(self):
-        did = self._selected_dl_id or (int(self.current_dl.id) if self.current_dl and getattr(self.current_dl, "id", None) else None)
+    async def _on_delete_clicked(self):
+        did = self._selected_dl_id or (
+            int(self.current_dl.id) if self.current_dl and getattr(self.current_dl, "id", None) else None
+        )
         if did is None:
             ui.notify("Nessun datalogger selezionato.", type="warning")
             return
+        dl = (
+            self.current_dl
+            if (self.current_dl and getattr(self.current_dl, "id", None) == did)
+            else self.eq_ctrl.get_datalogger(int(did))
+        )
+        display = (
+            f"{getattr(dl, 'manufacturer', '')} {getattr(dl, 'model', '')}".strip()
+            if dl
+            else f"ID {did}"
+        )
+        if not display:
+            display = f"ID {did}"
+
+        with ui.dialog() as dialog, ui.card().classes("w-full max-w-md p-6"):
+            ui.label("Conferma eliminazione").classes("text-lg font-bold text-slate-800")
+            ui.label(
+                f"Sei sicuro di voler eliminare {display}? Questa azione è irreversibile."
+            ).classes("text-sm text-slate-700 mt-2")
+            with ui.row().classes("w-full justify-end mt-6 gap-2"):
+                ui.button("Annulla", on_click=lambda: dialog.submit(False)).props("flat")
+                ui.button("Elimina", on_click=lambda: dialog.submit(True)).classes(
+                    "bg-red-600 text-white font-bold"
+                )
+
+        confirmed = await dialog
+        if not confirmed:
+            return
+
         try:
-            ok = self.eq_ctrl.delete_datalogger(did)
+            ok = self.eq_ctrl.delete_datalogger(int(did))
             if not ok:
                 ui.notify("Eliminazione non eseguita (nessuna riga nel database).", type="warning")
                 return
-            ui.notify("Datalogger eliminato dal catalogo.", type="warning")
+            ui.notify("Datalogger eliminato dal catalogo.", type="info")
             self._prepare_new()
             self.refresh_list()
         except EquipmentInUseError as e:

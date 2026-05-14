@@ -297,10 +297,35 @@ class DataloggerCatalogTab(QWidget):
             self.refresh_list(); app_signals.equipment_updated.emit()
 
     def _on_delete_clicked(self):
-        if self.current_dl.id and QMessageBox.question(self, "Confirm", "Delete?") == QMessageBox.StandardButton.Yes:
-            try:
-                if self.eq_ctrl.delete_datalogger(self.current_dl.id): self._prepare_new_model(); self.refresh_list(); app_signals.equipment_updated.emit()
-            except ValueError as e: QMessageBox.warning(self, "Cannot Delete", str(e))
+        did = self._selected_dl_id or (self.current_dl.id if self.current_dl and self.current_dl.id else None)
+        if not did:
+            QMessageBox.warning(self, "Elimina", "Seleziona un datalogger salvato nel catalogo.")
+            return
+        dl = (
+            self.current_dl
+            if (self.current_dl and getattr(self.current_dl, "id", None) == did)
+            else self.eq_ctrl.get_datalogger(did)
+        )
+        display = f"{dl.manufacturer} {dl.model}".strip() if dl else str(did)
+        msg = f"Sei sicuro di voler eliminare {display}? Questa azione è irreversibile."
+        if (
+            QMessageBox.question(
+                self,
+                "Conferma eliminazione",
+                msg,
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                QMessageBox.StandardButton.No,
+            )
+            != QMessageBox.StandardButton.Yes
+        ):
+            return
+        try:
+            if self.eq_ctrl.delete_datalogger(did):
+                self._prepare_new_model()
+                self.refresh_list()
+                app_signals.equipment_updated.emit()
+        except ValueError as e:
+            QMessageBox.warning(self, "Impossibile eliminare", str(e))
 
     def _on_replace_clicked(self):
         did = self._selected_dl_id or (self.current_dl.id if self.current_dl else None)

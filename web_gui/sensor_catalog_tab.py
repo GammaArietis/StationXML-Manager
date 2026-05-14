@@ -226,17 +226,47 @@ class SensorCatalogTab:
             )).classes('w-full mt-4')
         d.open()
 
-    def _on_delete_clicked(self):
-        sid = self._selected_sensor_id or (int(self.current_sensor.id) if self.current_sensor and getattr(self.current_sensor, "id", None) else None)
+    async def _on_delete_clicked(self):
+        sid = self._selected_sensor_id or (
+            int(self.current_sensor.id) if self.current_sensor and getattr(self.current_sensor, "id", None) else None
+        )
         if sid is None:
             ui.notify("Nessun sensore selezionato.", type="warning")
             return
+        ch = (
+            self.current_sensor
+            if (self.current_sensor and getattr(self.current_sensor, "id", None) == sid)
+            else self.eq_ctrl.get_sensor(int(sid))
+        )
+        display = (
+            f"{getattr(ch, 'manufacturer', '')} {getattr(ch, 'model', '')}".strip()
+            if ch
+            else f"ID {sid}"
+        )
+        if not display:
+            display = f"ID {sid}"
+
+        with ui.dialog() as dialog, ui.card().classes("w-full max-w-md p-6"):
+            ui.label("Conferma eliminazione").classes("text-lg font-bold text-slate-800")
+            ui.label(
+                f"Sei sicuro di voler eliminare {display}? Questa azione è irreversibile."
+            ).classes("text-sm text-slate-700 mt-2")
+            with ui.row().classes("w-full justify-end mt-6 gap-2"):
+                ui.button("Annulla", on_click=lambda: dialog.submit(False)).props("flat")
+                ui.button("Elimina", on_click=lambda: dialog.submit(True)).classes(
+                    "bg-red-600 text-white font-bold"
+                )
+
+        confirmed = await dialog
+        if not confirmed:
+            return
+
         try:
-            ok = self.eq_ctrl.delete_sensor(sid)
+            ok = self.eq_ctrl.delete_sensor(int(sid))
             if not ok:
                 ui.notify("Eliminazione non eseguita (nessuna riga nel database).", type="warning")
                 return
-            ui.notify("Sensore eliminato dal catalogo.", type="warning")
+            ui.notify("Sensore eliminato dal catalogo.", type="info")
             self._prepare_new()
             self.refresh_list()
         except EquipmentInUseError as e:

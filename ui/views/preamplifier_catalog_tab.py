@@ -228,7 +228,23 @@ class PreamplifierCatalogTab(QWidget):
         )
         if not pid:
             return
-        if QMessageBox.question(self, "Confirm", "Delete this preamplifier?") != QMessageBox.StandardButton.Yes:
+        pa = (
+            self.current_preamp
+            if (self.current_preamp and getattr(self.current_preamp, "id", None) == pid)
+            else self.eq_ctrl.get_preamplifier_by_id(pid)
+        )
+        display = f"{pa.manufacturer} {pa.model}".strip() if pa else str(pid)
+        msg = f"Sei sicuro di voler eliminare {display}? Questa azione è irreversibile."
+        if (
+            QMessageBox.question(
+                self,
+                "Conferma eliminazione",
+                msg,
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                QMessageBox.StandardButton.No,
+            )
+            != QMessageBox.StandardButton.Yes
+        ):
             return
         if self.eq_ctrl.delete_preamplifier(pid):
             self.refresh_list()
