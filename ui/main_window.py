@@ -36,6 +36,8 @@ class MainWindow(QMainWindow):
         self.cha_ctrl = cha_ctrl
         self.equ_ctrl = equ_ctrl
         self._export_web = StationXMLWebExportController(net_ctrl, sta_ctrl, cha_ctrl, equ_ctrl)
+        self._import_progress_dialog = None
+        self._export_progress_dialog = None
         
         self.setWindowTitle("StationXML Manager")
         self.resize(1200, 800)
@@ -207,35 +209,105 @@ class MainWindow(QMainWindow):
         dialog.exec()
     
     def _import_xml(self):
-        """Opens a dialog to select and import StationXML or Dataless SEED files."""
+        """Select and import StationXML / Dataless in a background thread with progress UI."""
         file_path, _ = QFileDialog.getOpenFileName(
             self,
             "Import Seismic Metadata",
             "",
-            "Seismic Metadata (*.xml *.dataless);;StationXML Files (*.xml);;Dataless SEED (*.dataless);;All Files (*)"
+            "Seismic Metadata (*.xml *.dataless);;StationXML Files (*.xml);;Dataless SEED (*.dataless);;All Files (*)",
         )
-        
+
         if not file_path:
             return
-            
+
+        if self._job_runner.is_running("stationxml_import"):
+            QMessageBox.information(self, "Import", "An import is already in progress.")
+            return
+
+        self._import_progress_dialog = QProgressDialog(self)
+        self._import_progress_dialog.setWindowTitle("StationXML import")
+        self._import_progress_dialog.setLabelText("Preparing…")
+        self._import_progress_dialog.setCancelButtonText("Cancel")
+        self._import_progress_dialog.setRange(0, 0)
+        self._import_progress_dialog.setMinimumDuration(0)
+        self._import_progress_dialog.setWindowModality(Qt.WindowModality.WindowModal)
+        self._import_progress_dialog.setAutoClose(False)
+        self._import_progress_dialog.setAutoReset(False)
+        self._import_progress_dialog.show()
+
+        self.import_btn.setEnabled(False)
+        self._import_progress_dialog.canceled.connect(
+            lambda: self._job_runner.cancel_job("stationxml_import")
+        )
+        self._job_runner.run_job(
+            Job(
+                name="stationxml_import",
+                function=self._job_stationxml_import,
+                args=(file_path,),
+            ),
+            on_progress=self._on_stationxml_import_progress,
+            on_finished=self._on_stationxml_import_finished,
+            on_error=self._on_stationxml_import_error,
+        )
+
+    def _job_stationxml_import(self, file_path, report_progress=None, is_cancelled=None):
         parser = StationXMLParser(self.net_ctrl, self.sta_ctrl, self.cha_ctrl, self.equ_ctrl)
-        
-        success = parser.import_file(file_path)
-        
+
+        def progress_cb(current: int, total: int, message: str) -> None:
+            if report_progress:
+                report_progress((current, total, message))
+
+        cancel_cb = is_cancelled if is_cancelled is not None else lambda: False
+        return parser.import_file(
+            file_path,
+            progress_callback=progress_cb,
+            cancel_callback=cancel_cb,
+        )
+
+    def _on_stationxml_import_progress(self, payload):
+        current, total, message = payload
+        dlg = self._import_progress_dialog
+        if not dlg:
+            return
+        dlg.setLabelText(message)
+        if total <= 0:
+            dlg.setRange(0, 0)
+        else:
+            dlg.setRange(0, total)
+            dlg.setValue(min(current, total))
+        pct = int(100 * current / total) if total else 0
+        dlg.setWindowTitle(f"StationXML import — {pct}%")
+
+    def _on_stationxml_import_finished(self, success):
+        dlg = self._import_progress_dialog
+        if dlg:
+            dlg.close()
+            self._import_progress_dialog = None
+        self.import_btn.setEnabled(True)
+
         if success:
             QMessageBox.information(
                 self,
-                "Import Completed",
-                "XML file successfully imported into the database!"
+                "Import completed",
+                "XML file successfully imported into the database!",
             )
             app_signals.network_updated.emit()
             app_signals.equipment_updated.emit()
         else:
-            QMessageBox.critical(
+            QMessageBox.warning(
                 self,
-                "Import Error",
-                "An error occurred during import. Check the logs."
+                "Import stopped",
+                "The import did not complete successfully (cancelled, validation error, or parser error). "
+                "Check the application log for details.",
             )
+
+    def _on_stationxml_import_error(self, err: str):
+        dlg = self._import_progress_dialog
+        if dlg:
+            dlg.close()
+            self._import_progress_dialog = None
+        self.import_btn.setEnabled(True)
+        QMessageBox.critical(self, "Import error", f"An error occurred during import:\n{err}")
             
     def _export_xml(self):
         """Shows export options and saves StationXML (single file or ZIP per station)."""
@@ -293,8 +365,9 @@ class MainWindow(QMainWindow):
         if dialog.exec() != QDialog.DialogCode.Accepted:
             return
 
-        exporter = self._export_web.exporter
-        exporter.validation_warnings.clear()
+        if self._job_runner.is_running("stationxml_export"):
+            QMessageBox.information(self, "Export", "An export is already in progress.")
+            return
 
         def _all_station_ids() -> list:
             ids: list = []
@@ -326,45 +399,138 @@ class MainWindow(QMainWindow):
             )
             if not file_path:
                 return
-            try:
-                zip_bytes = exporter.build_zip_bytes_for_station_ids(station_ids)
-                with open(file_path, "wb") as fh:
-                    fh.write(zip_bytes)
-                self._show_export_result_dialog(exporter, file_path, is_zip=True)
-            except Exception as e:
-                logger.error(f"ZIP export error: {e}")
-                QMessageBox.critical(self, "Error", f"Unable to export ZIP:\n{str(e)}")
-            return
+            spec = {"mode": "zip", "path": file_path, "station_ids": station_ids, "zip": True}
+        else:
+            target_station_id = None
+            if radio_single.isChecked() and combo_stations.count() > 0:
+                target_station_id = combo_stations.currentData()
+                if target_station_id is None:
+                    QMessageBox.warning(self, "Export", "No station selected for export.")
+                    return
 
-        # --- Single .xml (legacy behaviour) ---
-        target_station_id = None
-        if radio_single.isChecked() and combo_stations.count() > 0:
-            target_station_id = combo_stations.currentData()
-            if target_station_id is None:
-                QMessageBox.warning(self, "Export", "No station selected for export.")
+            default_name = (
+                f"inventory_{combo_stations.currentText().split(' ')[0]}.xml"
+                if target_station_id
+                else "inventory_full.xml"
+            )
+            file_path, _ = QFileDialog.getSaveFileName(
+                self,
+                "Save StationXML file",
+                default_name,
+                "StationXML Files (*.xml);;All Files (*)",
+            )
+            if not file_path:
                 return
+            spec = {
+                "mode": "single",
+                "path": file_path,
+                "target_station_id": target_station_id,
+                "zip": False,
+            }
 
-        default_name = (
-            f"inventory_{combo_stations.currentText().split(' ')[0]}.xml"
-            if target_station_id
-            else "inventory_full.xml"
+        self._export_progress_dialog = QProgressDialog(self)
+        self._export_progress_dialog.setWindowTitle("StationXML export")
+        self._export_progress_dialog.setLabelText("Starting…")
+        self._export_progress_dialog.setCancelButtonText("Cancel")
+        self._export_progress_dialog.setRange(0, 0)
+        self._export_progress_dialog.setMinimumDuration(0)
+        self._export_progress_dialog.setWindowModality(Qt.WindowModality.WindowModal)
+        self._export_progress_dialog.setAutoClose(False)
+        self._export_progress_dialog.setAutoReset(False)
+        self._export_progress_dialog.show()
+
+        self.export_btn.setEnabled(False)
+        self._export_progress_dialog.canceled.connect(
+            lambda: self._job_runner.cancel_job("stationxml_export")
         )
-        file_path, _ = QFileDialog.getSaveFileName(
-            self,
-            "Save StationXML file",
-            default_name,
-            "StationXML Files (*.xml);;All Files (*)",
+        self._job_runner.run_job(
+            Job(
+                name="stationxml_export",
+                function=self._job_stationxml_export,
+                args=(spec,),
+            ),
+            on_progress=self._on_stationxml_export_progress,
+            on_finished=self._on_stationxml_export_finished,
+            on_error=self._on_stationxml_export_error,
         )
-        if not file_path:
+
+    def _job_stationxml_export(self, spec, report_progress=None, is_cancelled=None):
+        exporter = self._export_web.exporter
+        exporter.validation_warnings.clear()
+
+        def cb(cur: int, tot: int, msg: str) -> None:
+            if report_progress:
+                report_progress((cur, tot, msg))
+
+        cancel = is_cancelled if is_cancelled is not None else (lambda: False)
+
+        if spec["mode"] == "single":
+            inv = exporter.build_inventory(
+                spec.get("target_station_id"),
+                output_path=spec["path"],
+                validate=True,
+                progress_callback=cb,
+                cancel_callback=cancel,
+            )
+            if inv is None:
+                return {"ok": False, "cancelled": True, "zip": False}
+            return {"ok": True, "cancelled": False, "path": spec["path"], "zip": False}
+
+        data = exporter.build_zip_bytes_for_station_ids(
+            spec["station_ids"],
+            progress_callback=cb,
+            cancel_callback=cancel,
+        )
+        if data is None:
+            return {"ok": False, "cancelled": True, "zip": True}
+        with open(spec["path"], "wb") as fh:
+            fh.write(data)
+        return {"ok": True, "cancelled": False, "path": spec["path"], "zip": True}
+
+    def _on_stationxml_export_progress(self, payload):
+        current, total, message = payload
+        dlg = self._export_progress_dialog
+        if not dlg:
+            return
+        dlg.setLabelText(message)
+        if total <= 0:
+            dlg.setRange(0, 0)
+        else:
+            dlg.setRange(0, total)
+            dlg.setValue(min(current, total))
+        pct = int(100 * current / total) if total else 0
+        dlg.setWindowTitle(f"StationXML export — {pct}%")
+
+    def _on_stationxml_export_finished(self, result: dict):
+        dlg = self._export_progress_dialog
+        if dlg:
+            dlg.close()
+            self._export_progress_dialog = None
+        self.export_btn.setEnabled(True)
+
+        if not result.get("ok"):
+            if result.get("cancelled"):
+                return
+            QMessageBox.warning(
+                self,
+                "Export",
+                "The export did not complete successfully. Check the application log.",
+            )
             return
 
-        try:
-            inv = exporter.build_inventory(target_station_id=target_station_id)
-            inv.write(file_path, format="STATIONXML", validate=True)
-            self._show_export_result_dialog(exporter, file_path, is_zip=False)
-        except Exception as e:
-            logger.error(f"XML export error: {e}")
-            QMessageBox.critical(self, "Error", f"Unable to export XML file:\n{str(e)}")
+        self._show_export_result_dialog(
+            self._export_web.exporter,
+            result["path"],
+            is_zip=result.get("zip", False),
+        )
+
+    def _on_stationxml_export_error(self, err: str):
+        dlg = self._export_progress_dialog
+        if dlg:
+            dlg.close()
+            self._export_progress_dialog = None
+        self.export_btn.setEnabled(True)
+        QMessageBox.critical(self, "Export error", f"An error occurred during export:\n{err}")
 
     def _show_export_result_dialog(self, exporter: StationXMLExporter, file_path: str, *, is_zip: bool) -> None:
         """Shared success / warning dialog after export."""

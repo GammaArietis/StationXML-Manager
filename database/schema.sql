@@ -137,6 +137,7 @@ CREATE TABLE IF NOT EXISTS channel (
     datalogger_serial_number TEXT,
     comments TEXT,
     types TEXT DEFAULT 'CONTINUOUS,GEOPHYSICAL',
+    restricted_status TEXT DEFAULT 'open',
     UNIQUE(station_id, code, location_code, start_date),
     FOREIGN KEY (station_id) REFERENCES station (id) ON DELETE CASCADE,
     FOREIGN KEY (sensor_id) REFERENCES sensor_catalog(id) ON DELETE SET NULL,

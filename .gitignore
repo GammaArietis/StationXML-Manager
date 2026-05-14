@@ -31,10 +31,14 @@ ENV/
 env/
 stationxml_env/
 
-# Local database (default paths; adjust if you store DB elsewhere)
+# Local database
+*.db
+*.db-journal
 stationxml.db
 data/stationxml.db
-*.db-journal
+
+# Local backups
+backups/
 
 # IDE / OS
 .idea/

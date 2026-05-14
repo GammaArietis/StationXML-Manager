@@ -68,10 +68,31 @@ class DatabaseManager:
                 cursor = conn.cursor()
                 # executescript runs multiple statements separated by semicolons
                 cursor.executescript(sql_script)
+                self._ensure_channel_restricted_status_column(conn)
                 conn.commit()
-                
+
             logger.info("Database initialized successfully.")
             
         except sqlite3.Error as e:
             logger.error(f"Error executing SQL schema: {e}")
             raise
+
+    def _ensure_channel_restricted_status_column(self, conn: sqlite3.Connection) -> None:
+        """
+        CREATE TABLE IF NOT EXISTS does not add columns to existing DBs.
+        FDSN Channel.restrictedStatus is stored as channel.restricted_status.
+        """
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' AND name='channel' LIMIT 1"
+        )
+        if not cur.fetchone():
+            return
+        cur.execute("PRAGMA table_info(channel)")
+        col_names = {row[1] for row in cur.fetchall()}
+        if "restricted_status" in col_names:
+            return
+        cur.execute(
+            "ALTER TABLE channel ADD COLUMN restricted_status TEXT DEFAULT 'open'"
+        )
+        logger.info("Applied migration: channel.restricted_status column added.")

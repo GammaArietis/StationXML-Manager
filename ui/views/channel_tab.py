@@ -24,31 +24,23 @@ class ChannelTab(QWidget):
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         form = QFormLayout()
 
-        # Identifiers
+        # --- Identifiers & Types (FDSN) ---
+        identifiers_group = QGroupBox("Identifiers & Types")
+        identifiers_form = QFormLayout(identifiers_group)
+
         self.code_input = QLineEdit()
         self.code_input.setPlaceholderText("E.g. HHZ")
         self.loc_input = QLineEdit()
-        self.loc_input.setPlaceholderText("00")
-        
-        # --- FDSN COMMENTS TABLE ---
-        comm_group = QGroupBox("Channel Comments (FDSN)")
-        comm_lay = QVBoxLayout(comm_group)
-        
-        self.comm_table = QTableWidget(0, 5)
-        self.comm_table.setHorizontalHeaderLabels(["Text", "Start (YYYY-MM-DD)", "End", "Subject", "Author (Name/Agency)"])
-        self.comm_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
-        comm_lay.addWidget(self.comm_table)
-        
-        btns = QHBoxLayout()
-        add_btn = QPushButton("+ Add Comment")
-        add_btn.clicked.connect(self._add_comment_row)
-        rem_btn = QPushButton("- Remove Row")
-        rem_btn.clicked.connect(self._remove_comment_row)
-        btns.addWidget(add_btn)
-        btns.addWidget(rem_btn)
-        comm_lay.addLayout(btns)
-        
-        # Channel Types (Matrix FDSN)
+        self.loc_input.setPlaceholderText('Empty or "--" for default location')
+
+        self.depth_input = QDoubleSpinBox()
+        self.depth_input.setRange(0, 10000)
+        self.depth_input.setSuffix(" m")
+
+        identifiers_form.addRow("Channel Code (e.g. HHZ):", self.code_input)
+        identifiers_form.addRow("Location Code:", self.loc_input)
+        identifiers_form.addRow("Depth:", self.depth_input)
+
         self.types_combo = QComboBox()
         self.types_combo.setEditable(True)
         self.types_combo.addItems([
@@ -66,11 +58,29 @@ class ChannelTab(QWidget):
             "SYNTHETIC,FLAG"
         ])
         self.types_combo.setCurrentIndex(0)
+
+        self.restricted_combo = QComboBox()
+        self.restricted_combo.addItems(["open", "closed", "partial"])
+        self.restricted_combo.setCurrentIndex(0)
+
+        identifiers_form.addRow("Channel Types (FDSN):", self.types_combo)
+        identifiers_form.addRow("Restricted Status:", self.restricted_combo)
+        comm_group = QGroupBox("Channel Comments (FDSN)")
+        comm_lay = QVBoxLayout(comm_group)
         
-        # Depth
-        self.depth_input = QDoubleSpinBox()
-        self.depth_input.setRange(0, 10000)
-        self.depth_input.setSuffix(" m")
+        self.comm_table = QTableWidget(0, 5)
+        self.comm_table.setHorizontalHeaderLabels(["Text", "Start (YYYY-MM-DD)", "End", "Subject", "Author (Name/Agency)"])
+        self.comm_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        comm_lay.addWidget(self.comm_table)
+        
+        btns = QHBoxLayout()
+        add_btn = QPushButton("+ Add Comment")
+        add_btn.clicked.connect(self._add_comment_row)
+        rem_btn = QPushButton("- Remove Row")
+        rem_btn.clicked.connect(self._remove_comment_row)
+        btns.addWidget(add_btn)
+        btns.addWidget(rem_btn)
+        comm_lay.addLayout(btns)
 
         # Technical Parameters
         self.sample_rate = QDoubleSpinBox()
@@ -145,11 +155,8 @@ class ChannelTab(QWidget):
         self.preamp_gain_input.setValue(1.0)
         
         # --- FORM COMPOSITION ---
-        form.addRow("Channel Code (e.g. HHZ):", self.code_input)
-        form.addRow("Location Code:", self.loc_input)
+        form.addRow(identifiers_group)
         form.addRow(comm_group)
-        form.addRow("Channel Types (FDSN):", self.types_combo)
-        form.addRow("Depth:", self.depth_input)
         
         line1 = QFrame()
         line1.setFrameShape(QFrame.Shape.HLine)
@@ -277,6 +284,7 @@ class ChannelTab(QWidget):
         self.loc_input.clear()
         self.comm_table.setRowCount(0)
         self.types_combo.setCurrentIndex(0)
+        self.restricted_combo.setCurrentIndex(0)
         self.depth_input.setValue(0.0)
         self.sample_rate.setValue(100.0)
         self.azimuth.setValue(0.0)
@@ -307,6 +315,13 @@ class ChannelTab(QWidget):
         idx_types = self.types_combo.findText(val_types)
         if idx_types >= 0: self.types_combo.setCurrentIndex(idx_types)
         else: self.types_combo.setEditText(val_types)
+
+        rs = getattr(channel, "restricted_status", None) or "open"
+        idx_rs = self.restricted_combo.findText(rs)
+        if idx_rs >= 0:
+            self.restricted_combo.setCurrentIndex(idx_rs)
+        else:
+            self.restricted_combo.setCurrentIndex(0)
 
         self.depth_input.setValue(channel.depth if channel.depth is not None else 0.0)
         self.sample_rate.setValue(channel.sample_rate if channel.sample_rate is not None else 0.0)
@@ -433,6 +448,7 @@ class ChannelTab(QWidget):
             sensor_serial_number=self.sensor_serial_input.text().strip() or None,
             datalogger_serial_number=self.datalogger_serial_input.text().strip() or None,
             types=self.types_combo.currentText().strip(),
+            restricted_status=self.restricted_combo.currentText(),
             clock_drift=self.clock_drift.value(),
             calibration_units=self.cal_units_combo.currentText().strip() or None,
             pre_amplifier_id=self.preamp_combo.currentData(),

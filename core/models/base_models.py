@@ -218,6 +218,7 @@ class Channel(BaseModel):
     sensor_serial_number: Optional[str] = None
     datalogger_serial_number: Optional[str] = None
     types: str = "CONTINUOUS,GEOPHYSICAL"
+    restricted_status: str = "open"
     clock_drift: Optional[float] = 0.0 # <--- FIX: Reso Optional
     calibration_units: Optional[str] = None
     pre_amplifier_id: Optional[int] = None
@@ -226,6 +227,11 @@ class Channel(BaseModel):
     stage_gain_delay: float = 0.0
     stage_gain_correction: float = 0.0
     comments: Optional[str] = None
+
+    @field_validator("restricted_status", mode="before")
+    @classmethod
+    def _normalize_channel_restricted_status(cls, v: object) -> str:
+        return coerce_fdsn_restricted_status(v)
 
     # Applichiamo lo stesso validatore usato in Sensor per gestire i None e le stringhe "None"
     @field_validator('clock_drift', 'sample_rate', 'depth', 'pre_amplifier_gain', mode='before')

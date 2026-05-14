@@ -1,5 +1,7 @@
 import logging
 import json
+from typing import Callable, Optional
+
 from obspy import read_inventory
 from obspy.core.inventory.response import (PolesZerosResponseStage, FIRResponseStage,
                                            CoefficientsTypeResponseStage, ResponseStage)
@@ -11,6 +13,11 @@ from core.models.base_models import (Network, Station, Operator, Sensor, Datalog
 from utils.nrl_client import NRLManager
 
 logger = logging.getLogger(__name__)
+
+# (current, total, message) — total==0 means indeterminate phase (e.g. reading file).
+ProgressCallback = Optional[Callable[[int, int, str], None]]
+CancelCallback = Optional[Callable[[], bool]]
+
 
 class StationXMLParser:
     def __init__(self, net_ctrl, sta_ctrl, cha_ctrl, equ_ctrl):
@@ -52,25 +59,141 @@ class StationXMLParser:
         # Return the JSON (e.g. [{"value": "Maintenance", "begin_date": "..."}])
         return json.dumps(comments_list) if comments_list else None
 
-    def import_file(self, file_path):
-        """Main entry point for importing an XML file."""
+    @staticmethod
+    def _emit_progress(
+        progress_callback: ProgressCallback,
+        current: int,
+        total: int,
+        message: str,
+    ) -> None:
+        if not progress_callback:
+            return
         try:
+            progress_callback(current, total, message)
+        except Exception as exc:
+            logger.warning("progress_callback failed: %s", exc)
+
+    @staticmethod
+    def _import_total_steps(inv) -> int:
+        """1 = read file step; then each network, station, and channel in the ObsPy tree."""
+        total = 1
+        for net in inv:
+            total += 1
+            for sta in net:
+                total += 1
+                total += len(list(sta))
+        return total
+
+    def import_file(
+        self,
+        file_path,
+        progress_callback: ProgressCallback = None,
+        cancel_callback: CancelCallback = None,
+    ):
+        """
+        Import a StationXML (or inventory) file into the database.
+
+        progress_callback(current, total, message):
+            total==0 only for the initial "reading file" phase; afterwards total matches
+            the planned step count until completion (current == total).
+        cancel_callback():
+            if provided and returns True, import stops and the method returns False.
+        """
+        try:
+            self._emit_progress(
+                progress_callback, 0, 0, "Reading StationXML file…"
+            )
+            if cancel_callback and cancel_callback():
+                return False
+
             inv = read_inventory(file_path)
-            logger.info(f"File {file_path} loaded with ObsPy. Starting parsing...")
+            logger.info("File %s loaded with ObsPy. Starting parsing...", file_path)
+
+            total = self._import_total_steps(inv)
+            current = 1
+            self._emit_progress(
+                progress_callback,
+                current,
+                total,
+                f"Inventory loaded ({len(inv)} network(s)); importing…",
+            )
 
             for net in inv:
+                if cancel_callback and cancel_callback():
+                    return False
                 net_op_id = self._get_or_create_operator(net)
                 db_net = self._process_network(net, net_op_id)
-                if not db_net: continue
+                current += 1
+                self._emit_progress(
+                    progress_callback,
+                    current,
+                    total,
+                    f"Network {getattr(net, 'code', '?')}: saved metadata",
+                )
+                if not db_net:
+                    for sta in net:
+                        if cancel_callback and cancel_callback():
+                            return False
+                        current += 1
+                        self._emit_progress(
+                            progress_callback,
+                            current,
+                            total,
+                            f"Station {getattr(sta, 'code', '?')}: skipped (network not stored)",
+                        )
+                        for cha in sta:
+                            if cancel_callback and cancel_callback():
+                                return False
+                            current += 1
+                            self._emit_progress(
+                                progress_callback,
+                                current,
+                                total,
+                                f"Channel {getattr(cha, 'code', '?')}: skipped",
+                            )
+                    continue
 
                 for sta in net:
+                    if cancel_callback and cancel_callback():
+                        return False
                     sta_op_id = self._get_or_create_operator(sta)
                     db_sta = self._process_station(sta, db_net.id, sta_op_id)
-                    if not db_sta: continue
+                    current += 1
+                    self._emit_progress(
+                        progress_callback,
+                        current,
+                        total,
+                        f"Station {getattr(sta, 'code', '?')}: saved metadata",
+                    )
+                    if not db_sta:
+                        for cha in sta:
+                            if cancel_callback and cancel_callback():
+                                return False
+                            current += 1
+                            self._emit_progress(
+                                progress_callback,
+                                current,
+                                total,
+                                f"Channel {getattr(cha, 'code', '?')}: skipped (station not stored)",
+                            )
+                        continue
 
                     for cha in sta:
+                        if cancel_callback and cancel_callback():
+                            return False
                         self._process_channel(cha, db_sta.id)
+                        current += 1
+                        loc = getattr(cha, "location_code", "") or "--"
+                        self._emit_progress(
+                            progress_callback,
+                            current,
+                            total,
+                            f"Channel {getattr(sta, 'code', '?')}.{getattr(cha, 'code', '?')} ({loc})",
+                        )
 
+            self._emit_progress(
+                progress_callback, total, total, "Import completed successfully."
+            )
             return True
         except Exception as e:
             logger.error(f"Critical error during import: {e}")
@@ -259,6 +382,9 @@ class StationXMLParser:
             sensor_serial_number=s_serial,
             datalogger_serial_number=dl_serial,
             types=",".join(obspy_cha.types) if getattr(obspy_cha, 'types', None) else "CONTINUOUS,GEOPHYSICAL",
+            restricted_status=coerce_fdsn_restricted_status(
+                getattr(obspy_cha, "restricted_status", None)
+            ),
             clock_drift=c_drift,
             calibration_units=cal_units,
             comments=comments

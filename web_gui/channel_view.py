@@ -27,6 +27,12 @@ class ChannelView:
                                  "CONTINUOUS,HEALTH", "CONTINUOUS,WEATHER", "CONTINUOUS,FLAG"]
                 # with_input=True permette di scrivere tipi custom se non in lista
                 self.types_in = ui.select(types_options, label='Channel Types (FDSN)', value=channel.types or "CONTINUOUS,GEOPHYSICAL", with_input=True).classes('flex-grow')
+            with ui.row().classes('w-full gap-4 mt-4'):
+                self.restr_in = ui.select(
+                    ['open', 'closed', 'partial'],
+                    label='Restricted Status',
+                    value=getattr(channel, 'restricted_status', None) or 'open',
+                ).classes('w-1/3')
 
         # --- BLOCCO 2: PARAMETRI TECNICI ---
         with ui.card().classes('w-full p-6 mb-4 shadow-sm'):
@@ -195,6 +201,7 @@ class ChannelView:
         channel.sensor_serial_number = self.sensor_sn.value or None
         channel.datalogger_serial_number = self.logger_sn.value or None
         channel.types = self.types_in.value
+        channel.restricted_status = self.restr_in.value
         channel.clock_drift = self.drift_in.value
         channel.calibration_units = self.cal_units_in.value or None
         

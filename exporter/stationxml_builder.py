@@ -2,7 +2,7 @@ import io
 import json
 import logging
 import zipfile
-from typing import List, Optional, Set
+from typing import Callable, List, Optional, Set, Tuple
 
 from obspy.core.inventory import Inventory, Network, Station, Channel, Site, Equipment
 from obspy.core.inventory.response import (
@@ -16,6 +16,10 @@ from obspy.core.inventory import Comment
 
 logger = logging.getLogger(__name__)
 
+ProgressCallback = Optional[Callable[[int, int, str], None]]
+CancelCallback = Optional[Callable[[], bool]]
+
+
 class StationXMLExporter:
     def __init__(self, net_ctrl, sta_ctrl, cha_ctrl, eq_ctrl):
         self.net_ctrl = net_ctrl
@@ -25,6 +29,38 @@ class StationXMLExporter:
         
         # --- FIX 2: Creation of the warnings collector ---
         self.validation_warnings = set()
+
+    @staticmethod
+    def _emit_export_progress(
+        callback: ProgressCallback,
+        current: int,
+        total: int,
+        message: str,
+    ) -> None:
+        if not callback:
+            return
+        try:
+            callback(current, total, message)
+        except Exception as exc:
+            logger.warning("export progress_callback failed: %s", exc)
+
+    def _iter_export_networks(self, target_station_id: Optional[int]):
+        for net in self.net_ctrl.get_all_networks():
+            stations = self.sta_ctrl.get_stations_by_network(net.id)
+            if target_station_id is not None:
+                stations = [s for s in stations if s.id == target_station_id]
+            if not stations:
+                continue
+            yield net, stations
+
+    def _count_export_units(self, target_station_id: Optional[int]) -> Tuple[int, int, int]:
+        nn = ns = nc = 0
+        for _net, stations in self._iter_export_networks(target_station_id):
+            nn += 1
+            for sta in stations:
+                ns += 1
+                nc += len(self.cha_ctrl.get_channels_by_station(sta.id))
+        return nn, ns, nc
         
     def _build_fdsn_comments(self, comments_json: str) -> list:
         """Reads the JSON string from the database and recreates ObsPy Comment objects."""
@@ -127,23 +163,42 @@ class StationXMLExporter:
             
         return [obspy_op]
 
-    def build_inventory(self, target_station_id: int = None) -> Inventory:
+    def build_inventory(
+        self,
+        target_station_id: Optional[int] = None,
+        *,
+        output_path: Optional[str] = None,
+        validate: bool = True,
+        progress_callback: ProgressCallback = None,
+        cancel_callback: CancelCallback = None,
+    ) -> Optional[Inventory]:
         inv = Inventory(networks=[], source="StationXML Manager FDSN")
 
         sensors_db = {s.id: s for s in self.eq_ctrl.get_all_sensors()}
         dataloggers_db = {d.id: d for d in self.eq_ctrl.get_all_dataloggers()}
         operators_db = {op.id: op for op in self.eq_ctrl.get_all_operators()}
 
-        networks = self.net_ctrl.get_all_networks()
-        for net in networks:
-            stations = self.sta_ctrl.get_stations_by_network(net.id)
-            
-            if target_station_id is not None:
-                stations = [s for s in stations if s.id == target_station_id]
-                
-            if not stations:
-                continue
-                
+        nn, ns, nc = self._count_export_units(target_station_id)
+        total = nn + ns + nc + 2
+        cur = 0
+        self._emit_export_progress(progress_callback, cur, total, "Preparing export…")
+        if cancel_callback and cancel_callback():
+            return None
+        cur = 1
+        self._emit_export_progress(
+            progress_callback, cur, total, "Loading equipment & operator catalogs…"
+        )
+        if cancel_callback and cancel_callback():
+            return None
+
+        for net, stations in self._iter_export_networks(target_station_id):
+            if cancel_callback and cancel_callback():
+                return None
+            cur += 1
+            self._emit_export_progress(
+                progress_callback, cur, total, f"Network {net.code}…"
+            )
+
             net_identifiers = []
             if hasattr(net, 'doi') and net.doi:
                 # ObsPy will automatically map this format to <Identifier type="DOI">
@@ -161,6 +216,13 @@ class StationXMLExporter:
             obspy_net.comments = self._build_fdsn_comments(getattr(net, 'comments', None))
             
             for sta in stations:
+                if cancel_callback and cancel_callback():
+                    return None
+                cur += 1
+                self._emit_export_progress(
+                    progress_callback, cur, total, f"Station {sta.code}…"
+                )
+
                 site_obj = Site(
                     name=sta.site_name if sta.site_name else "Unknown",
                     description=getattr(sta, 'description', None),
@@ -191,7 +253,17 @@ class StationXMLExporter:
 
                 channels = self.cha_ctrl.get_channels_by_station(sta.id)
                 for cha in channels:
-                    
+                    if cancel_callback and cancel_callback():
+                        return None
+                    cur += 1
+                    loc = cha.location_code or "--"
+                    self._emit_export_progress(
+                        progress_callback,
+                        cur,
+                        total,
+                        f"Channel {sta.code}.{cha.code} ({loc})…",
+                    )
+
                     lat = cha.latitude if cha.latitude is not None else sta.latitude
                     lon = cha.longitude if cha.longitude is not None else sta.longitude
                     elev = cha.elevation if cha.elevation is not None else sta.elevation
@@ -483,12 +555,32 @@ class StationXMLExporter:
                 obspy_net.stations.append(obspy_sta)
             inv.networks.append(obspy_net)
 
+        if cancel_callback and cancel_callback():
+            return None
+        cur += 1
+        if output_path:
+            self._emit_export_progress(
+                progress_callback, cur, total, f"Writing StationXML to disk…"
+            )
+            inv.write(output_path, format="STATIONXML", validate=validate)
+        else:
+            self._emit_export_progress(
+                progress_callback, cur, total, "Inventory build complete."
+            )
         return inv
 
-    def inventory_to_stationxml_bytes(self, inv: Inventory) -> bytes:
+    def inventory_to_stationxml_bytes(
+        self,
+        inv: Inventory,
+        progress_callback: ProgressCallback = None,
+    ) -> bytes:
         """Serialize a single ObsPy inventory to StationXML bytes."""
+        self._emit_export_progress(
+            progress_callback, 0, 2, "Serializing inventory to StationXML bytes…"
+        )
         buf = io.BytesIO()
         inv.write(buf, format="STATIONXML")
+        self._emit_export_progress(progress_callback, 2, 2, "Serialization complete.")
         return buf.getvalue()
 
     def _first_station_code_in_inventory(self, inv: Inventory) -> Optional[str]:
@@ -513,19 +605,56 @@ class StationXMLExporter:
                 return cand
             i += 1
 
-    def build_zip_bytes_for_station_ids(self, station_ids: List[int]) -> bytes:
+    def build_zip_bytes_for_station_ids(
+        self,
+        station_ids: List[int],
+        *,
+        progress_callback: ProgressCallback = None,
+        cancel_callback: CancelCallback = None,
+    ) -> Optional[bytes]:
         """
         One StationXML file per station ID inside a ZIP archive.
         Filenames default to {station_code}.xml (disambiguated on collision).
         """
         if not station_ids:
             raise ValueError("station_ids must not be empty")
+        n = len(station_ids)
+        total = n + 2
+        cur = 0
+        self._emit_export_progress(progress_callback, cur, total, "Preparing ZIP export…")
+        if cancel_callback and cancel_callback():
+            return None
+        cur = 1
+        self._emit_export_progress(progress_callback, cur, total, "Building ZIP archive…")
+        if cancel_callback and cancel_callback():
+            return None
+
         used_names: Set[str] = set()
         zip_buf = io.BytesIO()
         with zipfile.ZipFile(zip_buf, "w", compression=zipfile.ZIP_DEFLATED) as zf:
-            for sid in station_ids:
-                inv = self.build_inventory(target_station_id=sid)
+            for idx, sid in enumerate(station_ids):
+                if cancel_callback and cancel_callback():
+                    return None
+                cur += 1
+                self._emit_export_progress(
+                    progress_callback,
+                    cur,
+                    total,
+                    f"Station {idx + 1}/{n} (id={sid}) — building XML…",
+                )
+                inv = self.build_inventory(
+                    sid,
+                    progress_callback=None,
+                    cancel_callback=cancel_callback,
+                )
+                if inv is None:
+                    return None
                 code = self._first_station_code_in_inventory(inv) or f"id{sid}"
                 fname = self._safe_xml_filename(code, used_names)
                 zf.writestr(fname, self.inventory_to_stationxml_bytes(inv))
+
+        if cancel_callback and cancel_callback():
+            return None
+        cur += 1
+        self._emit_export_progress(progress_callback, cur, total, "Finalizing ZIP…")
         return zip_buf.getvalue()

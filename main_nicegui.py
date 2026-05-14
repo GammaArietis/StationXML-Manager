@@ -72,6 +72,7 @@ def index():
 
     # --- 3. LOGICA DI IMPORTAZIONE (FIX: Lettura byte e gestione errori) ---
     async def handle_import_upload(e):
+        tmp_path = None
         try:
             # Recupero del contenuto (content o file)
             content = getattr(e, 'content', None) or getattr(e, 'file', None)
@@ -81,31 +82,94 @@ def index():
 
             # Lettura asincrona obbligatoria per NiceGUI moderno
             file_bytes = await content.read() if hasattr(content, 'read') else content
-            
+
             with tempfile.NamedTemporaryFile(delete=False, suffix='.xml') as tmp:
                 tmp.write(file_bytes)
                 tmp_path = tmp.name
 
-            ui.notify('Analisi StationXML in corso...', loading=True)
-            
-            # Parsing e salvataggio nel DB
-            parser = StationXMLParser(net_ctrl, sta_ctrl, cha_ctrl, eq_ctrl)
-            # Usiamo import_file come definito nel tuo stationxml_parser.py
-            await run.io_bound(parser.import_file, tmp_path)
+            prog_col.set_visibility(True)
+            prog_bar.value = 0.0
+            prog_lbl.text = '0% — Preparing…'
 
-            if os.path.exists(tmp_path):
+            progress_q: queue.SimpleQueue = queue.SimpleQueue()
+            loop = asyncio.get_running_loop()
+
+            def run_import_sync() -> bool:
+                parser = StationXMLParser(net_ctrl, sta_ctrl, cha_ctrl, eq_ctrl)
+
+                def progress_cb(current: int, total: int, message: str) -> None:
+                    progress_q.put((current, total, message))
+
+                return parser.import_file(tmp_path, progress_callback=progress_cb)
+
+            fut = loop.run_in_executor(None, run_import_sync)
+
+            def apply_progress(current: int, total: int, message: str) -> None:
+                if total <= 0:
+                    prog_bar.value = 0.0
+                    prog_lbl.text = message
+                else:
+                    frac = min(1.0, max(0.0, current / total)) if total else 0.0
+                    prog_bar.value = frac
+                    pct = int(100 * current / total) if total else 0
+                    prog_lbl.text = f'{pct}% — {message}'
+
+            while True:
+                drained = False
+                while True:
+                    try:
+                        cur, tot, msg = progress_q.get_nowait()
+                        drained = True
+                        apply_progress(cur, tot, msg)
+                    except queue.Empty:
+                        break
+                if fut.done():
+                    while True:
+                        try:
+                            cur, tot, msg = progress_q.get_nowait()
+                            apply_progress(cur, tot, msg)
+                        except queue.Empty:
+                            break
+                    break
+                if not drained:
+                    await asyncio.sleep(0.04)
+
+            exc = fut.exception()
+            if exc is not None:
+                raise exc
+            ok = bool(fut.result())
+
+            if tmp_path and os.path.exists(tmp_path):
                 os.unlink(tmp_path)
-                
-            ui.notify('Importazione completata con successo!', type='positive')
-            build_tree()
-            import_dialog.close()
-            
+                tmp_path = None
+
+            prog_col.set_visibility(False)
+
+            if ok:
+                ui.notify('Importazione completata con successo!', type='positive')
+                build_tree()
+                import_dialog.close()
+            else:
+                ui.notify('Importazione non completata (vedi log).', type='warning')
+
         except Exception as ex:
             traceback.print_exc()
             ui.notify(f'Errore: {str(ex)}', type='negative')
+            prog_col.set_visibility(False)
+        finally:
+            if tmp_path and os.path.exists(tmp_path):
+                try:
+                    os.unlink(tmp_path)
+                except OSError:
+                    pass
 
-    with ui.dialog() as import_dialog, ui.card().classes('p-6 w-96'):
+    with ui.dialog() as import_dialog, ui.card().classes('p-6 w-full max-w-lg'):
         ui.label('Import StationXML').classes('text-xl font-bold mb-4')
+        prog_col = ui.column().classes('w-full gap-2')
+        with prog_col:
+            prog_bar = ui.linear_progress(value=0.0).classes('w-full')
+            prog_lbl = ui.label('').classes('text-sm text-slate-600 break-words')
+        prog_col.set_visibility(False)
         ui.upload(label='Trascina file XML qui', on_upload=handle_import_upload, auto_upload=True).classes('w-full')
         ui.button('Chiudi', on_click=import_dialog.close).props('flat').classes('mt-4')
 
@@ -140,34 +204,129 @@ def index():
                 value=StationXMLExportLayout.SINGLE_INVENTORY.value,
             ).classes('w-full max-w-2xl mb-4')
 
+            export_prog_col = ui.column().classes('w-full gap-2 mb-4')
+            with export_prog_col:
+                export_prog_bar = ui.linear_progress(value=0.0).classes('w-full')
+                export_prog_lbl = ui.label('').classes('text-sm text-slate-600 break-words')
+            export_prog_col.set_visibility(False)
+
             async def handle_export_click():
                 selected = export_table.selected
                 if not selected:
                     ui.notify('Seleziona almeno una stazione!', type='warning')
                     return
                 try:
-                    ui.notify('Generazione StationXML...', loading=True)
                     layout = StationXMLExportLayout(export_layout.value)
-                    data, fname = await run.io_bound(
-                        lambda: export_web_ctrl.build_download(selected, layout=layout),
-                    )
-                    ui.download(data, filename=fname)
-                    ui.notify('Download pronto!', type='positive')
+                    export_prog_col.set_visibility(True)
+                    export_prog_bar.value = 0.0
+                    export_prog_lbl.text = '0% — Avvio export…'
+
+                    progress_q: queue.SimpleQueue = queue.SimpleQueue()
+                    loop = asyncio.get_running_loop()
+
+                    def apply_export_progress(current: int, total: int, message: str) -> None:
+                        if total <= 0:
+                            export_prog_bar.value = 0.0
+                            export_prog_lbl.text = message
+                        else:
+                            frac = min(1.0, max(0.0, current / total)) if total else 0.0
+                            export_prog_bar.value = frac
+                            pct = int(100 * current / total) if total else 0
+                            export_prog_lbl.text = f'{pct}% — {message}'
+
+                    async def pump_until_done(fut):
+                        while True:
+                            drained = False
+                            while True:
+                                try:
+                                    cur, tot, msg = progress_q.get_nowait()
+                                    drained = True
+                                    apply_export_progress(cur, tot, msg)
+                                except queue.Empty:
+                                    break
+                            if fut.done():
+                                while True:
+                                    try:
+                                        cur, tot, msg = progress_q.get_nowait()
+                                        apply_export_progress(cur, tot, msg)
+                                    except queue.Empty:
+                                        break
+                                break
+                            if not drained:
+                                await asyncio.sleep(0.04)
+
+                    if layout == StationXMLExportLayout.SINGLE_INVENTORY:
+                        tmp = tempfile.NamedTemporaryFile(delete=False, suffix='.xml')
+                        temp_path = tmp.name
+                        tmp.close()
+
+                        def run_single_to_disk():
+                            def progress_cb(current: int, total: int, message: str) -> None:
+                                progress_q.put((current, total, message))
+
+                            return export_web_ctrl.write_single_inventory_xml_to_path(
+                                selected,
+                                temp_path,
+                                progress_callback=progress_cb,
+                                cancel_callback=None,
+                            )
+
+                        fut = loop.run_in_executor(None, run_single_to_disk)
+                        await pump_until_done(fut)
+
+                        exc = fut.exception()
+                        if exc is not None:
+                            raise exc
+                        disk_result = fut.result()
+
+                        export_prog_col.set_visibility(False)
+
+                        if disk_result is None:
+                            ui.notify('Export non completato.', type='warning')
+                            return
+                        ui.download(disk_result, 'inventory_export.xml')
+                        ui.notify('Download pronto!', type='positive')
+                    else:
+
+                        def run_export_sync():
+                            def progress_cb(current: int, total: int, message: str) -> None:
+                                progress_q.put((current, total, message))
+
+                            return export_web_ctrl.build_download(
+                                selected,
+                                layout=layout,
+                                progress_callback=progress_cb,
+                                cancel_callback=None,
+                            )
+
+                        fut = loop.run_in_executor(None, run_export_sync)
+                        await pump_until_done(fut)
+
+                        exc = fut.exception()
+                        if exc is not None:
+                            raise exc
+                        bundle = fut.result()
+
+                        export_prog_col.set_visibility(False)
+
+                        if bundle is None:
+                            ui.notify('Export non completato.', type='warning')
+                            return
+                        data, fname = bundle
+                        ui.download(data, filename=fname)
+                        ui.notify('Download pronto!', type='positive')
                 except Exception as ex:
                     traceback.print_exc()
                     ui.notify(f'Errore Export: {str(ex)}', type='negative')
+                    export_prog_col.set_visibility(False)
 
-            with ui.row().classes('w-full gap-2 items-center flex-wrap'):
-                ui.button('Tutti', on_click=lambda: export_table.select_all()).props('outline')
-                ui.button('Deseleziona', on_click=lambda: export_table.select_all(False)).props('outline')
-                ui.space()
+            with ui.row().classes('w-full justify-end'):
                 ui.button('SCARICA', on_click=handle_export_click).classes(
                     'bg-orange-600 text-white font-bold'
                 )
 
     # --- LOGICA DI ARRICCHIMENTO (ENRICH NET) USANDO I TUOI CLIENT ---
     async def handle_enrich_net():
-        # Recuperiamo tutte le stazioni dal database
         stazioni = []
         for net in net_ctrl.get_all_networks():
             stazioni.extend(sta_svc.get_stations_by_network(net.id))
@@ -176,12 +335,31 @@ def index():
             ui.notify('Nessuna stazione presente nel database!', type='warning')
             return
 
-        # 1. Setup Dialog e Barra di Progresso
+        with ui.dialog() as confirm_dialog, ui.card().classes('p-6'):
+            ui.label('Conferma Enrich Network').classes('text-xl font-bold text-slate-800')
+            ui.label(
+                "Vuoi procedere con l'arricchimento dei dati della Rete? Questa operazione aggiornerà "
+                'i metadati esistenti calcolando le informazioni mancanti.'
+            ).classes('mt-2')
+
+            with ui.row().classes('w-full justify-end mt-4 gap-2'):
+                ui.button('Annulla', on_click=lambda: confirm_dialog.submit(False)).props('flat text-color=grey')
+                ui.button('Conferma', on_click=lambda: confirm_dialog.submit(True)).classes(
+                    'bg-blue-600 text-white font-bold'
+                )
+
+        if not await confirm_dialog:
+            return
+
+        await _run_enrich_net_after_confirm(stazioni)
+
+    async def _run_enrich_net_after_confirm(stazioni):
+        # Setup Dialog e Barra di Progresso
         with ui.dialog() as enrich_dialog, ui.card().classes('p-6 w-96'):
             ui.label('🌍 Arricchimento Geografico/Geologico').classes('text-xl font-bold mb-4')
             progress_bar = ui.linear_progress(value=0).classes('w-full')
             status_label = ui.label('Inizializzazione...').classes('text-sm text-slate-500 mt-2')
-            
+
         enrich_dialog.open()
 
         error_flags = {"DATA_NOT_FOUND", "API_ERROR", "NETWORK_ERROR"}
@@ -191,7 +369,6 @@ def index():
         status_label.set_text(f"Avvio — 0/{totale} ({job_progress_percent(0, totale):.2f}%)")
         await yield_ui()
 
-        # 2. Esecuzione del Job (replicata da main_window.py)
         for i, sta in enumerate(stazioni):
             done = i + 1
             status_label.set_text(
@@ -203,13 +380,11 @@ def index():
                 start_time = time.time()
                 changed = False
 
-                # A. Geologia (Macrostrat v2)
                 geo_res = await run.io_bound(fetch_geology_from_coords, sta.latitude, sta.longitude)
                 if geo_res and geo_res not in error_flags and sta.geology != geo_res:
                     sta.geology = geo_res
                     changed = True
 
-                # B. Geografia (OpenStreetMap / Nominatim)
                 osm_res = await run.io_bound(fetch_geography_from_coords, sta.latitude, sta.longitude)
                 if isinstance(osm_res, dict):
                     mapped_fields = {
@@ -224,12 +399,10 @@ def index():
                             setattr(sta, field_name, value)
                             changed = True
 
-                # Salvataggio se ci sono stati cambiamenti
                 if changed:
                     sta_svc.save_station(sta)
                     updated_count += 1
 
-                # 3. Rispetto dei rate limit (2 secondi per stazione come nel desktop)
                 elapsed = time.time() - start_time
                 wait_time = max(0, 2.0 - elapsed)
                 if wait_time > 0:
@@ -248,11 +421,9 @@ def index():
 
         enrich_dialog.close()
         ui.notify(f'Arricchimento completato! Aggiornate {updated_count} stazioni.', type='positive')
-        
-        # Ricarica l'albero visivo
+
         build_tree()
         workspace.clear()
-        
     # --- LOGICA DI UPDATE NRL GLOBALE ---
     async def handle_update_nrl():
         with ui.dialog() as confirm_dialog, ui.card().classes('p-6'):
@@ -331,14 +502,12 @@ def index():
                 nrl_work_dialog.close()
             
     async def handle_bulk_sync_yasmine():
-        # 1. Recupero stazioni che hanno bisogno di sincronizzazione
         all_stations = []
         for net in net_ctrl.get_all_networks():
             all_stations.extend(sta_svc.get_stations_by_network(net.id))
-        
+
         red_stations = []
         for sta in all_stations:
-            # get_sync_status restituisce (stato, icona, messaggio)
             status, icon, _ = sta_ctrl.get_sync_status(sta)
             if icon in ["🔴", "⚪"]:
                 red_stations.append(sta)
@@ -347,12 +516,30 @@ def index():
             ui.notify('Tutto sincronizzato! 🟢', type='positive')
             return
 
-        # 2. Setup Dialog e Client
+        with ui.dialog() as confirm_dialog, ui.card().classes('p-6'):
+            ui.label('Conferma Sync Yasmine').classes('text-xl font-bold text-slate-800')
+            ui.label(
+                'Vuoi procedere con la sincronizzazione verso Yasmine? I metadati della rete verranno '
+                'inviati al server remoto.'
+            ).classes('mt-2')
+
+            with ui.row().classes('w-full justify-end mt-4 gap-2'):
+                ui.button('Annulla', on_click=lambda: confirm_dialog.submit(False)).props('flat text-color=grey')
+                ui.button('Conferma', on_click=lambda: confirm_dialog.submit(True)).classes(
+                    'bg-purple-600 text-white font-bold'
+                )
+
+        if not await confirm_dialog:
+            return
+
+        await _run_bulk_sync_yasmine_after_confirm(red_stations)
+
+    async def _run_bulk_sync_yasmine_after_confirm(red_stations):
         from utils.yasmine_client import YasmineClient
-        import io
+
         client = YasmineClient()
         exporter = StationXMLExporter(net_ctrl, sta_ctrl, cha_ctrl, eq_ctrl)
-        
+
         with ui.dialog() as sync_dialog, ui.card().classes('p-6 w-96'):
             ui.label('🚀 Yasmine Bulk Sync').classes('text-xl font-bold mb-2')
             progress_bar = ui.linear_progress(value=0).classes('w-full')
@@ -360,7 +547,6 @@ def index():
         sync_dialog.open()
 
         try:
-            # Recuperiamo la lista remota dei file per cercare i doppioni
             status_label.set_text("Connessione a Yasmine…")
             await yield_ui()
             remote_list = await run.io_bound(client.get_all_imported_xmls)
@@ -378,7 +564,6 @@ def index():
                 )
                 await yield_ui()
 
-                # Cerchiamo se esiste già un file con lo stesso nome sul server
                 existing_item = next(
                     (
                         item
@@ -395,10 +580,8 @@ def index():
                     )
                     await yield_ui()
                     old_id = existing_item.get("id")
-                    # Usiamo il nome corretto del metodo: delete_xml
                     await run.io_bound(client.delete_xml, old_id)
 
-                # Generazione XML
                 status_label.set_text(
                     f"{station.code}: generazione XML — {job_progress_percent(done - 1, totale):.2f}%"
                 )
@@ -408,7 +591,6 @@ def index():
                 inv.write(out_stream, format="STATIONXML", validate=True)
                 xml_bytes = out_stream.getvalue()
 
-                # Upload della nuova versione
                 status_label.set_text(
                     f"{station.code}: invio a Yasmine — {job_progress_percent(done - 1, totale):.2f}%"
                 )
@@ -416,7 +598,6 @@ def index():
                 new_id = await run.io_bound(client.upload_xml, xml_bytes, station.code)
 
                 if new_id:
-                    # Aggiorniamo il database locale per far diventare il pallino VERDE
                     await run.io_bound(sta_ctrl.mark_as_synced, station, new_id)
                     success_count += 1
 
@@ -441,7 +622,6 @@ def index():
             sync_dialog.close()
             traceback.print_exc()
             ui.notify(f'Errore critico durante il sync: {str(e)}', type='negative')
-            
 
     # --- 5. HEADER ---
     with ui.header().classes('bg-slate-800 text-white shadow-lg flex-col p-0'):

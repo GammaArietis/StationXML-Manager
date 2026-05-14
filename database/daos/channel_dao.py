@@ -52,10 +52,10 @@ class ChannelDAO:
                 depth, sample_rate, azimuth, dip, sensor_id, 
                 datalogger_id, start_date, end_date, overall_sensitivity,
                 sensor_serial_number, datalogger_serial_number, types,
-                clock_drift, calibration_units, pre_amplifier_id, 
+                restricted_status, clock_drift, calibration_units, pre_amplifier_id, 
                 pre_amplifier_serial_number, pre_amplifier_gain, comments
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """
         params = (
             channel.station_id, channel.code, channel.location_code,
@@ -64,7 +64,8 @@ class ChannelDAO:
             channel.dip, channel.sensor_id, channel.datalogger_id,
             channel.start_date, channel.end_date, channel.overall_sensitivity,
             channel.sensor_serial_number, channel.datalogger_serial_number,
-            channel.types, channel.clock_drift, channel.calibration_units,
+            channel.types, getattr(channel, "restricted_status", None) or "open",
+            channel.clock_drift, channel.calibration_units,
             channel.pre_amplifier_id, channel.pre_amplifier_serial_number,
             channel.pre_amplifier_gain, channel.comments
         )
@@ -87,7 +88,7 @@ class ChannelDAO:
                 depth=?, sample_rate=?, azimuth=?, dip=?, sensor_id=?, 
                 datalogger_id=?, start_date=?, end_date=?, overall_sensitivity=?,
                 sensor_serial_number=?, datalogger_serial_number=?, types=?,
-                clock_drift=?, calibration_units=?, pre_amplifier_id=?, 
+                restricted_status=?, clock_drift=?, calibration_units=?, pre_amplifier_id=?, 
                 pre_amplifier_serial_number=?, pre_amplifier_gain=?, comments=?
             WHERE id=?
         """
@@ -98,7 +99,8 @@ class ChannelDAO:
             channel.sensor_id, channel.datalogger_id,
             channel.start_date, channel.end_date, channel.overall_sensitivity,
             channel.sensor_serial_number, channel.datalogger_serial_number,
-            channel.types, channel.clock_drift, channel.calibration_units,
+            channel.types, getattr(channel, "restricted_status", None) or "open",
+            channel.clock_drift, channel.calibration_units,
             channel.pre_amplifier_id, channel.pre_amplifier_serial_number,
             channel.pre_amplifier_gain,
             channel.comments,
@@ -134,8 +136,9 @@ class ChannelDAO:
                     latitude, longitude, elevation, depth, azimuth, dip,
                     sample_rate, clock_drift,
                     sensor_id, datalogger_id, 
-                    pre_amplifier_id, pre_amplifier_serial_number, pre_amplifier_gain, comments
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    pre_amplifier_id, pre_amplifier_serial_number, pre_amplifier_gain,
+                    types, restricted_status, comments
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ON CONFLICT(station_id, code, location_code, start_date) DO UPDATE SET
                     end_date=excluded.end_date,
                     latitude=excluded.latitude,
@@ -151,6 +154,8 @@ class ChannelDAO:
                     pre_amplifier_id=excluded.pre_amplifier_id,
                     pre_amplifier_serial_number=excluded.pre_amplifier_serial_number,
                     pre_amplifier_gain=excluded.pre_amplifier_gain,
+                    types=excluded.types,
+                    restricted_status=excluded.restricted_status,
                     comments=excluded.comments
             """
             params = (
@@ -161,7 +166,10 @@ class ChannelDAO:
                 channel.sample_rate, channel.clock_drift,
                 channel.sensor_id, channel.datalogger_id,
                 channel.pre_amplifier_id, channel.pre_amplifier_serial_number,
-                channel.pre_amplifier_gain, channel.comments
+                channel.pre_amplifier_gain,
+                channel.types,
+                getattr(channel, "restricted_status", None) or "open",
+                channel.comments,
             )
             with self.db.get_connection() as conn:
                 conn.execute(query, params)
@@ -210,6 +218,11 @@ class ChannelDAO:
             sensor_serial_number=row['sensor_serial_number'],
             datalogger_serial_number=row['datalogger_serial_number'],
             types=row['types'],
+            restricted_status=(
+                row['restricted_status']
+                if 'restricted_status' in row.keys() and row['restricted_status']
+                else 'open'
+            ),
             clock_drift=clock_drift,
             calibration_units=row['calibration_units'] if 'calibration_units' in row.keys() else None,
             pre_amplifier_id=row['pre_amplifier_id'] if 'pre_amplifier_id' in row.keys() else None,
