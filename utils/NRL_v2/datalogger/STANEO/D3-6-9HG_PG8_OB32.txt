@@ -1,0 +1,102 @@
+[Main]
+question = "What is the final sample rate?"
+
+[80 Hz]
+description = "STANEO; D3-6-9HG; Preamp_Gain 8; Output_Bits 32; Final_Sample_Rate 80 Hz"
+xml = "D3-6-9HG_PG8_OB32_FR80.xml"
+
+
+[8 Hz]
+description = "STANEO; D3-6-9HG; Preamp_Gain 8; Output_Bits 32; Final_Sample_Rate 8 Hz"
+xml = "D3-6-9HG_PG8_OB32_FR8.xml"
+
+
+[500 Hz]
+description = "STANEO; D3-6-9HG; Preamp_Gain 8; Output_Bits 32; Final_Sample_Rate 500 Hz"
+xml = "D3-6-9HG_PG8_OB32_FR500.xml"
+
+
+[50 Hz]
+description = "STANEO; D3-6-9HG; Preamp_Gain 8; Output_Bits 32; Final_Sample_Rate 50 Hz"
+xml = "D3-6-9HG_PG8_OB32_FR50.xml"
+
+
+[5 Hz]
+description = "STANEO; D3-6-9HG; Preamp_Gain 8; Output_Bits 32; Final_Sample_Rate 5 Hz"
+xml = "D3-6-9HG_PG8_OB32_FR5.xml"
+
+
+[400 Hz]
+description = "STANEO; D3-6-9HG; Preamp_Gain 8; Output_Bits 32; Final_Sample_Rate 400 Hz"
+xml = "D3-6-9HG_PG8_OB32_FR400.xml"
+
+
+[40 Hz]
+description = "STANEO; D3-6-9HG; Preamp_Gain 8; Output_Bits 32; Final_Sample_Rate 40 Hz"
+xml = "D3-6-9HG_PG8_OB32_FR40.xml"
+
+
+[4 Hz]
+description = "STANEO; D3-6-9HG; Preamp_Gain 8; Output_Bits 32; Final_Sample_Rate 4 Hz"
+xml = "D3-6-9HG_PG8_OB32_FR4.xml"
+
+
+[250 Hz]
+description = "STANEO; D3-6-9HG; Preamp_Gain 8; Output_Bits 32; Final_Sample_Rate 250 Hz"
+xml = "D3-6-9HG_PG8_OB32_FR250.xml"
+
+
+[25 Hz]
+description = "STANEO; D3-6-9HG; Preamp_Gain 8; Output_Bits 32; Final_Sample_Rate 25 Hz"
+xml = "D3-6-9HG_PG8_OB32_FR25.xml"
+
+
+[2000 Hz]
+description = "STANEO; D3-6-9HG; Preamp_Gain 8; Output_Bits 32; Final_Sample_Rate 2000 Hz"
+xml = "D3-6-9HG_PG8_OB32_FR2000.xml"
+
+
+[200 Hz]
+description = "STANEO; D3-6-9HG; Preamp_Gain 8; Output_Bits 32; Final_Sample_Rate 200 Hz"
+xml = "D3-6-9HG_PG8_OB32_FR200.xml"
+
+
+[20 Hz]
+description = "STANEO; D3-6-9HG; Preamp_Gain 8; Output_Bits 32; Final_Sample_Rate 20 Hz"
+xml = "D3-6-9HG_PG8_OB32_FR20.xml"
+
+
+[2 Hz]
+description = "STANEO; D3-6-9HG; Preamp_Gain 8; Output_Bits 32; Final_Sample_Rate 2 Hz"
+xml = "D3-6-9HG_PG8_OB32_FR2.xml"
+
+
+[16 Hz]
+description = "STANEO; D3-6-9HG; Preamp_Gain 8; Output_Bits 32; Final_Sample_Rate 16 Hz"
+xml = "D3-6-9HG_PG8_OB32_FR16.xml"
+
+
+[125 Hz]
+description = "STANEO; D3-6-9HG; Preamp_Gain 8; Output_Bits 32; Final_Sample_Rate 125 Hz"
+xml = "D3-6-9HG_PG8_OB32_FR125.xml"
+
+
+[1000 Hz]
+description = "STANEO; D3-6-9HG; Preamp_Gain 8; Output_Bits 32; Final_Sample_Rate 1000 Hz"
+xml = "D3-6-9HG_PG8_OB32_FR1000.xml"
+
+
+[100 Hz]
+description = "STANEO; D3-6-9HG; Preamp_Gain 8; Output_Bits 32; Final_Sample_Rate 100 Hz"
+xml = "D3-6-9HG_PG8_OB32_FR100.xml"
+
+
+[10 Hz]
+description = "STANEO; D3-6-9HG; Preamp_Gain 8; Output_Bits 32; Final_Sample_Rate 10 Hz"
+xml = "D3-6-9HG_PG8_OB32_FR10.xml"
+
+
+[1 Hz]
+description = "STANEO; D3-6-9HG; Preamp_Gain 8; Output_Bits 32; Final_Sample_Rate 1 Hz"
+xml = "D3-6-9HG_PG8_OB32_FR1.xml"
+

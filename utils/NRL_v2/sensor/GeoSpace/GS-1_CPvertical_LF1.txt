@@ -1,0 +1,14 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[4550]
+path = "GS-1_CPvertical_LF1_RC4550.txt"
+
+
+[450]
+path = "GS-1_CPvertical_LF1_RC450.txt"
+
+
+[17400]
+path = "GS-1_CPvertical_LF1_RC17400.txt"
+

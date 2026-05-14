@@ -1,0 +1,24 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[8]
+path = "SpiderNano_PG8.txt"
+
+[64]
+path = "SpiderNano_PG64.txt"
+
+[4]
+path = "SpiderNano_PG4.txt"
+
+[32]
+path = "SpiderNano_PG32.txt"
+
+[2]
+path = "SpiderNano_PG2.txt"
+
+[1]
+path = "SpiderNano_PG1.txt"
+
+[16]
+path = "SpiderNano_PG16.txt"
+

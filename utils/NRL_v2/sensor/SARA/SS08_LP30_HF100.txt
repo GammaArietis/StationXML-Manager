@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[1500]
+description = "SARA; SS08; Long-Period_Corner 30 s; High-Frequency_Corner 100 Hz; Sensitivity 1500 V/m/s; Sensor_Type groundVel"
+xml = "SS08_LP30_HF100_SG1500_STgroundVel.xml"
+

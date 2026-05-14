@@ -1,0 +1,10 @@
+Below is some configuration-specific information to help you locate your instrument response.
+### Full-Scale Voltage
+Full-Scale Voltage is the range of voltages output by the sensor for the largest and smallest acceleration described by the clip level.To illustrate, if an accelerometer with a +/-4g clip level outputs +10V for a +4g signal and -10V for a -4g signal, the full-scale voltage is +/-10V.  Here are three equivalent ways to express this:- the full scale voltage is +/- 10V,- the peak-to-peak voltage (Vpp) is 20V (+10 to -10), and  - the peak voltage (Vp) is 10V.
+### Output Wiring
+Instruments can be wired for either single-ended (one positive) or differential (one positive and one negative) output. In the case of differential output, the instrument reverses the polarity of the negative output before summing it with the postive to amplify signal and cancel induced noise. For an instrument that can be run in either mode, the full-scale voltage in differential mode will be twice the full-scale voltage in single-ended mode.
+### Sensitivity
+The nominal sensitivity for an accelerometer in V/m/s\*\*2 is
+ > [Full-scale voltage / Clip level] / [9.80665 m/(g * s\*\*2)]
+  
+Sensitivities for clip and full-scale voltage values not listed here can be calculated using this relationship and substituted.

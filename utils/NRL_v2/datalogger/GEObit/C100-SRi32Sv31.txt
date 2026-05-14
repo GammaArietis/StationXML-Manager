@@ -1,0 +1,18 @@
+[Main]
+question = "What is the final sample rate?"
+
+[500 Hz]
+path = "C100-SRi32Sv31_FR500.txt"
+
+[250 Hz]
+path = "C100-SRi32Sv31_FR250.txt"
+
+[200 Hz]
+path = "C100-SRi32Sv31_FR200.txt"
+
+[100 Hz]
+path = "C100-SRi32Sv31_FR100.txt"
+
+[1000 Hz]
+path = "C100-SRi32Sv31_FR1000.txt"
+

@@ -1,0 +1,24 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[8]
+path = "DR-4000_PG8.txt"
+
+[64]
+path = "DR-4000_PG64.txt"
+
+[4]
+path = "DR-4000_PG4.txt"
+
+[32]
+path = "DR-4000_PG32.txt"
+
+[2]
+path = "DR-4000_PG2.txt"
+
+[1]
+path = "DR-4000_PG1.txt"
+
+[16]
+path = "DR-4000_PG16.txt"
+

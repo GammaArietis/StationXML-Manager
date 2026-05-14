@@ -1,0 +1,6 @@
+[Main]
+question = "What is the sensitivity?"
+
+[1000]
+path = "Q330HR-PacketBaler_CDAntennaCurrent_SG1000.txt"
+

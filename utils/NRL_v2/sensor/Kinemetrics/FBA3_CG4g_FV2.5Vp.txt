@@ -1,0 +1,6 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[50 Hz]
+path = "FBA3_CG4g_FV2.5Vp_HF50.txt"
+

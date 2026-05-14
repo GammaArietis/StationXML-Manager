@@ -1,0 +1,12 @@
+[Main]
+question = "Select the IESE sensor model"
+
+[S31f]
+path="S31f.txt"
+
+[S21g]
+path="S21g.txt"
+
+[G88]
+path="G88.txt"
+

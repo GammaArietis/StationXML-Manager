@@ -1,0 +1,32 @@
+[Main]
+question = "What is the final sample rate?"
+
+[800 Hz]
+description = "Guralp; CMG-6TD; Tap_Table_Lookup 225; Taps 800-160-32-8-2-1; Final_Sample_Rate 800 Hz"
+xml = "CMG-6TD_TL225_TP800-160-32-8-2-1_FR800.xml"
+
+
+[8 Hz]
+description = "Guralp; CMG-6TD; Tap_Table_Lookup 225; Taps 800-160-32-8-2-1; Final_Sample_Rate 8 Hz"
+xml = "CMG-6TD_TL225_TP800-160-32-8-2-1_FR8.xml"
+
+
+[32 Hz]
+description = "Guralp; CMG-6TD; Tap_Table_Lookup 225; Taps 800-160-32-8-2-1; Final_Sample_Rate 32 Hz"
+xml = "CMG-6TD_TL225_TP800-160-32-8-2-1_FR32.xml"
+
+
+[2 Hz]
+description = "Guralp; CMG-6TD; Tap_Table_Lookup 225; Taps 800-160-32-8-2-1; Final_Sample_Rate 2 Hz"
+xml = "CMG-6TD_TL225_TP800-160-32-8-2-1_FR2.xml"
+
+
+[160 Hz]
+description = "Guralp; CMG-6TD; Tap_Table_Lookup 225; Taps 800-160-32-8-2-1; Final_Sample_Rate 160 Hz"
+xml = "CMG-6TD_TL225_TP800-160-32-8-2-1_FR160.xml"
+
+
+[1 Hz]
+description = "Guralp; CMG-6TD; Tap_Table_Lookup 225; Taps 800-160-32-8-2-1; Final_Sample_Rate 1 Hz"
+xml = "CMG-6TD_TL225_TP800-160-32-8-2-1_FR1.xml"
+

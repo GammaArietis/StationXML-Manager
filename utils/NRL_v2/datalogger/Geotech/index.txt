@@ -1,0 +1,6 @@
+[Main]
+question = "Select the Geotech datalogger model"
+
+[SMART24]
+path="SMART24.txt"
+

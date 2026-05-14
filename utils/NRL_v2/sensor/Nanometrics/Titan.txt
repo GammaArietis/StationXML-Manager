@@ -1,0 +1,21 @@
+[Main]
+question = "What is the accelerometer clip level in +/-g?"
+
+[4g]
+path = "Titan_CG4g.txt"
+
+[2g]
+path = "Titan_CG2g.txt"
+
+[1g]
+path = "Titan_CG1g.txt"
+
+[0.5g]
+path = "Titan_CG0.5g.txt"
+
+[0.25g]
+path = "Titan_CG0.25g.txt"
+
+[0.125g]
+path = "Titan_CG0.125g.txt"
+

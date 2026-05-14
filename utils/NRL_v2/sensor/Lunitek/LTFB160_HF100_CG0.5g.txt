@@ -1,0 +1,6 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[10Vp]
+path = "LTFB160_HF100_CG0.5g_FV10Vp.txt"
+

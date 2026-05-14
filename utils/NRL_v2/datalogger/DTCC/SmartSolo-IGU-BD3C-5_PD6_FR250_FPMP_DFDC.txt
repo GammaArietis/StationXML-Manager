@@ -1,0 +1,12 @@
+[Main]
+question = "What are the final output units?"
+
+[mV]
+description = "DTCC; SmartSolo-IGU-BD3C-5; Preamp_Db 6; Final_Sample_Rate 250 Hz; Final_Filter_Phase MP; DC_Filter DC; Output_Units mV"
+xml = "SmartSolo-IGU-BD3C-5_PD6_FR250_FPMP_DFDC_OUmV.xml"
+
+
+[count]
+description = "DTCC; SmartSolo-IGU-BD3C-5; Preamp_Db 6; Final_Sample_Rate 250 Hz; Final_Filter_Phase MP; DC_Filter DC; Output_Units count"
+xml = "SmartSolo-IGU-BD3C-5_PD6_FR250_FPMP_DFDC_OUcount.xml"
+

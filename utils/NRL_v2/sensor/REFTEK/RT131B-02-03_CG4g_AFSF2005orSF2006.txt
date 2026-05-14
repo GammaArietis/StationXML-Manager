@@ -1,0 +1,6 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[6.9Vp]
+path = "RT131B-02-03_CG4g_AFSF2005orSF2006_FV6.9Vp.txt"
+

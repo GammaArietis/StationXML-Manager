@@ -1,0 +1,6 @@
+[Main]
+question = "What is the accelerometer clip level in +/-g?"
+
+[1.5g]
+path = "103P-OmniTilt-Accel_FV15Vpp_CG1.5g.txt"
+

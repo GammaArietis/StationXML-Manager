@@ -1,0 +1,12 @@
+[Main]
+question = "What is the DC removal/low pass filter setting?"
+
+[Off]
+description = "Nanometrics; Pegasus; Full-Scale_Voltage 1Vpp; Final_Sample_Rate 1 Hz; DC_Filter Off"
+xml = "Pegasus_FV1Vpp_FR1_DFOff.xml"
+
+
+[0.001]
+description = "Nanometrics; Pegasus; Full-Scale_Voltage 1Vpp; Final_Sample_Rate 1 Hz; DC_Filter 0.001"
+xml = "Pegasus_FV1Vpp_FR1_DF0.001.xml"
+

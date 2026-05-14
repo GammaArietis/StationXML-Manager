@@ -1,0 +1,6 @@
+[Main]
+question = "Select the TDG integrated model"
+
+[e-QUAKENOVA]
+path="e-QUAKENOVA.txt"
+

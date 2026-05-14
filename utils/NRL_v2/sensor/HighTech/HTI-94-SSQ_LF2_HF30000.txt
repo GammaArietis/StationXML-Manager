@@ -1,0 +1,7 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[1]
+description = "HighTech; HTI-94-SSQ; Low-Frequency_Corner 2 Hz; High-Frequency_Corner 30000 Hz; Preamp_Gain 1; Sensitivity 0.000089; Sensor_Type waterPressure "
+xml = "HTI-94-SSQ_LF2_HF30000_PG1_SG0.000089_STwaterPressure.xml"
+

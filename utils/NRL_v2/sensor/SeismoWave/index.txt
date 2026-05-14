@@ -1,0 +1,6 @@
+[Main]
+question = "Select the SeismoWave sensor model"
+
+[MB3a]
+path="MB3a.txt"
+

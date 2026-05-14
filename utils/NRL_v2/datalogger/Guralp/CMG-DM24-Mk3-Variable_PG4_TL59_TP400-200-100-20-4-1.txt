@@ -1,0 +1,32 @@
+[Main]
+question = "What is the final sample rate?"
+
+[400 Hz]
+description = "Guralp; CMG-DM24-Mk3-Variable; Preamp_Gain 4; Tap_Table_Lookup 59; Taps 400-200-100-20-4-1; Final_Sample_Rate 400 Hz"
+xml = "CMG-DM24-Mk3-Variable_PG4_TL59_TP400-200-100-20-4-1_FR400.xml"
+
+
+[4 Hz]
+description = "Guralp; CMG-DM24-Mk3-Variable; Preamp_Gain 4; Tap_Table_Lookup 59; Taps 400-200-100-20-4-1; Final_Sample_Rate 4 Hz"
+xml = "CMG-DM24-Mk3-Variable_PG4_TL59_TP400-200-100-20-4-1_FR4.xml"
+
+
+[200 Hz]
+description = "Guralp; CMG-DM24-Mk3-Variable; Preamp_Gain 4; Tap_Table_Lookup 59; Taps 400-200-100-20-4-1; Final_Sample_Rate 200 Hz"
+xml = "CMG-DM24-Mk3-Variable_PG4_TL59_TP400-200-100-20-4-1_FR200.xml"
+
+
+[20 Hz]
+description = "Guralp; CMG-DM24-Mk3-Variable; Preamp_Gain 4; Tap_Table_Lookup 59; Taps 400-200-100-20-4-1; Final_Sample_Rate 20 Hz"
+xml = "CMG-DM24-Mk3-Variable_PG4_TL59_TP400-200-100-20-4-1_FR20.xml"
+
+
+[100 Hz]
+description = "Guralp; CMG-DM24-Mk3-Variable; Preamp_Gain 4; Tap_Table_Lookup 59; Taps 400-200-100-20-4-1; Final_Sample_Rate 100 Hz"
+xml = "CMG-DM24-Mk3-Variable_PG4_TL59_TP400-200-100-20-4-1_FR100.xml"
+
+
+[1 Hz]
+description = "Guralp; CMG-DM24-Mk3-Variable; Preamp_Gain 4; Tap_Table_Lookup 59; Taps 400-200-100-20-4-1; Final_Sample_Rate 1 Hz"
+xml = "CMG-DM24-Mk3-Variable_PG4_TL59_TP400-200-100-20-4-1_FR1.xml"
+

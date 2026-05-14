@@ -1,0 +1,12 @@
+[Main]
+question = "Select the SARA datalogger model"
+
+[SL06]
+path="SL06.txt"
+
+[SL0632]
+path="SL0632.txt"
+
+[SL0624]
+path="SL0624.txt"
+

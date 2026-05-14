@@ -1,0 +1,26 @@
+[Main]
+question = "What is the final sample rate?"
+
+[50 Hz]
+path = "K2_PG100_FR50.txt"
+
+
+[40 Hz]
+path = "K2_PG100_FR40.txt"
+
+
+[250 Hz]
+path = "K2_PG100_FR250.txt"
+
+
+[20 Hz]
+path = "K2_PG100_FR20.txt"
+
+
+[200 Hz]
+path = "K2_PG100_FR200.txt"
+
+
+[100 Hz]
+path = "K2_PG100_FR100.txt"
+

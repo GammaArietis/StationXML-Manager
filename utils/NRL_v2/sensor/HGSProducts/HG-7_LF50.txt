@@ -1,0 +1,6 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[370]
+path = "HG-7_LF50_RC370.txt"
+

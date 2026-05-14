@@ -1,0 +1,6 @@
+[Main]
+question = "What is the long-period corner?"
+
+[244 s]
+path = "Trillium240OBS_EG2_LP244.txt"
+

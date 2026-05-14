@@ -1,0 +1,62 @@
+[Main]
+question = "What is the final sample rate?"
+
+[5 Hz]
+path = "Wrangler_PG4_WS30_FR5.txt"
+
+
+[50 Hz]
+path = "Wrangler_PG4_WS30_FR50.txt"
+
+
+[500 Hz]
+path = "Wrangler_PG4_WS30_FR500.txt"
+
+
+[40 Hz]
+path = "Wrangler_PG4_WS30_FR40.txt"
+
+
+[4000 Hz]
+path = "Wrangler_PG4_WS30_FR4000.txt"
+
+
+[250 Hz]
+path = "Wrangler_PG4_WS30_FR250.txt"
+
+
+[20 Hz]
+path = "Wrangler_PG4_WS30_FR20.txt"
+
+
+[200 Hz]
+path = "Wrangler_PG4_WS30_FR200.txt"
+
+
+[2000 Hz]
+path = "Wrangler_PG4_WS30_FR2000.txt"
+
+
+[1 Hz]
+path = "Wrangler_PG4_WS30_FR1.txt"
+
+
+[125 Hz]
+path = "Wrangler_PG4_WS30_FR125.txt"
+
+
+[10 Hz]
+path = "Wrangler_PG4_WS30_FR10.txt"
+
+
+[100 Hz]
+path = "Wrangler_PG4_WS30_FR100.txt"
+
+
+[1000 Hz]
+path = "Wrangler_PG4_WS30_FR1000.txt"
+
+
+[0.1 Hz]
+path = "Wrangler_PG4_WS30_FR0.1.txt"
+

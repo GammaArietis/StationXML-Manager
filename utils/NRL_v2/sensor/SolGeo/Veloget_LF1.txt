@@ -1,0 +1,10 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[80 Hz]
+path = "Veloget_LF1_HF80.txt"
+
+
+[315 Hz]
+path = "Veloget_LF1_HF315.txt"
+

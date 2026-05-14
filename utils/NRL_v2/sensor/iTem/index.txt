@@ -1,0 +1,15 @@
+[Main]
+question = "Select the iTem sensor model"
+
+[prs2500]
+path="prs2500.txt"
+
+[prs0250]
+path="prs0250.txt"
+
+[prs0100]
+path="prs0100.txt"
+
+[prs0025]
+path="prs0025.txt"
+

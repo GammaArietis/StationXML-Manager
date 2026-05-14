@@ -1,0 +1,10 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[20Vp]
+path = "DR-4000_PG16_FV20Vp.txt"
+
+
+[2.5Vp]
+path = "DR-4000_PG16_FV2.5Vp.txt"
+

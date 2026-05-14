@@ -1,0 +1,6 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[2.5Vp]
+path = "FBA23_CG1g_FV2.5Vp.txt"
+

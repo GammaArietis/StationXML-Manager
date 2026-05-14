@@ -1,0 +1,12 @@
+[Main]
+question = "What is the final filter phase?"
+
+[Non-Causal]
+description = "Kinemetrics; Pebble; Preamp_Gain 64; Final_Sample_Rate 10 Hz; Final_Filter_Phase Non-Causal"
+xml = "Pebble_PG64_FR10_FPNon-Causal.xml"
+
+
+[Causal]
+description = "Kinemetrics; Pebble; Preamp_Gain 64; Final_Sample_Rate 10 Hz; Final_Filter_Phase Causal"
+xml = "Pebble_PG64_FR10_FPCausal.xml"
+

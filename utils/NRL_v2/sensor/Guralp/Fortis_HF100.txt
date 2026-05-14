@@ -1,0 +1,22 @@
+[Main]
+question = "What is the sensitivity?"
+
+[4.08]
+description = "Guralp; Fortis; High-Frequency_Corner 100 Hz; Sensitivity 4.08 V/m/s**2; Sensor_Type groundAccel"
+xml = "Fortis_HF100_SG4.08_STgroundAccel.xml"
+
+
+[2.04]
+description = "Guralp; Fortis; High-Frequency_Corner 100 Hz; Sensitivity 2.04 V/m/s**2; Sensor_Type groundAccel"
+xml = "Fortis_HF100_SG2.04_STgroundAccel.xml"
+
+
+[1.02]
+description = "Guralp; Fortis; High-Frequency_Corner 100 Hz; Sensitivity 1.02 V/m/s**2; Sensor_Type groundAccel"
+xml = "Fortis_HF100_SG1.02_STgroundAccel.xml"
+
+
+[0.51]
+description = "Guralp; Fortis; High-Frequency_Corner 100 Hz; Sensitivity 0.51 V/m/s**2; Sensor_Type groundAccel"
+xml = "Fortis_HF100_SG0.51_STgroundAccel.xml"
+

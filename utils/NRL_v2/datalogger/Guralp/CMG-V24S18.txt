@@ -1,0 +1,24 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[8]
+path = "CMG-V24S18_PG8.txt"
+
+[64]
+path = "CMG-V24S18_PG64.txt"
+
+[4]
+path = "CMG-V24S18_PG4.txt"
+
+[32]
+path = "CMG-V24S18_PG32.txt"
+
+[2]
+path = "CMG-V24S18_PG2.txt"
+
+[1]
+path = "CMG-V24S18_PG1.txt"
+
+[16]
+path = "CMG-V24S18_PG16.txt"
+

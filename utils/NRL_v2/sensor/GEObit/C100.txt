@@ -1,0 +1,12 @@
+[Main]
+question = "What is the long-period corner?"
+
+[5 s]
+path = "C100_LP5.txt"
+
+[10 s]
+path = "C100_LP10.txt"
+
+[1.2 s]
+path = "C100_LP1.2.txt"
+

@@ -1,0 +1,7 @@
+[Main]
+question = "What property does this sensor measure?"
+
+[groundVel V/m/s]
+description = "CEADASE; LPHA; Feedback_Loop_Board_Type Velocity; Long-Period_Corner 60 s; High-Frequency_Corner 1 Hz; Sensitivity 10000 V/m/s; Sensor_Type groundVel"
+xml = "LPHA_FBVelocity_LP60_HF1_SG10000_STgroundVel.xml"
+

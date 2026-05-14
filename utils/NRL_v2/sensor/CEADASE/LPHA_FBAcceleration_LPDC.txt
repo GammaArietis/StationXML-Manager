@@ -1,0 +1,6 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[1 Hz]
+path = "LPHA_FBAcceleration_LPDC_HF1.txt"
+

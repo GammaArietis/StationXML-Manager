@@ -1,0 +1,27 @@
+[Main]
+question = "What is the final sample rate?"
+
+[800 Hz]
+description = "DiGOSOmnirecs; DataCube; Preamp_Gain 8; Final_Sample_Rate 800 Hz"
+xml = "DataCube_PG8_FR800.xml"
+
+
+[50 Hz]
+description = "DiGOSOmnirecs; DataCube; Preamp_Gain 8; Final_Sample_Rate 50 Hz"
+xml = "DataCube_PG8_FR50.xml"
+
+
+[400 Hz]
+description = "DiGOSOmnirecs; DataCube; Preamp_Gain 8; Final_Sample_Rate 400 Hz"
+xml = "DataCube_PG8_FR400.xml"
+
+
+[200 Hz]
+description = "DiGOSOmnirecs; DataCube; Preamp_Gain 8; Final_Sample_Rate 200 Hz"
+xml = "DataCube_PG8_FR200.xml"
+
+
+[100 Hz]
+description = "DiGOSOmnirecs; DataCube; Preamp_Gain 8; Final_Sample_Rate 100 Hz"
+xml = "DataCube_PG8_FR100.xml"
+

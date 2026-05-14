@@ -1,0 +1,7 @@
+[Main]
+question = "What is the decimation filter type?"
+
+[None]
+description = "Quanterra; Q330HR; Preamp_Gain 1; Final_Sample_Rate 200 Hz; ADC_Type SR; Linear_Filter_Rates below100; Decimation_Filter None"
+xml = "Q330HR_PG1_FR200_ADSR_LRbelow100_DENone.xml"
+

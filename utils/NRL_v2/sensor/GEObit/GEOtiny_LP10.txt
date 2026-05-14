@@ -1,0 +1,6 @@
+[Main]
+question = "What is the low-frequency corner?"
+
+[0.1 Hz]
+path = "GEOtiny_LP10_LF0.1.txt"
+

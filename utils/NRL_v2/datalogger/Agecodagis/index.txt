@@ -1,0 +1,6 @@
+[Main]
+question = "Select the Agecodagis datalogger model"
+
+[Kephren]
+path="Kephren.txt"
+

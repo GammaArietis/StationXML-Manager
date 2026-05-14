@@ -1,0 +1,18 @@
+[Main]
+question = "What are the taps (sample rate options in Hz) for this channel?"
+
+[40-20-2-1]
+path = "CMG-CD24E1_TL160_TP40-20-2-1.txt"
+
+
+[40-20-10-2]
+path = "CMG-CD24E1_TL160_TP40-20-10-2.txt"
+
+
+[40-20-10-1]
+path = "CMG-CD24E1_TL160_TP40-20-10-1.txt"
+
+
+[20-10-2-1]
+path = "CMG-CD24E1_TL160_TP20-10-2-1.txt"
+

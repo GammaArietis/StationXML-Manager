@@ -1,0 +1,6 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[10Vp]
+path = "SM1500_CG2g_FV10Vp.txt"
+

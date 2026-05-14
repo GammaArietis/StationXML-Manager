@@ -1,0 +1,6 @@
+### Full-Scale Voltage
+When configuring the Taurus or Trident 305, the user sets the input (full-scale) voltage range, which translates to choosing a preamplifier gain.  Input range values of 40V, 16V, 8V, 4V and 2V correspond to gains of 0.4, 1, 2, 4 and 8 respectively.
+### DC Filter
+The Library includes a response for a final IIR DC removal filter with a low-frequency corner of 1 mHz (0.001 Hz) as an example.  The filter corner can be set to any value of integer mHz between 1 and 1000 mHz.  For other corner frequency values, set the pole for this filter instead to the selected corner frequency times 2 * pi.
+### Software Gain
+The Trident305 has a software gain that can be set to any value between 0.001 and 100 by the user at configuration time. If this gain has been adjusted in this manner, the response gain will need to be multiplied by this value.

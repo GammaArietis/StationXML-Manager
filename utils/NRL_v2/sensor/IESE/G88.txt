@@ -1,0 +1,9 @@
+[Main]
+question = "What is the low-frequency corner?"
+
+[4.5 Hz]
+path = "G88_LF4.5.txt"
+
+[2.0 Hz]
+path = "G88_LF2.0.txt"
+

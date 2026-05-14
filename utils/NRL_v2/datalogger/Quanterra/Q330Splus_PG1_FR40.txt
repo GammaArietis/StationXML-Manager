@@ -1,0 +1,18 @@
+[Main]
+question = "To which sample rates are linear filters applied?"
+
+[below40]
+path = "Q330Splus_PG1_FR40_LRbelow40.txt"
+
+
+[below20]
+path = "Q330Splus_PG1_FR40_LRbelow20.txt"
+
+
+[below100]
+path = "Q330Splus_PG1_FR40_LRbelow100.txt"
+
+
+[all]
+path = "Q330Splus_PG1_FR40_LRall.txt"
+

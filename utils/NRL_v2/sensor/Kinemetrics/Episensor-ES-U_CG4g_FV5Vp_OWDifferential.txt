@@ -1,0 +1,6 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[200 Hz]
+path = "Episensor-ES-U_CG4g_FV5Vp_OWDifferential_HF200.txt"
+

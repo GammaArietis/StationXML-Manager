@@ -1,0 +1,6 @@
+[Main]
+question = "Which sensor component is this?"
+
+[Horizontal]
+path = "MBB-1_CPHorizontal.txt"
+

@@ -1,0 +1,22 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[8450]
+path = "L-22E_LF2_RC8450.txt"
+
+
+[510]
+path = "L-22E_LF2_RC510.txt"
+
+
+[325]
+path = "L-22E_LF2_RC325.txt"
+
+
+[2200]
+path = "L-22E_LF2_RC2200.txt"
+
+
+[210]
+path = "L-22E_LF2_RC210.txt"
+

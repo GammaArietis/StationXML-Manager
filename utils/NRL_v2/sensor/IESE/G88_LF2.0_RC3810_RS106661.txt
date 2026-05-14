@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[76.0]
+description = "IESE; G88; Low-Frequency_Corner 2.0 Hz; Coil_Resistance 3810; Shunt_Resistance 106661; Sensitivity 76.0 V/m/s; Sensor_Type groundVel"
+xml = "G88_LF2.0_RC3810_RS106661_SG76.0_STgroundVel.xml"
+

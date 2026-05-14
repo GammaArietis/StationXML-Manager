@@ -1,0 +1,6 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[1 Hz]
+path = "LPZA_FBVelocity_LP60_HF1.txt"
+

@@ -1,0 +1,643 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<FDSNStationXML xmlns="http://www.fdsn.org/xml/station/1" schemaVersion="1.1">
+  <Source>IRIS-DMC</Source>
+  <Module>IRIS NRL service | version: 1</Module>
+  <ModuleURI>https://service.iris.edu/irisws/nrl/1/</ModuleURI>
+  <Created>2026-04-20T01:00:03.466603Z</Created>
+  <Network code="XX" startDate="1970-01-01T00:00:00Z">
+    <Station code="YY" startDate="1970-01-01T00:00:00Z">
+      <Comment>
+        <Value>This is a comment.</Value>
+      </Comment>
+      <Latitude>0.0</Latitude>
+      <Longitude>0.0</Longitude>
+      <Elevation>0.0</Elevation>
+      <Site>
+        <Name>Long site name</Name>
+      </Site>
+      <Channel code="ZZZ" locationCode="00" startDate="1970-01-01T00:00:00Z">
+        <Latitude>0.0</Latitude>
+        <Longitude>0.0</Longitude>
+        <Elevation>0.0</Elevation>
+        <Depth>0.0</Depth>
+        <Azimuth>0.0</Azimuth>
+        <Dip>0.0</Dip>
+        <SampleRate>400</SampleRate>
+        <Sensor>
+          <Description>The sensor name</Description>
+        </Sensor>
+        <Response>
+          <InstrumentSensitivity>
+            <Value>+2.18862E+06</Value>
+            <Frequency>100</Frequency>
+            <InputUnits>
+              <Name>V</Name>
+              <Description>Volt</Description>
+            </InputUnits>
+            <OutputUnits>
+              <Name>count</Name>
+              <Description>Digital Counts</Description>
+            </OutputUnits>
+          </InstrumentSensitivity>
+          <Stage number="1" resourceId="NRL:AnaPAZ_IUV_NZ0_NP0_PHd41d8cd_AN1_FN1::NRL:Gain_SG8_FN1">
+            <PolesZeros>
+              <InputUnits>
+                <Name>V</Name>
+                <Description>Volt</Description>
+              </InputUnits>
+              <OutputUnits>
+                <Name>V</Name>
+                <Description>Volt</Description>
+              </OutputUnits>
+              <PzTransferFunctionType>LAPLACE (RADIANS/SECOND)</PzTransferFunctionType>
+              <NormalizationFactor>1</NormalizationFactor>
+              <NormalizationFrequency>1</NormalizationFrequency>
+            </PolesZeros>
+            <StageGain>
+              <Value>8</Value>
+              <Frequency>1</Frequency>
+            </StageGain>
+          </Stage>
+          <Stage number="2" resourceId="NRL:ADC_SF419430_IR256000_ED0">
+            <Coefficients>
+              <InputUnits>
+                <Name>V</Name>
+                <Description>Volt</Description>
+              </InputUnits>
+              <OutputUnits>
+                <Name>count</Name>
+                <Description>Digital Counts</Description>
+              </OutputUnits>
+              <CfTransferFunctionType>DIGITAL</CfTransferFunctionType>
+              <Numerator number="0">1.000000e+00</Numerator>
+            </Coefficients>
+            <Decimation>
+              <InputSampleRate>256000</InputSampleRate>
+              <Factor>1</Factor>
+              <Offset>0</Offset>
+              <Delay>0</Delay>
+              <Correction>0</Correction>
+            </Decimation>
+            <StageGain>
+              <Value>419430</Value>
+              <Frequency>0</Frequency>
+            </StageGain>
+          </Stage>
+          <Stage number="3" resourceId="NRL:Dec_IR256000_OR400_NS2-DC475-80-DC29-8_NH42b4439">
+            <Coefficients>
+              <InputUnits>
+                <Name>count</Name>
+                <Description>Digital Counts</Description>
+              </InputUnits>
+              <OutputUnits>
+                <Name>count</Name>
+                <Description>Digital Counts</Description>
+              </OutputUnits>
+              <CfTransferFunctionType>DIGITAL</CfTransferFunctionType>
+              <Numerator number="0">3.814700e-12</Numerator>
+              <Numerator number="1">2.288820e-11</Numerator>
+              <Numerator number="2">8.010860e-11</Numerator>
+              <Numerator number="3">2.136230e-10</Numerator>
+              <Numerator number="4">4.806520e-10</Numerator>
+              <Numerator number="5">9.613040e-10</Numerator>
+              <Numerator number="6">1.762390e-09</Numerator>
+              <Numerator number="7">3.021240e-09</Numerator>
+              <Numerator number="8">4.909520e-09</Numerator>
+              <Numerator number="9">7.637020e-09</Numerator>
+              <Numerator number="10">1.145550e-08</Numerator>
+              <Numerator number="11">1.666260e-08</Numerator>
+              <Numerator number="12">2.360530e-08</Numerator>
+              <Numerator number="13">3.268430e-08</Numerator>
+              <Numerator number="14">4.435730e-08</Numerator>
+              <Numerator number="15">5.914310e-08</Numerator>
+              <Numerator number="16">7.762530e-08</Numerator>
+              <Numerator number="17">1.004560e-07</Numerator>
+              <Numerator number="18">1.283610e-07</Numerator>
+              <Numerator number="19">1.621400e-07</Numerator>
+              <Numerator number="20">2.026750e-07</Numerator>
+              <Numerator number="21">2.509310e-07</Numerator>
+              <Numerator number="22">3.079610e-07</Numerator>
+              <Numerator number="23">3.749080e-07</Numerator>
+              <Numerator number="24">4.530140e-07</Numerator>
+              <Numerator number="25">5.436170e-07</Numerator>
+              <Numerator number="26">6.481590e-07</Numerator>
+              <Numerator number="27">7.681880e-07</Numerator>
+              <Numerator number="28">9.053650e-07</Numerator>
+              <Numerator number="29">1.061460e-06</Numerator>
+              <Numerator number="30">1.238370e-06</Numerator>
+              <Numerator number="31">1.438110e-06</Numerator>
+              <Numerator number="32">1.662820e-06</Numerator>
+              <Numerator number="33">1.914760e-06</Numerator>
+              <Numerator number="34">2.196340e-06</Numerator>
+              <Numerator number="35">2.510100e-06</Numerator>
+              <Numerator number="36">2.858730e-06</Numerator>
+              <Numerator number="37">3.245040e-06</Numerator>
+              <Numerator number="38">3.672020e-06</Numerator>
+              <Numerator number="39">4.142790e-06</Numerator>
+              <Numerator number="40">4.660640e-06</Numerator>
+              <Numerator number="41">5.229010e-06</Numerator>
+              <Numerator number="42">5.851510e-06</Numerator>
+              <Numerator number="43">6.531920e-06</Numerator>
+              <Numerator number="44">7.274190e-06</Numerator>
+              <Numerator number="45">8.082430e-06</Numerator>
+              <Numerator number="46">8.960950e-06</Numerator>
+              <Numerator number="47">9.914250e-06</Numerator>
+              <Numerator number="48">1.094700e-05</Numerator>
+              <Numerator number="49">1.206400e-05</Numerator>
+              <Numerator number="50">1.327040e-05</Numerator>
+              <Numerator number="51">1.457140e-05</Numerator>
+              <Numerator number="52">1.597250e-05</Numerator>
+              <Numerator number="53">1.747940e-05</Numerator>
+              <Numerator number="54">1.909780e-05</Numerator>
+              <Numerator number="55">2.083400e-05</Numerator>
+              <Numerator number="56">2.269420e-05</Numerator>
+              <Numerator number="57">2.468490e-05</Numerator>
+              <Numerator number="58">2.681290e-05</Numerator>
+              <Numerator number="59">2.908520e-05</Numerator>
+              <Numerator number="60">3.150900e-05</Numerator>
+              <Numerator number="61">3.409170e-05</Numerator>
+              <Numerator number="62">3.684100e-05</Numerator>
+              <Numerator number="63">3.976490e-05</Numerator>
+              <Numerator number="64">4.287150e-05</Numerator>
+              <Numerator number="65">4.616930e-05</Numerator>
+              <Numerator number="66">4.966700e-05</Numerator>
+              <Numerator number="67">5.337350e-05</Numerator>
+              <Numerator number="68">5.729800e-05</Numerator>
+              <Numerator number="69">6.145010e-05</Numerator>
+              <Numerator number="70">6.583930e-05</Numerator>
+              <Numerator number="71">7.047590e-05</Numerator>
+              <Numerator number="72">7.537010e-05</Numerator>
+              <Numerator number="73">8.053240e-05</Numerator>
+              <Numerator number="74">8.597380e-05</Numerator>
+              <Numerator number="75">9.170540e-05</Numerator>
+              <Numerator number="76">9.773860e-05</Numerator>
+              <Numerator number="77">1.040850e-04</Numerator>
+              <Numerator number="78">1.107570e-04</Numerator>
+              <Numerator number="79">1.177670e-04</Numerator>
+              <Numerator number="80">1.251280e-04</Numerator>
+              <Numerator number="81">1.328520e-04</Numerator>
+              <Numerator number="82">1.409520e-04</Numerator>
+              <Numerator number="83">1.494420e-04</Numerator>
+              <Numerator number="84">1.583360e-04</Numerator>
+              <Numerator number="85">1.676470e-04</Numerator>
+              <Numerator number="86">1.773900e-04</Numerator>
+              <Numerator number="87">1.875780e-04</Numerator>
+              <Numerator number="88">1.982250e-04</Numerator>
+              <Numerator number="89">2.093470e-04</Numerator>
+              <Numerator number="90">2.209570e-04</Numerator>
+              <Numerator number="91">2.330700e-04</Numerator>
+              <Numerator number="92">2.457000e-04</Numerator>
+              <Numerator number="93">2.588630e-04</Numerator>
+              <Numerator number="94">2.725730e-04</Numerator>
+              <Numerator number="95">2.868440e-04</Numerator>
+              <Numerator number="96">3.016920e-04</Numerator>
+              <Numerator number="97">3.171300e-04</Numerator>
+              <Numerator number="98">3.331730e-04</Numerator>
+              <Numerator number="99">3.498360e-04</Numerator>
+              <Numerator number="100">3.671340e-04</Numerator>
+              <Numerator number="101">3.850790e-04</Numerator>
+              <Numerator number="102">4.036870e-04</Numerator>
+              <Numerator number="103">4.229720e-04</Numerator>
+              <Numerator number="104">4.429460e-04</Numerator>
+              <Numerator number="105">4.636250e-04</Numerator>
+              <Numerator number="106">4.850210e-04</Numerator>
+              <Numerator number="107">5.071470e-04</Numerator>
+              <Numerator number="108">5.300160e-04</Numerator>
+              <Numerator number="109">5.536410e-04</Numerator>
+              <Numerator number="110">5.780350e-04</Numerator>
+              <Numerator number="111">6.032090e-04</Numerator>
+              <Numerator number="112">6.291750e-04</Numerator>
+              <Numerator number="113">6.559440e-04</Numerator>
+              <Numerator number="114">6.835280e-04</Numerator>
+              <Numerator number="115">7.119370e-04</Numerator>
+              <Numerator number="116">7.411810e-04</Numerator>
+              <Numerator number="117">7.712710e-04</Numerator>
+              <Numerator number="118">8.022150e-04</Numerator>
+              <Numerator number="119">8.340220e-04</Numerator>
+              <Numerator number="120">8.667020e-04</Numerator>
+              <Numerator number="121">9.002610e-04</Numerator>
+              <Numerator number="122">9.347080e-04</Numerator>
+              <Numerator number="123">9.700490e-04</Numerator>
+              <Numerator number="124">1.006290e-03</Numerator>
+              <Numerator number="125">1.043440e-03</Numerator>
+              <Numerator number="126">1.081500e-03</Numerator>
+              <Numerator number="127">1.120470e-03</Numerator>
+              <Numerator number="128">1.160370e-03</Numerator>
+              <Numerator number="129">1.201190e-03</Numerator>
+              <Numerator number="130">1.242930e-03</Numerator>
+              <Numerator number="131">1.285610e-03</Numerator>
+              <Numerator number="132">1.329210e-03</Numerator>
+              <Numerator number="133">1.373740e-03</Numerator>
+              <Numerator number="134">1.419200e-03</Numerator>
+              <Numerator number="135">1.465590e-03</Numerator>
+              <Numerator number="136">1.512910e-03</Numerator>
+              <Numerator number="137">1.561150e-03</Numerator>
+              <Numerator number="138">1.610310e-03</Numerator>
+              <Numerator number="139">1.660390e-03</Numerator>
+              <Numerator number="140">1.711380e-03</Numerator>
+              <Numerator number="141">1.763280e-03</Numerator>
+              <Numerator number="142">1.816070e-03</Numerator>
+              <Numerator number="143">1.869750e-03</Numerator>
+              <Numerator number="144">1.924320e-03</Numerator>
+              <Numerator number="145">1.979760e-03</Numerator>
+              <Numerator number="146">2.036060e-03</Numerator>
+              <Numerator number="147">2.093210e-03</Numerator>
+              <Numerator number="148">2.151200e-03</Numerator>
+              <Numerator number="149">2.210010e-03</Numerator>
+              <Numerator number="150">2.269630e-03</Numerator>
+              <Numerator number="151">2.330050e-03</Numerator>
+              <Numerator number="152">2.391240e-03</Numerator>
+              <Numerator number="153">2.453190e-03</Numerator>
+              <Numerator number="154">2.515880e-03</Numerator>
+              <Numerator number="155">2.579280e-03</Numerator>
+              <Numerator number="156">2.643390e-03</Numerator>
+              <Numerator number="157">2.708170e-03</Numerator>
+              <Numerator number="158">2.773600e-03</Numerator>
+              <Numerator number="159">2.839660e-03</Numerator>
+              <Numerator number="160">2.906320e-03</Numerator>
+              <Numerator number="161">2.973550e-03</Numerator>
+              <Numerator number="162">3.041320e-03</Numerator>
+              <Numerator number="163">3.109610e-03</Numerator>
+              <Numerator number="164">3.178390e-03</Numerator>
+              <Numerator number="165">3.247610e-03</Numerator>
+              <Numerator number="166">3.317260e-03</Numerator>
+              <Numerator number="167">3.387290e-03</Numerator>
+              <Numerator number="168">3.457680e-03</Numerator>
+              <Numerator number="169">3.528380e-03</Numerator>
+              <Numerator number="170">3.599370e-03</Numerator>
+              <Numerator number="171">3.670590e-03</Numerator>
+              <Numerator number="172">3.742030e-03</Numerator>
+              <Numerator number="173">3.813630e-03</Numerator>
+              <Numerator number="174">3.885370e-03</Numerator>
+              <Numerator number="175">3.957200e-03</Numerator>
+              <Numerator number="176">4.029070e-03</Numerator>
+              <Numerator number="177">4.100960e-03</Numerator>
+              <Numerator number="178">4.172820e-03</Numerator>
+              <Numerator number="179">4.244600e-03</Numerator>
+              <Numerator number="180">4.316270e-03</Numerator>
+              <Numerator number="181">4.387790e-03</Numerator>
+              <Numerator number="182">4.459110e-03</Numerator>
+              <Numerator number="183">4.530180e-03</Numerator>
+              <Numerator number="184">4.600970e-03</Numerator>
+              <Numerator number="185">4.671440e-03</Numerator>
+              <Numerator number="186">4.741530e-03</Numerator>
+              <Numerator number="187">4.811200e-03</Numerator>
+              <Numerator number="188">4.880420e-03</Numerator>
+              <Numerator number="189">4.949140e-03</Numerator>
+              <Numerator number="190">5.017300e-03</Numerator>
+              <Numerator number="191">5.084880e-03</Numerator>
+              <Numerator number="192">5.151820e-03</Numerator>
+              <Numerator number="193">5.218090e-03</Numerator>
+              <Numerator number="194">5.283630e-03</Numerator>
+              <Numerator number="195">5.348400e-03</Numerator>
+              <Numerator number="196">5.412370e-03</Numerator>
+              <Numerator number="197">5.475480e-03</Numerator>
+              <Numerator number="198">5.537700e-03</Numerator>
+              <Numerator number="199">5.598980e-03</Numerator>
+              <Numerator number="200">5.659280e-03</Numerator>
+              <Numerator number="201">5.718560e-03</Numerator>
+              <Numerator number="202">5.776780e-03</Numerator>
+              <Numerator number="203">5.833890e-03</Numerator>
+              <Numerator number="204">5.889860e-03</Numerator>
+              <Numerator number="205">5.944640e-03</Numerator>
+              <Numerator number="206">5.998200e-03</Numerator>
+              <Numerator number="207">6.050490e-03</Numerator>
+              <Numerator number="208">6.101490e-03</Numerator>
+              <Numerator number="209">6.151140e-03</Numerator>
+              <Numerator number="210">6.199420e-03</Numerator>
+              <Numerator number="211">6.246290e-03</Numerator>
+              <Numerator number="212">6.291720e-03</Numerator>
+              <Numerator number="213">6.335660e-03</Numerator>
+              <Numerator number="214">6.378090e-03</Numerator>
+              <Numerator number="215">6.418970e-03</Numerator>
+              <Numerator number="216">6.458280e-03</Numerator>
+              <Numerator number="217">6.495970e-03</Numerator>
+              <Numerator number="218">6.532030e-03</Numerator>
+              <Numerator number="219">6.566430e-03</Numerator>
+              <Numerator number="220">6.599120e-03</Numerator>
+              <Numerator number="221">6.630100e-03</Numerator>
+              <Numerator number="222">6.659340e-03</Numerator>
+              <Numerator number="223">6.686800e-03</Numerator>
+              <Numerator number="224">6.712480e-03</Numerator>
+              <Numerator number="225">6.736340e-03</Numerator>
+              <Numerator number="226">6.758360e-03</Numerator>
+              <Numerator number="227">6.778540e-03</Numerator>
+              <Numerator number="228">6.796850e-03</Numerator>
+              <Numerator number="229">6.813280e-03</Numerator>
+              <Numerator number="230">6.827800e-03</Numerator>
+              <Numerator number="231">6.840420e-03</Numerator>
+              <Numerator number="232">6.851120e-03</Numerator>
+              <Numerator number="233">6.859880e-03</Numerator>
+              <Numerator number="234">6.866700e-03</Numerator>
+              <Numerator number="235">6.871580e-03</Numerator>
+              <Numerator number="236">6.874510e-03</Numerator>
+              <Numerator number="237">6.875490e-03</Numerator>
+              <Numerator number="238">6.874510e-03</Numerator>
+              <Numerator number="239">6.871580e-03</Numerator>
+              <Numerator number="240">6.866700e-03</Numerator>
+              <Numerator number="241">6.859880e-03</Numerator>
+              <Numerator number="242">6.851120e-03</Numerator>
+              <Numerator number="243">6.840420e-03</Numerator>
+              <Numerator number="244">6.827800e-03</Numerator>
+              <Numerator number="245">6.813280e-03</Numerator>
+              <Numerator number="246">6.796850e-03</Numerator>
+              <Numerator number="247">6.778540e-03</Numerator>
+              <Numerator number="248">6.758360e-03</Numerator>
+              <Numerator number="249">6.736340e-03</Numerator>
+              <Numerator number="250">6.712480e-03</Numerator>
+              <Numerator number="251">6.686800e-03</Numerator>
+              <Numerator number="252">6.659340e-03</Numerator>
+              <Numerator number="253">6.630100e-03</Numerator>
+              <Numerator number="254">6.599120e-03</Numerator>
+              <Numerator number="255">6.566430e-03</Numerator>
+              <Numerator number="256">6.532030e-03</Numerator>
+              <Numerator number="257">6.495970e-03</Numerator>
+              <Numerator number="258">6.458280e-03</Numerator>
+              <Numerator number="259">6.418970e-03</Numerator>
+              <Numerator number="260">6.378090e-03</Numerator>
+              <Numerator number="261">6.335660e-03</Numerator>
+              <Numerator number="262">6.291720e-03</Numerator>
+              <Numerator number="263">6.246290e-03</Numerator>
+              <Numerator number="264">6.199420e-03</Numerator>
+              <Numerator number="265">6.151140e-03</Numerator>
+              <Numerator number="266">6.101490e-03</Numerator>
+              <Numerator number="267">6.050490e-03</Numerator>
+              <Numerator number="268">5.998200e-03</Numerator>
+              <Numerator number="269">5.944640e-03</Numerator>
+              <Numerator number="270">5.889860e-03</Numerator>
+              <Numerator number="271">5.833890e-03</Numerator>
+              <Numerator number="272">5.776780e-03</Numerator>
+              <Numerator number="273">5.718560e-03</Numerator>
+              <Numerator number="274">5.659280e-03</Numerator>
+              <Numerator number="275">5.598980e-03</Numerator>
+              <Numerator number="276">5.537700e-03</Numerator>
+              <Numerator number="277">5.475480e-03</Numerator>
+              <Numerator number="278">5.412370e-03</Numerator>
+              <Numerator number="279">5.348400e-03</Numerator>
+              <Numerator number="280">5.283630e-03</Numerator>
+              <Numerator number="281">5.218090e-03</Numerator>
+              <Numerator number="282">5.151820e-03</Numerator>
+              <Numerator number="283">5.084880e-03</Numerator>
+              <Numerator number="284">5.017300e-03</Numerator>
+              <Numerator number="285">4.949140e-03</Numerator>
+              <Numerator number="286">4.880420e-03</Numerator>
+              <Numerator number="287">4.811200e-03</Numerator>
+              <Numerator number="288">4.741530e-03</Numerator>
+              <Numerator number="289">4.671440e-03</Numerator>
+              <Numerator number="290">4.600970e-03</Numerator>
+              <Numerator number="291">4.530180e-03</Numerator>
+              <Numerator number="292">4.459110e-03</Numerator>
+              <Numerator number="293">4.387790e-03</Numerator>
+              <Numerator number="294">4.316270e-03</Numerator>
+              <Numerator number="295">4.244600e-03</Numerator>
+              <Numerator number="296">4.172820e-03</Numerator>
+              <Numerator number="297">4.100960e-03</Numerator>
+              <Numerator number="298">4.029070e-03</Numerator>
+              <Numerator number="299">3.957200e-03</Numerator>
+              <Numerator number="300">3.885370e-03</Numerator>
+              <Numerator number="301">3.813630e-03</Numerator>
+              <Numerator number="302">3.742030e-03</Numerator>
+              <Numerator number="303">3.670590e-03</Numerator>
+              <Numerator number="304">3.599370e-03</Numerator>
+              <Numerator number="305">3.528380e-03</Numerator>
+              <Numerator number="306">3.457680e-03</Numerator>
+              <Numerator number="307">3.387290e-03</Numerator>
+              <Numerator number="308">3.317260e-03</Numerator>
+              <Numerator number="309">3.247610e-03</Numerator>
+              <Numerator number="310">3.178390e-03</Numerator>
+              <Numerator number="311">3.109610e-03</Numerator>
+              <Numerator number="312">3.041320e-03</Numerator>
+              <Numerator number="313">2.973550e-03</Numerator>
+              <Numerator number="314">2.906320e-03</Numerator>
+              <Numerator number="315">2.839660e-03</Numerator>
+              <Numerator number="316">2.773600e-03</Numerator>
+              <Numerator number="317">2.708170e-03</Numerator>
+              <Numerator number="318">2.643390e-03</Numerator>
+              <Numerator number="319">2.579280e-03</Numerator>
+              <Numerator number="320">2.515880e-03</Numerator>
+              <Numerator number="321">2.453190e-03</Numerator>
+              <Numerator number="322">2.391240e-03</Numerator>
+              <Numerator number="323">2.330050e-03</Numerator>
+              <Numerator number="324">2.269630e-03</Numerator>
+              <Numerator number="325">2.210010e-03</Numerator>
+              <Numerator number="326">2.151200e-03</Numerator>
+              <Numerator number="327">2.093210e-03</Numerator>
+              <Numerator number="328">2.036060e-03</Numerator>
+              <Numerator number="329">1.979760e-03</Numerator>
+              <Numerator number="330">1.924320e-03</Numerator>
+              <Numerator number="331">1.869750e-03</Numerator>
+              <Numerator number="332">1.816070e-03</Numerator>
+              <Numerator number="333">1.763280e-03</Numerator>
+              <Numerator number="334">1.711380e-03</Numerator>
+              <Numerator number="335">1.660390e-03</Numerator>
+              <Numerator number="336">1.610310e-03</Numerator>
+              <Numerator number="337">1.561150e-03</Numerator>
+              <Numerator number="338">1.512910e-03</Numerator>
+              <Numerator number="339">1.465590e-03</Numerator>
+              <Numerator number="340">1.419200e-03</Numerator>
+              <Numerator number="341">1.373740e-03</Numerator>
+              <Numerator number="342">1.329210e-03</Numerator>
+              <Numerator number="343">1.285610e-03</Numerator>
+              <Numerator number="344">1.242930e-03</Numerator>
+              <Numerator number="345">1.201190e-03</Numerator>
+              <Numerator number="346">1.160370e-03</Numerator>
+              <Numerator number="347">1.120470e-03</Numerator>
+              <Numerator number="348">1.081500e-03</Numerator>
+              <Numerator number="349">1.043440e-03</Numerator>
+              <Numerator number="350">1.006290e-03</Numerator>
+              <Numerator number="351">9.700490e-04</Numerator>
+              <Numerator number="352">9.347080e-04</Numerator>
+              <Numerator number="353">9.002610e-04</Numerator>
+              <Numerator number="354">8.667020e-04</Numerator>
+              <Numerator number="355">8.340220e-04</Numerator>
+              <Numerator number="356">8.022150e-04</Numerator>
+              <Numerator number="357">7.712710e-04</Numerator>
+              <Numerator number="358">7.411810e-04</Numerator>
+              <Numerator number="359">7.119370e-04</Numerator>
+              <Numerator number="360">6.835280e-04</Numerator>
+              <Numerator number="361">6.559440e-04</Numerator>
+              <Numerator number="362">6.291750e-04</Numerator>
+              <Numerator number="363">6.032090e-04</Numerator>
+              <Numerator number="364">5.780350e-04</Numerator>
+              <Numerator number="365">5.536410e-04</Numerator>
+              <Numerator number="366">5.300160e-04</Numerator>
+              <Numerator number="367">5.071470e-04</Numerator>
+              <Numerator number="368">4.850210e-04</Numerator>
+              <Numerator number="369">4.636250e-04</Numerator>
+              <Numerator number="370">4.429460e-04</Numerator>
+              <Numerator number="371">4.229720e-04</Numerator>
+              <Numerator number="372">4.036870e-04</Numerator>
+              <Numerator number="373">3.850790e-04</Numerator>
+              <Numerator number="374">3.671340e-04</Numerator>
+              <Numerator number="375">3.498360e-04</Numerator>
+              <Numerator number="376">3.331730e-04</Numerator>
+              <Numerator number="377">3.171300e-04</Numerator>
+              <Numerator number="378">3.016920e-04</Numerator>
+              <Numerator number="379">2.868440e-04</Numerator>
+              <Numerator number="380">2.725730e-04</Numerator>
+              <Numerator number="381">2.588630e-04</Numerator>
+              <Numerator number="382">2.457000e-04</Numerator>
+              <Numerator number="383">2.330700e-04</Numerator>
+              <Numerator number="384">2.209570e-04</Numerator>
+              <Numerator number="385">2.093470e-04</Numerator>
+              <Numerator number="386">1.982250e-04</Numerator>
+              <Numerator number="387">1.875780e-04</Numerator>
+              <Numerator number="388">1.773900e-04</Numerator>
+              <Numerator number="389">1.676470e-04</Numerator>
+              <Numerator number="390">1.583360e-04</Numerator>
+              <Numerator number="391">1.494420e-04</Numerator>
+              <Numerator number="392">1.409520e-04</Numerator>
+              <Numerator number="393">1.328520e-04</Numerator>
+              <Numerator number="394">1.251280e-04</Numerator>
+              <Numerator number="395">1.177670e-04</Numerator>
+              <Numerator number="396">1.107570e-04</Numerator>
+              <Numerator number="397">1.040850e-04</Numerator>
+              <Numerator number="398">9.773860e-05</Numerator>
+              <Numerator number="399">9.170540e-05</Numerator>
+              <Numerator number="400">8.597380e-05</Numerator>
+              <Numerator number="401">8.053240e-05</Numerator>
+              <Numerator number="402">7.537010e-05</Numerator>
+              <Numerator number="403">7.047590e-05</Numerator>
+              <Numerator number="404">6.583930e-05</Numerator>
+              <Numerator number="405">6.145010e-05</Numerator>
+              <Numerator number="406">5.729800e-05</Numerator>
+              <Numerator number="407">5.337350e-05</Numerator>
+              <Numerator number="408">4.966700e-05</Numerator>
+              <Numerator number="409">4.616930e-05</Numerator>
+              <Numerator number="410">4.287150e-05</Numerator>
+              <Numerator number="411">3.976490e-05</Numerator>
+              <Numerator number="412">3.684100e-05</Numerator>
+              <Numerator number="413">3.409170e-05</Numerator>
+              <Numerator number="414">3.150900e-05</Numerator>
+              <Numerator number="415">2.908520e-05</Numerator>
+              <Numerator number="416">2.681290e-05</Numerator>
+              <Numerator number="417">2.468490e-05</Numerator>
+              <Numerator number="418">2.269420e-05</Numerator>
+              <Numerator number="419">2.083400e-05</Numerator>
+              <Numerator number="420">1.909780e-05</Numerator>
+              <Numerator number="421">1.747940e-05</Numerator>
+              <Numerator number="422">1.597250e-05</Numerator>
+              <Numerator number="423">1.457140e-05</Numerator>
+              <Numerator number="424">1.327040e-05</Numerator>
+              <Numerator number="425">1.206400e-05</Numerator>
+              <Numerator number="426">1.094700e-05</Numerator>
+              <Numerator number="427">9.914250e-06</Numerator>
+              <Numerator number="428">8.960950e-06</Numerator>
+              <Numerator number="429">8.082430e-06</Numerator>
+              <Numerator number="430">7.274190e-06</Numerator>
+              <Numerator number="431">6.531920e-06</Numerator>
+              <Numerator number="432">5.851510e-06</Numerator>
+              <Numerator number="433">5.229010e-06</Numerator>
+              <Numerator number="434">4.660640e-06</Numerator>
+              <Numerator number="435">4.142790e-06</Numerator>
+              <Numerator number="436">3.672020e-06</Numerator>
+              <Numerator number="437">3.245040e-06</Numerator>
+              <Numerator number="438">2.858730e-06</Numerator>
+              <Numerator number="439">2.510100e-06</Numerator>
+              <Numerator number="440">2.196340e-06</Numerator>
+              <Numerator number="441">1.914760e-06</Numerator>
+              <Numerator number="442">1.662820e-06</Numerator>
+              <Numerator number="443">1.438110e-06</Numerator>
+              <Numerator number="444">1.238370e-06</Numerator>
+              <Numerator number="445">1.061460e-06</Numerator>
+              <Numerator number="446">9.053650e-07</Numerator>
+              <Numerator number="447">7.681880e-07</Numerator>
+              <Numerator number="448">6.481590e-07</Numerator>
+              <Numerator number="449">5.436170e-07</Numerator>
+              <Numerator number="450">4.530140e-07</Numerator>
+              <Numerator number="451">3.749080e-07</Numerator>
+              <Numerator number="452">3.079610e-07</Numerator>
+              <Numerator number="453">2.509310e-07</Numerator>
+              <Numerator number="454">2.026750e-07</Numerator>
+              <Numerator number="455">1.621400e-07</Numerator>
+              <Numerator number="456">1.283610e-07</Numerator>
+              <Numerator number="457">1.004560e-07</Numerator>
+              <Numerator number="458">7.762530e-08</Numerator>
+              <Numerator number="459">5.914310e-08</Numerator>
+              <Numerator number="460">4.435730e-08</Numerator>
+              <Numerator number="461">3.268430e-08</Numerator>
+              <Numerator number="462">2.360530e-08</Numerator>
+              <Numerator number="463">1.666260e-08</Numerator>
+              <Numerator number="464">1.145550e-08</Numerator>
+              <Numerator number="465">7.637020e-09</Numerator>
+              <Numerator number="466">4.909520e-09</Numerator>
+              <Numerator number="467">3.021240e-09</Numerator>
+              <Numerator number="468">1.762390e-09</Numerator>
+              <Numerator number="469">9.613040e-10</Numerator>
+              <Numerator number="470">4.806520e-10</Numerator>
+              <Numerator number="471">2.136230e-10</Numerator>
+              <Numerator number="472">8.010860e-11</Numerator>
+              <Numerator number="473">2.288820e-11</Numerator>
+              <Numerator number="474">3.814700e-12</Numerator>
+            </Coefficients>
+            <Decimation>
+              <InputSampleRate>256000</InputSampleRate>
+              <Factor>80</Factor>
+              <Offset>0</Offset>
+              <Delay>0.000925781</Delay>
+              <Correction>0.000925781</Correction>
+            </Decimation>
+            <StageGain>
+              <Value>1</Value>
+              <Frequency>0</Frequency>
+            </StageGain>
+          </Stage>
+          <Stage number="4" resourceId="NRL:Dec_IR256000_OR400_NS2-DC475-80-DC29-8_NH42b4439">
+            <Coefficients>
+              <InputUnits>
+                <Name>count</Name>
+                <Description>Digital Counts</Description>
+              </InputUnits>
+              <OutputUnits>
+                <Name>count</Name>
+                <Description>Digital Counts</Description>
+              </OutputUnits>
+              <CfTransferFunctionType>DIGITAL</CfTransferFunctionType>
+              <Numerator number="0">2.441410e-04</Numerator>
+              <Numerator number="1">9.765620e-04</Numerator>
+              <Numerator number="2">2.441410e-03</Numerator>
+              <Numerator number="3">4.882810e-03</Numerator>
+              <Numerator number="4">8.544920e-03</Numerator>
+              <Numerator number="5">1.367190e-02</Numerator>
+              <Numerator number="6">2.050780e-02</Numerator>
+              <Numerator number="7">2.929690e-02</Numerator>
+              <Numerator number="8">3.930660e-02</Numerator>
+              <Numerator number="9">4.980470e-02</Numerator>
+              <Numerator number="10">6.005860e-02</Numerator>
+              <Numerator number="11">6.933590e-02</Numerator>
+              <Numerator number="12">7.690430e-02</Numerator>
+              <Numerator number="13">8.203120e-02</Numerator>
+              <Numerator number="14">8.398440e-02</Numerator>
+              <Numerator number="15">8.203120e-02</Numerator>
+              <Numerator number="16">7.690430e-02</Numerator>
+              <Numerator number="17">6.933590e-02</Numerator>
+              <Numerator number="18">6.005860e-02</Numerator>
+              <Numerator number="19">4.980470e-02</Numerator>
+              <Numerator number="20">3.930660e-02</Numerator>
+              <Numerator number="21">2.929690e-02</Numerator>
+              <Numerator number="22">2.050780e-02</Numerator>
+              <Numerator number="23">1.367190e-02</Numerator>
+              <Numerator number="24">8.544920e-03</Numerator>
+              <Numerator number="25">4.882810e-03</Numerator>
+              <Numerator number="26">2.441410e-03</Numerator>
+              <Numerator number="27">9.765620e-04</Numerator>
+              <Numerator number="28">2.441410e-04</Numerator>
+            </Coefficients>
+            <Decimation>
+              <InputSampleRate>3200</InputSampleRate>
+              <Factor>8</Factor>
+              <Offset>0</Offset>
+              <Delay>0.004375</Delay>
+              <Correction>0.004375</Correction>
+            </Decimation>
+            <StageGain>
+              <Value>1</Value>
+              <Frequency>0</Frequency>
+            </StageGain>
+          </Stage>
+        </Response>
+      </Channel>
+    </Station>
+  </Network>
+</FDSNStationXML>
+

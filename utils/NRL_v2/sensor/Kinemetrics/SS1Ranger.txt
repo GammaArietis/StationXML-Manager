@@ -1,0 +1,7 @@
+[Main]
+question = "What is the long-period corner?"
+
+[1 s]
+description = "Kinemetrics; SS1Ranger; Long-Period_Corner 1 s; Sensitivity 345 V/m/s; Sensor_Type groundVel"
+xml = "SS1Ranger_LP1_SG345_STgroundVel.xml"
+

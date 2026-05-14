@@ -1,0 +1,15 @@
+[Main]
+question = "Select the STANEO datalogger model"
+
+[D3-6-9]
+path="D3-6-9.txt"
+
+[D3-6-9HG]
+path="D3-6-9HG.txt"
+
+[D24-48]
+path="D24-48.txt"
+
+[D24-48HG]
+path="D24-48HG.txt"
+

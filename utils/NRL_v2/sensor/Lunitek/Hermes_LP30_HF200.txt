@@ -1,0 +1,27 @@
+[Main]
+question = "What is the sensitivity?"
+
+[0.8]
+description = "Lunitek; Hermes; Long-Period_Corner 30 s; High-Frequency_Corner 200 Hz; Sensitivity 0.8 V/Pa; Sensor_Type airPressure"
+xml = "Hermes_LP30_HF200_SG0.8_STairPressure.xml"
+
+
+[0.16]
+description = "Lunitek; Hermes; Long-Period_Corner 30 s; High-Frequency_Corner 200 Hz; Sensitivity 0.16 V/Pa; Sensor_Type airPressure"
+xml = "Hermes_LP30_HF200_SG0.16_STairPressure.xml"
+
+
+[0.08]
+description = "Lunitek; Hermes; Long-Period_Corner 30 s; High-Frequency_Corner 200 Hz; Sensitivity 0.08 V/Pa; Sensor_Type airPressure"
+xml = "Hermes_LP30_HF200_SG0.08_STairPressure.xml"
+
+
+[0.04]
+description = "Lunitek; Hermes; Long-Period_Corner 30 s; High-Frequency_Corner 200 Hz; Sensitivity 0.04 V/Pa; Sensor_Type airPressure"
+xml = "Hermes_LP30_HF200_SG0.04_STairPressure.xml"
+
+
+[0.016]
+description = "Lunitek; Hermes; Long-Period_Corner 30 s; High-Frequency_Corner 200 Hz; Sensitivity 0.016 V/Pa; Sensor_Type airPressure"
+xml = "Hermes_LP30_HF200_SG0.016_STairPressure.xml"
+

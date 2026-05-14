@@ -1,0 +1,52 @@
+[Main]
+question = "What is the final sample rate?"
+
+[800 Hz]
+description = "INGV; GAIA-IV; Full-Scale_Voltage 2Vpp; Final_Sample_Rate 800 Hz"
+xml = "GAIA-IV_FV2Vpp_FR800.xml"
+
+
+[500 Hz]
+description = "INGV; GAIA-IV; Full-Scale_Voltage 2Vpp; Final_Sample_Rate 500 Hz"
+xml = "GAIA-IV_FV2Vpp_FR500.xml"
+
+
+[400 Hz]
+description = "INGV; GAIA-IV; Full-Scale_Voltage 2Vpp; Final_Sample_Rate 400 Hz"
+xml = "GAIA-IV_FV2Vpp_FR400.xml"
+
+
+[250 Hz]
+description = "INGV; GAIA-IV; Full-Scale_Voltage 2Vpp; Final_Sample_Rate 250 Hz"
+xml = "GAIA-IV_FV2Vpp_FR250.xml"
+
+
+[2000 Hz]
+description = "INGV; GAIA-IV; Full-Scale_Voltage 2Vpp; Final_Sample_Rate 2000 Hz"
+xml = "GAIA-IV_FV2Vpp_FR2000.xml"
+
+
+[200 Hz]
+description = "INGV; GAIA-IV; Full-Scale_Voltage 2Vpp; Final_Sample_Rate 200 Hz"
+xml = "GAIA-IV_FV2Vpp_FR200.xml"
+
+
+[1600 Hz]
+description = "INGV; GAIA-IV; Full-Scale_Voltage 2Vpp; Final_Sample_Rate 1600 Hz"
+xml = "GAIA-IV_FV2Vpp_FR1600.xml"
+
+
+[125 Hz]
+description = "INGV; GAIA-IV; Full-Scale_Voltage 2Vpp; Final_Sample_Rate 125 Hz"
+xml = "GAIA-IV_FV2Vpp_FR125.xml"
+
+
+[1000 Hz]
+description = "INGV; GAIA-IV; Full-Scale_Voltage 2Vpp; Final_Sample_Rate 1000 Hz"
+xml = "GAIA-IV_FV2Vpp_FR1000.xml"
+
+
+[100 Hz]
+description = "INGV; GAIA-IV; Full-Scale_Voltage 2Vpp; Final_Sample_Rate 100 Hz"
+xml = "GAIA-IV_FV2Vpp_FR100.xml"
+

@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[39.5]
+description = "Sercel; L-28LB; Low-Frequency_Corner 4.5 Hz; Coil_Resistance 630; Shunt_Resistance None; Sensitivity 39.5 V/m/s; Sensor_Type groundVel"
+xml = "L-28LB_LF4.5_RC630_RSNone_SG39.5_STgroundVel.xml"
+

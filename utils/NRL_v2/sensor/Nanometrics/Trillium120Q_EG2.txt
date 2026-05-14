@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[1201]
+description = "Nanometrics; Trillium120Q; Electronics_Generation 2; Sensitivity 1201 V/m/s; Long-Period_Corner 120 s; Sensor_Type groundVel"
+xml = "Trillium120Q_EG2_SG1201_LP120_STgroundVel.xml"
+

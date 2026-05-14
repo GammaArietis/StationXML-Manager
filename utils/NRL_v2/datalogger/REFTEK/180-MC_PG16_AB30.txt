@@ -1,0 +1,12 @@
+[Main]
+question = "What is the final sample rate?"
+
+[200 Hz]
+description = "REFTEK; 180-MC; Preamp_Gain 16; ADC_Bits 30; Final_Sample_Rate 200 Hz"
+xml = "180-MC_PG16_AB30_FR200.xml"
+
+
+[100 Hz]
+description = "REFTEK; 180-MC; Preamp_Gain 16; ADC_Bits 30; Final_Sample_Rate 100 Hz"
+xml = "180-MC_PG16_AB30_FR100.xml"
+

@@ -1,0 +1,24 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[8]
+path = "SMART24_PG8.txt"
+
+[64]
+path = "SMART24_PG64.txt"
+
+[4]
+path = "SMART24_PG4.txt"
+
+[32]
+path = "SMART24_PG32.txt"
+
+[2]
+path = "SMART24_PG2.txt"
+
+[1]
+path = "SMART24_PG1.txt"
+
+[16]
+path = "SMART24_PG16.txt"
+

@@ -1,0 +1,17 @@
+[Main]
+question = "What is the final sample rate?"
+
+[500 Hz]
+description = "Guralp; CMG-6TD; Tap_Table_Lookup 2; Taps 1000-500-125; Final_Sample_Rate 500 Hz"
+xml = "CMG-6TD_TL2_TP1000-500-125_FR500.xml"
+
+
+[125 Hz]
+description = "Guralp; CMG-6TD; Tap_Table_Lookup 2; Taps 1000-500-125; Final_Sample_Rate 125 Hz"
+xml = "CMG-6TD_TL2_TP1000-500-125_FR125.xml"
+
+
+[1000 Hz]
+description = "Guralp; CMG-6TD; Tap_Table_Lookup 2; Taps 1000-500-125; Final_Sample_Rate 1000 Hz"
+xml = "CMG-6TD_TL2_TP1000-500-125_FR1000.xml"
+

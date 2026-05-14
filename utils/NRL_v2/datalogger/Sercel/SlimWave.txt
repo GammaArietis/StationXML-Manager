@@ -1,0 +1,9 @@
+[Main]
+question = "What is the preamp gain in dB?"
+
+[40]
+path = "SlimWave_PD40.txt"
+
+[20]
+path = "SlimWave_PD20.txt"
+

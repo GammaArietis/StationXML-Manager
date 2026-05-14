@@ -1,0 +1,11 @@
+[Main]
+question = "What is the long-period corner?"
+
+[60 s]
+description = "GeoDevice; BBVS; Long-Period_Corner 60 s; Sensitivity 1000 V/m/s; Sensor_Type groundVel"
+xml = "BBVS_LP60_SG1000_STgroundVel.xml"
+
+[120 s]
+description = "GeoDevice; BBVS; Long-Period_Corner 120 s; Sensitivity 1000 V/m/s; Sensor_Type groundVel"
+xml = "BBVS_LP120_SG1000_STgroundVel.xml"
+

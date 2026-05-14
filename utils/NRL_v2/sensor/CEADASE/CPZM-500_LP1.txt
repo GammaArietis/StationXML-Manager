@@ -1,0 +1,22 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[8]
+description = "CEADASE; CPZM-500; Long-Period_Corner 1 s; Preamp_Gain 8; Sensitivity 2250 V/m/s; Sensor_Type groundVel"
+xml = "CPZM-500_LP1_PG8_SG2250_STgroundVel.xml"
+
+
+[4]
+description = "CEADASE; CPZM-500; Long-Period_Corner 1 s; Preamp_Gain 4; Sensitivity 2250 V/m/s; Sensor_Type groundVel"
+xml = "CPZM-500_LP1_PG4_SG2250_STgroundVel.xml"
+
+
+[32]
+description = "CEADASE; CPZM-500; Long-Period_Corner 1 s; Preamp_Gain 32; Sensitivity 2250 V/m/s; Sensor_Type groundVel"
+xml = "CPZM-500_LP1_PG32_SG2250_STgroundVel.xml"
+
+
+[1]
+description = "CEADASE; CPZM-500; Long-Period_Corner 1 s; Preamp_Gain 1; Sensitivity 2250 V/m/s; Sensor_Type groundVel"
+xml = "CPZM-500_LP1_PG1_SG2250_STgroundVel.xml"
+

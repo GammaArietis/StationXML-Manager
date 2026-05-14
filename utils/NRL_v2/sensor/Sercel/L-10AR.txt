@@ -1,0 +1,6 @@
+[Main]
+question = "What is the low-frequency corner?"
+
+[14 Hz]
+path = "L-10AR_LF14.txt"
+

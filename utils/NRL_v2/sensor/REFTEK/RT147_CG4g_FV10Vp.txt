@@ -1,0 +1,7 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[150 Hz]
+description = "REFTEK; RT147; Clip_Level 4g; Full-Scale_Voltage 10Vp; High-Frequency_Corner 150 Hz; Sensitivity 0.25493 V/m/s**2; Sensor_Type groundAccel"
+xml = "RT147_CG4g_FV10Vp_HF150_SG0.25493_STgroundAccel.xml"
+

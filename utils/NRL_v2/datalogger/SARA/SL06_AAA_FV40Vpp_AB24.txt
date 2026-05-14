@@ -1,0 +1,14 @@
+[Main]
+question = "What version is the datalogger board?"
+
+[preV2.2x6ch]
+path = "SL06_AAA_FV40Vpp_AB24_BVpreV2.2x6ch.txt"
+
+
+[preV2.2x3ch]
+path = "SL06_AAA_FV40Vpp_AB24_BVpreV2.2x3ch.txt"
+
+
+[V2.2andLater]
+path = "SL06_AAA_FV40Vpp_AB24_BVV2.2andLater.txt"
+

@@ -1,0 +1,6 @@
+[Main]
+question = "Select the GeoDevice datalogger model"
+
+[EDAS-24IP]
+path="EDAS-24IP.txt"
+

@@ -1,0 +1,26 @@
+[Main]
+question = "What is the final sample rate?"
+
+[50 Hz]
+path = "Makalu_PG2_FR50.txt"
+
+
+[40 Hz]
+path = "Makalu_PG2_FR40.txt"
+
+
+[250 Hz]
+path = "Makalu_PG2_FR250.txt"
+
+
+[20 Hz]
+path = "Makalu_PG2_FR20.txt"
+
+
+[200 Hz]
+path = "Makalu_PG2_FR200.txt"
+
+
+[100 Hz]
+path = "Makalu_PG2_FR100.txt"
+

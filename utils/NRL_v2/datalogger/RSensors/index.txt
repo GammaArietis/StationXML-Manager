@@ -1,0 +1,9 @@
+[Main]
+question = "Select the RSensors datalogger model"
+
+[NDAS-8226]
+path="NDAS-8226.txt"
+
+[Baykal-8]
+path="Baykal-8.txt"
+

@@ -1,0 +1,6 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[160]
+path = "S-13_LF0.8_SG87.4_RC160.txt"
+

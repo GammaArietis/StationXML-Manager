@@ -1,0 +1,9 @@
+[Main]
+question = "Select the DTCC sensor model"
+
+[DT-SOLO]
+path="DT-SOLO.txt"
+
+[DT-SOLO-BB]
+path="DT-SOLO-BB.txt"
+

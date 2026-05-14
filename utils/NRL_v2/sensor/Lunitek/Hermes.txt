@@ -1,0 +1,6 @@
+[Main]
+question = "What is the long-period corner?"
+
+[30 s]
+path = "Hermes_LP30.txt"
+

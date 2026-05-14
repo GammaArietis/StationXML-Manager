@@ -1,0 +1,6 @@
+[Main]
+question = "What is the low-frequency corner?"
+
+[0.8 Hz]
+path = "VDP-10_LF0.8.txt"
+

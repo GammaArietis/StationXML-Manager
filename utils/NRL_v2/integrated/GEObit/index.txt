@@ -1,0 +1,9 @@
+[Main]
+question = "Select the GEObit integrated model"
+
+[GEOwarning]
+path="GEOwarning.txt"
+
+[GEO-A200]
+path="GEO-A200.txt"
+

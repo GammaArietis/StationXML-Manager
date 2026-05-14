@@ -1,0 +1,9 @@
+[Main]
+question = "Select the HighTech sensor model"
+
+[HTI-96-Min]
+path="HTI-96-Min.txt"
+
+[HTI-94-SSQ]
+path="HTI-94-SSQ.txt"
+

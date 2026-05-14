@@ -1,0 +1,11 @@
+[Main]
+question = "What is the long-period corner?"
+
+[60 s]
+description = "REFTEK; Colt; Long-Period_Corner 60 s; Sensitivity 2000 V/m/s; Sensor_Type groundVel"
+xml = "Colt_LP60_SG2000_STgroundVel.xml"
+
+[120 s]
+description = "REFTEK; Colt; Long-Period_Corner 120 s; Sensitivity 2000 V/m/s; Sensor_Type groundVel"
+xml = "Colt_LP120_SG2000_STgroundVel.xml"
+

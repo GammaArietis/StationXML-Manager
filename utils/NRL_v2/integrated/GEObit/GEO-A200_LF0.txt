@@ -1,0 +1,22 @@
+[Main]
+question = "What is the accelerometer clip level in +/-g?"
+
+[4]
+path = "GEO-A200_LF0_CG4.txt"
+
+
+[2]
+path = "GEO-A200_LF0_CG2.txt"
+
+
+[1]
+path = "GEO-A200_LF0_CG1.txt"
+
+
+[0.5]
+path = "GEO-A200_LF0_CG0.5.txt"
+
+
+[0.25]
+path = "GEO-A200_LF0_CG0.25.txt"
+

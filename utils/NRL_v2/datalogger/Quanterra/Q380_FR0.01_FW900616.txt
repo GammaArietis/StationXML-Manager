@@ -1,0 +1,12 @@
+[Main]
+question = "What FIR cascade type is this?"
+
+[Typical]
+description = "Quanterra; Q380; Final_Sample_Rate 0.01 Hz; Firmware_Version 900616; FIR_Cascade_Type Typical"
+xml = "Q380_FR0.01_FW900616_CTTypical.xml"
+
+
+[GSN]
+description = "Quanterra; Q380; Final_Sample_Rate 0.01 Hz; Firmware_Version 900616; FIR_Cascade_Type GSN"
+xml = "Q380_FR0.01_FW900616_CTGSN.xml"
+

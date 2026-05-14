@@ -1,0 +1,6 @@
+[Main]
+question = "What is the accelerometer clip level in +/-g?"
+
+[5g]
+path = "LTME100_HF700_CG5g.txt"
+

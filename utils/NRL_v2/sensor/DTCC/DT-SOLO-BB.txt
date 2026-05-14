@@ -1,0 +1,7 @@
+[Main]
+question = "What is the long-period corner?"
+
+[5 s]
+description = "DTCC; DT-SOLO-BB; Long-Period_Corner 5 s; Sensitivity 209.4 V/m/s; Sensor_Type groundVel"
+xml = "DT-SOLO-BB_LP5_SG209.4_STgroundVel.xml"
+

@@ -1,0 +1,6 @@
+[Main]
+question = "What is the low-frequency corner?"
+
+[0 Hz]
+path = "GEOwarning_FR200_LF0.txt"
+

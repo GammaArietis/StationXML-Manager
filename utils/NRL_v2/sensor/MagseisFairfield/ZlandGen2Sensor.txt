@@ -1,0 +1,9 @@
+[Main]
+question = "What is the low-frequency corner?"
+
+[5 Hz]
+path = "ZlandGen2Sensor_LF5.txt"
+
+[10 Hz]
+path = "ZlandGen2Sensor_LF10.txt"
+

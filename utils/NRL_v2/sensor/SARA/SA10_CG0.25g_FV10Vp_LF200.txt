@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[4.08]
+description = "SARA; SA10; Clip_Level 0.25g; Full-Scale_Voltage 10Vp; Low-Frequency_Corner 200 Hz; Sensitivity 4.08 V/m/s**2; Sensor_Type groundAccel"
+xml = "SA10_CG0.25g_FV10Vp_LF200_SG4.08_STgroundAccel.xml"
+

@@ -1,0 +1,12 @@
+[Main]
+question = "What is the sensitivity?"
+
+[40]
+description = "SolGeo; Veloget; Low-Frequency_Corner 1 Hz; High-Frequency_Corner 315 Hz; Sensitivity 40 V/m/s; Sensor_Type groundVel"
+xml = "Veloget_LF1_HF315_SG40_STgroundVel.xml"
+
+
+[400]
+description = "SolGeo; Veloget; Low-Frequency_Corner 1 Hz; High-Frequency_Corner 315 Hz; Sensitivity 400 V/m/s; Sensor_Type groundVel"
+xml = "Veloget_LF1_HF315_SG400_STgroundVel.xml"
+

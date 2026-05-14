@@ -1,0 +1,18 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[8Vpp]
+path = "Taurus_FV8Vpp.txt"
+
+[4Vpp]
+path = "Taurus_FV4Vpp.txt"
+
+[40Vpp]
+path = "Taurus_FV40Vpp.txt"
+
+[2Vpp]
+path = "Taurus_FV2Vpp.txt"
+
+[16Vpp]
+path = "Taurus_FV16Vpp.txt"
+

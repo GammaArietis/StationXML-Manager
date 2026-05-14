@@ -1,0 +1,12 @@
+[Main]
+question = "Select the GenericUnity sensor model"
+
+[UnityVelocity]
+path="UnityVelocity.txt"
+
+[UnityPolynomialPA]
+path="UnityPolynomialPA.txt"
+
+[UnityAccelerometer]
+path="UnityAccelerometer.txt"
+

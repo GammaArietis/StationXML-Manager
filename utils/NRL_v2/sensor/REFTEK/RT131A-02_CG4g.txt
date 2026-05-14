@@ -1,0 +1,6 @@
+[Main]
+question = "What is the analog filter type?"
+
+[SF1600]
+path = "RT131A-02_CG4g_AFSF1600.txt"
+

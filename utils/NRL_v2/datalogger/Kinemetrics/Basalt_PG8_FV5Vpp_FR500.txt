@@ -1,0 +1,12 @@
+[Main]
+question = "What is the final filter phase?"
+
+[Non-causal]
+description = "Kinemetrics; Basalt; Preamp_Gain 8; Full-Scale_Voltage 5Vpp; Final_Sample_Rate 500 Hz; Final_Filter_Phase Non-causal"
+xml = "Basalt_PG8_FV5Vpp_FR500_FPNon-causal.xml"
+
+
+[Causal]
+description = "Kinemetrics; Basalt; Preamp_Gain 8; Full-Scale_Voltage 5Vpp; Final_Sample_Rate 500 Hz; Final_Filter_Phase Causal"
+xml = "Basalt_PG8_FV5Vpp_FR500_FPCausal.xml"
+

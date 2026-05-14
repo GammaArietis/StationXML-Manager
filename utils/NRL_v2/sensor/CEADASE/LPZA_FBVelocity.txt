@@ -1,0 +1,6 @@
+[Main]
+question = "What is the long-period corner?"
+
+[60 s]
+path = "LPZA_FBVelocity_LP60.txt"
+

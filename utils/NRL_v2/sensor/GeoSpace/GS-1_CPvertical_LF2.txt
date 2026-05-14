@@ -1,0 +1,6 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[450]
+path = "GS-1_CPvertical_LF2_RC450.txt"
+

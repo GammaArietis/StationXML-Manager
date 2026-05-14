@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[75.97]
+description = "HGSProducts; HG-5HS; Low-Frequency_Corner 5 Hz; Coil_Resistance 1850; Shunt_Resistance 20000; Sensitivity 75.97 V/m/s; Sensor_Type groundVel"
+xml = "HG-5HS_LF5_RC1850_RS20000_SG75.97_STgroundVel.xml"
+

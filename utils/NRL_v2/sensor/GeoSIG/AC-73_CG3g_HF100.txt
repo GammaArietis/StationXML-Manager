@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[0.3399]
+description = "GeoSIG; AC-73; Clip_Level 3g; High-Frequency_Corner 100 Hz; Sensitivity 0.3399 V/m/s**2; Full-Scale_Voltage 10Vp; Output_Wiring Differential; Sensor_Type groundAccel"
+xml = "AC-73_CG3g_HF100_SG0.3399_FV10Vp_OWDifferential_STgroundAccel.xml"
+

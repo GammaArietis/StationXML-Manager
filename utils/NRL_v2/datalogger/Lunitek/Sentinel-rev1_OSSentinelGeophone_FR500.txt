@@ -1,0 +1,12 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[2.048Vpp]
+description = "Lunitek; Sentinel-rev1; Onboard_Sensor SentinelGeophone; Final_Sample_Rate 500 Hz; Full-Scale_Voltage 2.048Vpp"
+xml = "Sentinel-rev1_OSSentinelGeophone_FR500_FV2.048Vpp.xml"
+
+
+[1.024Vpp]
+description = "Lunitek; Sentinel-rev1; Onboard_Sensor SentinelGeophone; Final_Sample_Rate 500 Hz; Full-Scale_Voltage 1.024Vpp"
+xml = "Sentinel-rev1_OSSentinelGeophone_FR500_FV1.024Vpp.xml"
+

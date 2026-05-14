@@ -1,0 +1,6 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[360]
+path = "HG-11_LF30_RC360.txt"
+

@@ -1,0 +1,14 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[None]
+path = "HG-11_LF30_RC360_RSNone.txt"
+
+
+[4700]
+path = "HG-11_LF30_RC360_RS4700.txt"
+
+
+[1300]
+path = "HG-11_LF30_RC360_RS1300.txt"
+

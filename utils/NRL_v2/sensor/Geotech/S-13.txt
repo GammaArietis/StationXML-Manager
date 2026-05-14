@@ -1,0 +1,9 @@
+[Main]
+question = "What is the low-frequency corner?"
+
+[1 Hz]
+path = "S-13_LF1.txt"
+
+[0.8 Hz]
+path = "S-13_LF0.8.txt"
+

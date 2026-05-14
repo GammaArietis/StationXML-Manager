@@ -1,0 +1,15 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[8]
+path = "DYMAS32_PG8.txt"
+
+[4]
+path = "DYMAS32_PG4.txt"
+
+[2]
+path = "DYMAS32_PG2.txt"
+
+[1]
+path = "DYMAS32_PG1.txt"
+

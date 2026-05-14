@@ -1,0 +1,6 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[383000]
+path = "GS-1_CPvertical_LF1_RC17400_RS383000.txt"
+

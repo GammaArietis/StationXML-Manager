@@ -1,0 +1,12 @@
+[Main]
+question = "What is the final filter phase?"
+
+[Non-causal]
+description = "Kinemetrics; MtWhitney; Preamp_Gain 100; Final_Sample_Rate 200 Hz; Final_Filter_Phase Non-causal"
+xml = "MtWhitney_PG100_FR200_FPNon-causal.xml"
+
+
+[Causal]
+description = "Kinemetrics; MtWhitney; Preamp_Gain 100; Final_Sample_Rate 200 Hz; Final_Filter_Phase Causal"
+xml = "MtWhitney_PG100_FR200_FPCausal.xml"
+

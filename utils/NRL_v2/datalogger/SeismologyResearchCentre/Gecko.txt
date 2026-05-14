@@ -1,0 +1,33 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[8]
+path = "Gecko_PG8.txt"
+
+[64]
+path = "Gecko_PG64.txt"
+
+[512]
+path = "Gecko_PG512.txt"
+
+[4]
+path = "Gecko_PG4.txt"
+
+[32]
+path = "Gecko_PG32.txt"
+
+[2]
+path = "Gecko_PG2.txt"
+
+[256]
+path = "Gecko_PG256.txt"
+
+[1]
+path = "Gecko_PG1.txt"
+
+[16]
+path = "Gecko_PG16.txt"
+
+[128]
+path = "Gecko_PG128.txt"
+

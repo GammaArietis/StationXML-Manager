@@ -1,0 +1,6 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[1800]
+path = "GS-ONE_LF10_RC1800.txt"
+

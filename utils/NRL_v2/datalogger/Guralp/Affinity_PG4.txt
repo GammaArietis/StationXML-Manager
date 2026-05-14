@@ -1,0 +1,122 @@
+[Main]
+question = "What is the final sample rate?"
+
+[800 Hz]
+description = "Guralp; Affinity; Preamp_Gain 4; Final_Sample_Rate 800 Hz"
+xml = "Affinity_PG4_FR800.xml"
+
+
+[80 Hz]
+description = "Guralp; Affinity; Preamp_Gain 4; Final_Sample_Rate 80 Hz"
+xml = "Affinity_PG4_FR80.xml"
+
+
+[8 Hz]
+description = "Guralp; Affinity; Preamp_Gain 4; Final_Sample_Rate 8 Hz"
+xml = "Affinity_PG4_FR8.xml"
+
+
+[500 Hz]
+description = "Guralp; Affinity; Preamp_Gain 4; Final_Sample_Rate 500 Hz"
+xml = "Affinity_PG4_FR500.xml"
+
+
+[50 Hz]
+description = "Guralp; Affinity; Preamp_Gain 4; Final_Sample_Rate 50 Hz"
+xml = "Affinity_PG4_FR50.xml"
+
+
+[5 Hz]
+description = "Guralp; Affinity; Preamp_Gain 4; Final_Sample_Rate 5 Hz"
+xml = "Affinity_PG4_FR5.xml"
+
+
+[4000 Hz]
+description = "Guralp; Affinity; Preamp_Gain 4; Final_Sample_Rate 4000 Hz"
+xml = "Affinity_PG4_FR4000.xml"
+
+
+[400 Hz]
+description = "Guralp; Affinity; Preamp_Gain 4; Final_Sample_Rate 400 Hz"
+xml = "Affinity_PG4_FR400.xml"
+
+
+[40 Hz]
+description = "Guralp; Affinity; Preamp_Gain 4; Final_Sample_Rate 40 Hz"
+xml = "Affinity_PG4_FR40.xml"
+
+
+[4 Hz]
+description = "Guralp; Affinity; Preamp_Gain 4; Final_Sample_Rate 4 Hz"
+xml = "Affinity_PG4_FR4.xml"
+
+
+[32 Hz]
+description = "Guralp; Affinity; Preamp_Gain 4; Final_Sample_Rate 32 Hz"
+xml = "Affinity_PG4_FR32.xml"
+
+
+[250 Hz]
+description = "Guralp; Affinity; Preamp_Gain 4; Final_Sample_Rate 250 Hz"
+xml = "Affinity_PG4_FR250.xml"
+
+
+[25 Hz]
+description = "Guralp; Affinity; Preamp_Gain 4; Final_Sample_Rate 25 Hz"
+xml = "Affinity_PG4_FR25.xml"
+
+
+[2000 Hz]
+description = "Guralp; Affinity; Preamp_Gain 4; Final_Sample_Rate 2000 Hz"
+xml = "Affinity_PG4_FR2000.xml"
+
+
+[200 Hz]
+description = "Guralp; Affinity; Preamp_Gain 4; Final_Sample_Rate 200 Hz"
+xml = "Affinity_PG4_FR200.xml"
+
+
+[20 Hz]
+description = "Guralp; Affinity; Preamp_Gain 4; Final_Sample_Rate 20 Hz"
+xml = "Affinity_PG4_FR20.xml"
+
+
+[2 Hz]
+description = "Guralp; Affinity; Preamp_Gain 4; Final_Sample_Rate 2 Hz"
+xml = "Affinity_PG4_FR2.xml"
+
+
+[160 Hz]
+description = "Guralp; Affinity; Preamp_Gain 4; Final_Sample_Rate 160 Hz"
+xml = "Affinity_PG4_FR160.xml"
+
+
+[16 Hz]
+description = "Guralp; Affinity; Preamp_Gain 4; Final_Sample_Rate 16 Hz"
+xml = "Affinity_PG4_FR16.xml"
+
+
+[125 Hz]
+description = "Guralp; Affinity; Preamp_Gain 4; Final_Sample_Rate 125 Hz"
+xml = "Affinity_PG4_FR125.xml"
+
+
+[1000 Hz]
+description = "Guralp; Affinity; Preamp_Gain 4; Final_Sample_Rate 1000 Hz"
+xml = "Affinity_PG4_FR1000.xml"
+
+
+[100 Hz]
+description = "Guralp; Affinity; Preamp_Gain 4; Final_Sample_Rate 100 Hz"
+xml = "Affinity_PG4_FR100.xml"
+
+
+[10 Hz]
+description = "Guralp; Affinity; Preamp_Gain 4; Final_Sample_Rate 10 Hz"
+xml = "Affinity_PG4_FR10.xml"
+
+
+[1 Hz]
+description = "Guralp; Affinity; Preamp_Gain 4; Final_Sample_Rate 1 Hz"
+xml = "Affinity_PG4_FR1.xml"
+

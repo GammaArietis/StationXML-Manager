@@ -1,0 +1,12 @@
+[Main]
+question = "What are the final output units?"
+
+[mV]
+description = "MagseisFairfield; ZlandGen2; Preamp_Db 18; Final_Sample_Rate 1000 Hz; Final_Filter_Phase LP; DC_Filter Off; Output_Units mV"
+xml = "ZlandGen2_PD18_FR1000_FPLP_DFOff_OUmV.xml"
+
+
+[count]
+description = "MagseisFairfield; ZlandGen2; Preamp_Db 18; Final_Sample_Rate 1000 Hz; Final_Filter_Phase LP; DC_Filter Off; Output_Units count"
+xml = "ZlandGen2_PD18_FR1000_FPLP_DFOff_OUcount.xml"
+

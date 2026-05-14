@@ -1,0 +1,6 @@
+[Main]
+question = "Select the WorldSensing datalogger model"
+
+[SpiderNano]
+path="SpiderNano.txt"
+

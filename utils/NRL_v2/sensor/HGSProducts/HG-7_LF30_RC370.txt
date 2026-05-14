@@ -1,0 +1,6 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[None]
+path = "HG-7_LF30_RC370_RSNone.txt"
+

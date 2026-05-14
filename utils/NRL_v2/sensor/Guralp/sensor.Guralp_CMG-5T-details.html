@@ -1,0 +1,6 @@
+Below is some model-specific information to help you locate your instrument response.
+### Sensitivity
+Guralp accelerometers have adjustable clip levels and full scale voltage outputs that are custom set at the factory according to the purchaser's needs.  Clip levels, in units of g's, rangefrom 0.1 g through 4g.  Full-scale voltages can be set to 2.5, 5 or 10 Volts.
+The example response file(s) available here gives the sensitivity assuming a 4g clip level and +/-10V Full scale voltage. Instrument-specific sensitivities in V/g can be found in their accompanying Guralp manual.  Those values can be divided by 9.80665 m/(g * s\*\*2) to get units of V/m/s\*\*2 using the following expression for nominal sensitivity:
+ > [Full scale voltage / Clip level] / [9.80665 m/(g * s\*\*2)]
+  

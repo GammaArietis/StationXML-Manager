@@ -1,0 +1,6 @@
+[Main]
+question = "What is the low-frequency corner?"
+
+[2 Hz]
+path = "L-22D_LF2.txt"
+

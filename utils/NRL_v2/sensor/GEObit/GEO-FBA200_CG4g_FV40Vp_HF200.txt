@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[0.5098]
+description = "GEObit; GEO-FBA200; Clip_Level 4g; Full-Scale_Voltage 40Vp; High-Frequency_Corner 200 Hz; Sensitivity 0.5098 V/m/s**2; Sensor_Type groundAccel"
+xml = "GEO-FBA200_CG4g_FV40Vp_HF200_SG0.5098_STgroundAccel.xml"
+

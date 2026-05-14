@@ -1,0 +1,6 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[7096]
+path = "G88_LF4.5_RC3810_RS7096.txt"
+

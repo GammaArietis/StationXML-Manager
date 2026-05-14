@@ -1,0 +1,7 @@
+[Main]
+question = "What is the final filter phase?"
+
+[Linear]
+description = "Nanometrics; Centaur; Full-Scale_Voltage 40Vpp; Final_Sample_Rate 80 Hz; DC_Filter Off; Final_Filter_Phase Linear"
+xml = "Centaur_FV40Vpp_FR80_DFOff_FPLinear.xml"
+

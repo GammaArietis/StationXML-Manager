@@ -1,0 +1,6 @@
+[Main]
+question = "Select the SensorNederland sensor model"
+
+[PE-6B]
+path="PE-6B.txt"
+

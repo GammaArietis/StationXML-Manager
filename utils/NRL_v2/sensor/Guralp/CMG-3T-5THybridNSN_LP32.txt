@@ -1,0 +1,6 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[50 Hz]
+path = "CMG-3T-5THybridNSN_LP32_HF50.txt"
+

@@ -1,0 +1,8 @@
+Below is some configuration-specific information to help you locate your instrument response.
+### Long-period sample rates
+A sample rate of 0.1 is decimated from the 1 sps channel. Similarly, a sample rate of 0.01 is decimated from a 0.1 sps stream.  
+Originally, the 0.1 sps was decimated from the 1 sps channel using a fir filter called DEC10.  The 0.01 sps channel was derived from the 0.1 sps channel by cascading the DEC10 fir filter a second time.  With the availability of Baler firmware version 1.87 in early 2006, the 0.1 sps channel defaulted to using a fir filter called ULP389 and the 0.01 sps channel was derived from it by cascading the ULP379 filter.  Any of these fir filters can currently be programmed into the Q330.  The filter type for 0.1 and 0.01 sample rates is noted below in the comments.  
+To determine which fir filters to use, you can
+1. check the filter type in the Q330 configuration using Willard if the instrument is still running, 
+2. read the OCF channel for the configuration, or 
+3. check the miniSEED record start times - data created with the VLP389 and ELP379 filters begin on even 10 second and 100 second boundaries. Data created with DEC10 filters typically do not. 

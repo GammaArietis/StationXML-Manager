@@ -1,0 +1,10 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[900]
+path = "HG-6HT_LF10_RC900.txt"
+
+
+[400]
+path = "HG-6HT_LF10_RC400.txt"
+

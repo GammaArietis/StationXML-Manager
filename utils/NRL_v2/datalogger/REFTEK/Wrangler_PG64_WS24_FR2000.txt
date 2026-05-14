@@ -1,0 +1,7 @@
+[Main]
+question = "What is the final filter phase?"
+
+[Lin]
+description = "REFTEK; Wrangler; Preamp_Gain 64; Word_Size 24 bits; Final_Sample_Rate 2000 Hz; Final_Filter_Phase Lin"
+xml = "Wrangler_PG64_WS24_FR2000_FPLin.xml"
+

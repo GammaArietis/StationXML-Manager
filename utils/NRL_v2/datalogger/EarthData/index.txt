@@ -1,0 +1,15 @@
+[Main]
+question = "Select the EarthData datalogger model"
+
+[PS6-24]
+path="PS6-24.txt"
+
+[PR6-24]
+path="PR6-24.txt"
+
+[EDR-210]
+path="EDR-210.txt"
+
+[EDR-209]
+path="EDR-209.txt"
+

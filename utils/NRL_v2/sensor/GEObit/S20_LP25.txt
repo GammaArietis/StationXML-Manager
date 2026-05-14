@@ -1,0 +1,7 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[56 Hz]
+description = "GEObit; S20; Long-Period_Corner 25 s; High-Frequency_Corner 56 Hz; Sensitivity 1500 V/m/s; Sensor_Type groundVel"
+xml = "S20_LP25_HF56_SG1500_STgroundVel.xml"
+

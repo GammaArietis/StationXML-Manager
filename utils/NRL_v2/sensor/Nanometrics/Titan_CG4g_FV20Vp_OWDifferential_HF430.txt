@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[0.510]
+description = "Nanometrics; Titan; Clip_Level 4g; Full-Scale_Voltage 20Vp; Output_Wiring Differential; High-Frequency_Corner 430 Hz; Sensitivity 0.510 V/m/s**2; Sensor_Type groundAccel"
+xml = "Titan_CG4g_FV20Vp_OWDifferential_HF430_SG0.510_STgroundAccel.xml"
+

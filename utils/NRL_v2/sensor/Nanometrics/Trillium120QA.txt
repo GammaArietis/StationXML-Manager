@@ -1,0 +1,15 @@
+[Main]
+question = "What is the sensitivity?"
+
+[2013]
+description = "Nanometrics; Trillium120QA; Sensitivity 2013 V/m/s; Long-Period_Corner 120 s; Sensor_Type groundVel"
+xml = "Trillium120QA_SG2013_LP120_STgroundVel.xml"
+
+[1500]
+description = "Nanometrics; Trillium120QA; Sensitivity 1500 V/m/s; Long-Period_Corner 120 s; Sensor_Type groundVel"
+xml = "Trillium120QA_SG1500_LP120_STgroundVel.xml"
+
+[1203]
+description = "Nanometrics; Trillium120QA; Sensitivity 1203 V/m/s; Long-Period_Corner 120 s; Sensor_Type groundVel"
+xml = "Trillium120QA_SG1203_LP120_STgroundVel.xml"
+

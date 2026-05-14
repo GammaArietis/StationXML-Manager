@@ -1,0 +1,7 @@
+[Main]
+question = "What is the final filter phase?"
+
+[Non-Causal]
+description = "Kinemetrics; Pebble; Preamp_Gain 128; Final_Sample_Rate 2000 Hz; Final_Filter_Phase Non-Causal"
+xml = "Pebble_PG128_FR2000_FPNon-Causal.xml"
+

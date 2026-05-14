@@ -1,0 +1,12 @@
+[Main]
+question = "What FIR cascade type is this?"
+
+[qtrBandwidth]
+description = "ESG; LSPaladin5; Preamp_Db -6; Final_Sample_Rate 250 Hz; FIR_Cascade_Type qtrBandwidth"
+xml = "LSPaladin5_PD-6_FR250_CTqtrBandwidth.xml"
+
+
+[aggressive]
+description = "ESG; LSPaladin5; Preamp_Db -6; Final_Sample_Rate 250 Hz; FIR_Cascade_Type aggressive"
+xml = "LSPaladin5_PD-6_FR250_CTaggressive.xml"
+

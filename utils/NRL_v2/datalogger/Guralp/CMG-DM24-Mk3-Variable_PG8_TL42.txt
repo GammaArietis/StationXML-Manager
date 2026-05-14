@@ -1,0 +1,6 @@
+[Main]
+question = "What are the taps (sample rate options in Hz) for this channel?"
+
+[500-250-50-25-5-1]
+path = "CMG-DM24-Mk3-Variable_PG8_TL42_TP500-250-50-25-5-1.txt"
+

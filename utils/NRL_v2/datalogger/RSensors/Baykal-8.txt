@@ -1,0 +1,24 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[8]
+path = "Baykal-8_PG8.txt"
+
+[64]
+path = "Baykal-8_PG64.txt"
+
+[4]
+path = "Baykal-8_PG4.txt"
+
+[32]
+path = "Baykal-8_PG32.txt"
+
+[2]
+path = "Baykal-8_PG2.txt"
+
+[1]
+path = "Baykal-8_PG1.txt"
+
+[16]
+path = "Baykal-8_PG16.txt"
+

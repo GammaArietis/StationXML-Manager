@@ -1,0 +1,7 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[20000]
+description = "GeoSpace; GS-ONE; Low-Frequency_Corner 10 Hz; Coil_Resistance 1800; Shunt_Resistance 20000; Sensitivity 72.2 V/m/s; Sensor_Type groundVel"
+xml = "GS-ONE_LF10_RC1800_RS20000_SG72.2_STgroundVel.xml"
+

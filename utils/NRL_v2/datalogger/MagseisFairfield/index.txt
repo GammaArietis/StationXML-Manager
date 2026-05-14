@@ -1,0 +1,6 @@
+[Main]
+question = "Select the MagseisFairfield datalogger model"
+
+[ZlandGen2]
+path="ZlandGen2.txt"
+

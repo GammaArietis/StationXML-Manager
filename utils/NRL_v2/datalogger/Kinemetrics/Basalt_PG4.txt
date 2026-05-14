@@ -1,0 +1,14 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[5Vpp]
+path = "Basalt_PG4_FV5Vpp.txt"
+
+
+[40Vpp]
+path = "Basalt_PG4_FV40Vpp.txt"
+
+
+[10Vpp]
+path = "Basalt_PG4_FV10Vpp.txt"
+

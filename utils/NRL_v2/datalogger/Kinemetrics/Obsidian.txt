@@ -1,0 +1,18 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[8]
+path = "Obsidian_PG8.txt"
+
+[4]
+path = "Obsidian_PG4.txt"
+
+[2]
+path = "Obsidian_PG2.txt"
+
+[1]
+path = "Obsidian_PG1.txt"
+
+[16]
+path = "Obsidian_PG16.txt"
+

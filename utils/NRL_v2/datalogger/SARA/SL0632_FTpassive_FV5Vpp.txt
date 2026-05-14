@@ -1,0 +1,22 @@
+[Main]
+question = "What is the ADC bit count?"
+
+[32]
+path = "SL0632_FTpassive_FV5Vpp_AB32.txt"
+
+
+[30]
+path = "SL0632_FTpassive_FV5Vpp_AB30.txt"
+
+
+[28]
+path = "SL0632_FTpassive_FV5Vpp_AB28.txt"
+
+
+[26]
+path = "SL0632_FTpassive_FV5Vpp_AB26.txt"
+
+
+[24]
+path = "SL0632_FTpassive_FV5Vpp_AB24.txt"
+

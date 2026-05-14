@@ -1,0 +1,30 @@
+[Main]
+question = "What is the output word size in bits?"
+
+[30 bits]
+path = "Wrangler_PG1_WS30.txt"
+
+
+[29 bits]
+path = "Wrangler_PG1_WS29.txt"
+
+
+[28 bits]
+path = "Wrangler_PG1_WS28.txt"
+
+
+[27 bits]
+path = "Wrangler_PG1_WS27.txt"
+
+
+[26 bits]
+path = "Wrangler_PG1_WS26.txt"
+
+
+[25 bits]
+path = "Wrangler_PG1_WS25.txt"
+
+
+[24 bits]
+path = "Wrangler_PG1_WS24.txt"
+

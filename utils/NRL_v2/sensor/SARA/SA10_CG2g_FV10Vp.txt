@@ -1,0 +1,10 @@
+[Main]
+question = "What is the low-frequency corner?"
+
+[200 Hz]
+path = "SA10_CG2g_FV10Vp_LF200.txt"
+
+
+[100 Hz]
+path = "SA10_CG2g_FV10Vp_LF100.txt"
+

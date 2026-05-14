@@ -1,0 +1,6 @@
+[Main]
+question = "What is the low-frequency corner?"
+
+[15 Hz]
+path = "SGHT-15_LF15.txt"
+

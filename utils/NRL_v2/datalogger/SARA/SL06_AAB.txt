@@ -1,0 +1,18 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[4Vpp]
+path = "SL06_AAB_FV4Vpp.txt"
+
+
+[40Vpp]
+path = "SL06_AAB_FV40Vpp.txt"
+
+
+[2Vpp]
+path = "SL06_AAB_FV2Vpp.txt"
+
+
+[20Vpp]
+path = "SL06_AAB_FV20Vpp.txt"
+

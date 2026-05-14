@@ -1,0 +1,14 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[5Vpp]
+path = "Dolomite_PG16_FV5Vpp.txt"
+
+
+[40Vpp]
+path = "Dolomite_PG16_FV40Vpp.txt"
+
+
+[10Vpp]
+path = "Dolomite_PG16_FV10Vpp.txt"
+

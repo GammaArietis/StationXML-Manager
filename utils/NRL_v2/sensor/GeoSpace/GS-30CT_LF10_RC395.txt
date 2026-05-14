@@ -1,0 +1,10 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[None]
+path = "GS-30CT_LF10_RC395_RSNone.txt"
+
+
+[1000]
+path = "GS-30CT_LF10_RC395_RS1000.txt"
+

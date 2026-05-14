@@ -1,0 +1,6 @@
+[Main]
+question = "Select the KUTECAG sensor model"
+
+[KU-BRL]
+path="KU-BRL.txt"
+

@@ -1,0 +1,9 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[1]
+path = "DAQ3-3_PG1.txt"
+
+[16]
+path = "DAQ3-3_PG16.txt"
+

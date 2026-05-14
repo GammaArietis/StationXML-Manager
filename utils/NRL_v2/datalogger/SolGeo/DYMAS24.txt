@@ -1,0 +1,27 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[8]
+path = "DYMAS24_PG8.txt"
+
+[64]
+path = "DYMAS24_PG64.txt"
+
+[4]
+path = "DYMAS24_PG4.txt"
+
+[32]
+path = "DYMAS24_PG32.txt"
+
+[2]
+path = "DYMAS24_PG2.txt"
+
+[1]
+path = "DYMAS24_PG1.txt"
+
+[16]
+path = "DYMAS24_PG16.txt"
+
+[128]
+path = "DYMAS24_PG128.txt"
+

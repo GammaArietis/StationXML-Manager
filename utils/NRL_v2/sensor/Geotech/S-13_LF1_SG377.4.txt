@@ -1,0 +1,6 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[3600]
+path = "S-13_LF1_SG377.4_RC3600.txt"
+

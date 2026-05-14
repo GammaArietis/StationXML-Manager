@@ -1,0 +1,12 @@
+[Main]
+question = "What is the final filter phase?"
+
+[Mixed]
+description = "GeoDevice; EDAS-24IP; Full-Scale_Voltage 10Vp; Final_Sample_Rate 200 Hz; Final_Filter_Phase Mixed"
+xml = "EDAS-24IP_FV10Vp_FR200_FPMixed.xml"
+
+
+[Linear]
+description = "GeoDevice; EDAS-24IP; Full-Scale_Voltage 10Vp; Final_Sample_Rate 200 Hz; Final_Filter_Phase Linear"
+xml = "EDAS-24IP_FV10Vp_FR200_FPLinear.xml"
+

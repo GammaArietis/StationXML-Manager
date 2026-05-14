@@ -1,0 +1,12 @@
+[Main]
+question = "Select the JeffreyBJohnson sensor model"
+
+[infraNMT]
+path="infraNMT.txt"
+
+[infraBSUv2]
+path="infraBSUv2.txt"
+
+[infraBSU]
+path="infraBSU.txt"
+

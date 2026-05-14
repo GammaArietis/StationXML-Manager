@@ -1,0 +1,12 @@
+[Main]
+question = "Select the GaiaCode sensor model"
+
+[THETA]
+path="THETA.txt"
+
+[SIGMA]
+path="SIGMA.txt"
+
+[ALPHA]
+path="ALPHA.txt"
+

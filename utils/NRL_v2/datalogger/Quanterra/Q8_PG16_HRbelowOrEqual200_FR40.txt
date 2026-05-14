@@ -1,0 +1,22 @@
+[Main]
+question = "To which sample rates are linear filters applied?"
+
+[below40]
+description = "Quanterra; Q8; Preamp_Gain 16; Highest_Configured_Sample_Rate belowOrEqual200 Hz; Final_Sample_Rate 40 Hz; Linear_Filter_Rates below40"
+xml = "Q8_PG16_HRbelowOrEqual200_FR40_LRbelow40.xml"
+
+
+[below20]
+description = "Quanterra; Q8; Preamp_Gain 16; Highest_Configured_Sample_Rate belowOrEqual200 Hz; Final_Sample_Rate 40 Hz; Linear_Filter_Rates below20"
+xml = "Q8_PG16_HRbelowOrEqual200_FR40_LRbelow20.xml"
+
+
+[below100]
+description = "Quanterra; Q8; Preamp_Gain 16; Highest_Configured_Sample_Rate belowOrEqual200 Hz; Final_Sample_Rate 40 Hz; Linear_Filter_Rates below100"
+xml = "Q8_PG16_HRbelowOrEqual200_FR40_LRbelow100.xml"
+
+
+[all]
+description = "Quanterra; Q8; Preamp_Gain 16; Highest_Configured_Sample_Rate belowOrEqual200 Hz; Final_Sample_Rate 40 Hz; Linear_Filter_Rates all"
+xml = "Q8_PG16_HRbelowOrEqual200_FR40_LRall.xml"
+

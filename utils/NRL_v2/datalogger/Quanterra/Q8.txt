@@ -1,0 +1,27 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[8]
+path = "Q8_PG8.txt"
+
+[64]
+path = "Q8_PG64.txt"
+
+[4]
+path = "Q8_PG4.txt"
+
+[32]
+path = "Q8_PG32.txt"
+
+[2]
+path = "Q8_PG2.txt"
+
+[1]
+path = "Q8_PG1.txt"
+
+[16]
+path = "Q8_PG16.txt"
+
+[128]
+path = "Q8_PG128.txt"
+

@@ -1,0 +1,7 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[104 Hz]
+description = "GEObit; C100; Long-Period_Corner 10 s; Model_Version 32; High-Frequency_Corner 104 Hz; Sensitivity 1500 V/m/s; Sensor_Type groundVel"
+xml = "C100_LP10_MV32_HF104_SG1500_STgroundVel.xml"
+

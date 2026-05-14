@@ -1,0 +1,12 @@
+[Main]
+question = "What is the final filter phase?"
+
+[Minimum]
+description = "Geotech; SMART24; Preamp_Gain 16; Full-Scale_Voltage 5Vpp; Primary_Sample_Rate 250 Hz; Final_Sample_Rate 125 Hz; Final_Filter_Phase Minimum"
+xml = "SMART24_PG16_FV5Vpp_PR250_FR125_FPMinimum.xml"
+
+
+[Linear]
+description = "Geotech; SMART24; Preamp_Gain 16; Full-Scale_Voltage 5Vpp; Primary_Sample_Rate 250 Hz; Final_Sample_Rate 125 Hz; Final_Filter_Phase Linear"
+xml = "SMART24_PG16_FV5Vpp_PR250_FR125_FPLinear.xml"
+

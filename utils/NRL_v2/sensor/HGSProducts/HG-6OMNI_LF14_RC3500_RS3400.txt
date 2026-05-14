@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[39.42]
+description = "HGSProducts; HG-6OMNI; Low-Frequency_Corner 14 Hz; Coil_Resistance 3500; Shunt_Resistance 3400; Sensitivity 39.42 V/m/s; Sensor_Type groundVel"
+xml = "HG-6OMNI_LF14_RC3500_RS3400_SG39.42_STgroundVel.xml"
+

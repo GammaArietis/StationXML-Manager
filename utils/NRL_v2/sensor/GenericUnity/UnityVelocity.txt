@@ -1,0 +1,7 @@
+[Main]
+question = "What is the low-frequency corner?"
+
+[0 Hz]
+description = "GenericUnity; UnityVelocity; Low-Frequency_Corner 0 Hz; Sensitivity 1 V/m/s; Sensor_Type groundVel"
+xml = "UnityVelocity_LF0_SG1_STgroundVel.xml"
+

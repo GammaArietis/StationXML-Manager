@@ -1,0 +1,10 @@
+[Main]
+question = "What is the DC removal/low pass filter setting?"
+
+[Off]
+path = "ZlandGen2_PD0_FR250_FPMP_DFOff.txt"
+
+
+[1]
+path = "ZlandGen2_PD0_FR250_FPMP_DF1.txt"
+

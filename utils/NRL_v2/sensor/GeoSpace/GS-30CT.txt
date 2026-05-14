@@ -1,0 +1,6 @@
+[Main]
+question = "What is the low-frequency corner?"
+
+[10 Hz]
+path = "GS-30CT_LF10.txt"
+

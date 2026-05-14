@@ -1,0 +1,7 @@
+[Main]
+question = "What is the long-period corner?"
+
+[125 s]
+description = "Hyperion; 5313A; Long-Period_Corner 125 s; Sensitivity 0.0266 V/Pa; Sensor_Type airPressure"
+xml = "5313A_LP125_SG0.0266_STairPressure.xml"
+

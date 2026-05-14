@@ -1,0 +1,24 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[8]
+path = "Affinity_PG8.txt"
+
+[64]
+path = "Affinity_PG64.txt"
+
+[4]
+path = "Affinity_PG4.txt"
+
+[32]
+path = "Affinity_PG32.txt"
+
+[2]
+path = "Affinity_PG2.txt"
+
+[1]
+path = "Affinity_PG1.txt"
+
+[16]
+path = "Affinity_PG16.txt"
+

@@ -1,0 +1,12 @@
+[Main]
+question = "What is the DC removal/low pass filter setting?"
+
+[Off]
+description = "Nanometrics; Trident; Full-Scale_Voltage 40Vpp; Final_Sample_Rate 100 Hz; DC_Filter Off"
+xml = "Trident_FV40Vpp_FR100_DFOff.xml"
+
+
+[0.001]
+description = "Nanometrics; Trident; Full-Scale_Voltage 40Vpp; Final_Sample_Rate 100 Hz; DC_Filter 0.001"
+xml = "Trident_FV40Vpp_FR100_DF0.001.xml"
+

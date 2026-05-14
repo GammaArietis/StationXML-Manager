@@ -1,0 +1,6 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[2516]
+path = "L-22D_LF2_RC510_RS2516.txt"
+

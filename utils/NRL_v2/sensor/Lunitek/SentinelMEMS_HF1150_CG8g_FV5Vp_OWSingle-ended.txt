@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[0.06225]
+description = "Lunitek; SentinelMEMS; High-Frequency_Corner 1150 Hz; Clip_Level 8g; Full-Scale_Voltage 5Vp; Output_Wiring Single-ended; Sensitivity 0.06225 V/m/s**2; Sensor_Type groundAccel"
+xml = "SentinelMEMS_HF1150_CG8g_FV5Vp_OWSingle-ended_SG0.06225_STgroundAccel.xml"
+

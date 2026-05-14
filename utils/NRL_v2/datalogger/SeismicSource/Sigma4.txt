@@ -1,0 +1,9 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[1]
+path = "Sigma4_PG1.txt"
+
+[16]
+path = "Sigma4_PG16.txt"
+

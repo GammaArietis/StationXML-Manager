@@ -1,0 +1,12 @@
+[Main]
+question = "What is the sensitivity?"
+
+[96.15]
+description = "Lunitek; LVDT; Long-Period_Corner DC s; Sensitivity 96.15; Sensor_Type displ "
+xml = "LVDT_LPDC_SG96.15_STdispl.xml"
+
+
+[10.4]
+description = "Lunitek; LVDT; Long-Period_Corner DC s; Sensitivity 10.4; Sensor_Type displ "
+xml = "LVDT_LPDC_SG10.4_STdispl.xml"
+

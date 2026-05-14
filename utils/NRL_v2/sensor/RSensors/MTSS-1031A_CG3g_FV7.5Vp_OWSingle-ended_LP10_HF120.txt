@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[0.24465]
+description = "RSensors; MTSS-1031A; Clip_Level 3g; Full-Scale_Voltage 7.5Vp; Output_Wiring Single-ended; Long-Period_Corner 10 s; High-Frequency_Corner 120 Hz; Sensitivity 0.24465 V/m/s**2; Sensor_Type groundAccel"
+xml = "MTSS-1031A_CG3g_FV7.5Vp_OWSingle-ended_LP10_HF120_SG0.24465_STgroundAccel.xml"
+

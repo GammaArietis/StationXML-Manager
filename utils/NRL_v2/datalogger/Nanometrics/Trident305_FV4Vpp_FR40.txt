@@ -1,0 +1,10 @@
+[Main]
+question = "Is the input impedance high or low?"
+
+[Low]
+path = "Trident305_FV4Vpp_FR40_ZNLow.txt"
+
+
+[High]
+path = "Trident305_FV4Vpp_FR40_ZNHigh.txt"
+

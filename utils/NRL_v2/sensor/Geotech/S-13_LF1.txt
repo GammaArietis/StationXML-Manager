@@ -1,0 +1,26 @@
+[Main]
+question = "What is the sensitivity?"
+
+[986.9]
+path = "S-13_LF1_SG986.9.txt"
+
+
+[76.6]
+path = "S-13_LF1_SG76.6.txt"
+
+
+[48.9]
+path = "S-13_LF1_SG48.9.txt"
+
+
+[377.4]
+path = "S-13_LF1_SG377.4.txt"
+
+
+[241.4]
+path = "S-13_LF1_SG241.4.txt"
+
+
+[1322.5]
+path = "S-13_LF1_SG1322.5.txt"
+

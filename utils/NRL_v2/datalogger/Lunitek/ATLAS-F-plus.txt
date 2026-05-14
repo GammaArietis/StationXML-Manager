@@ -1,0 +1,9 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[40Vpp]
+path = "ATLAS-F-plus_FV40Vpp.txt"
+
+[20Vpp]
+path = "ATLAS-F-plus_FV20Vpp.txt"
+

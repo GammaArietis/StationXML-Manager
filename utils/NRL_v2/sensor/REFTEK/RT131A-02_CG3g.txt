@@ -1,0 +1,10 @@
+[Main]
+question = "What is the analog filter type?"
+
+[SF3000L]
+path = "RT131A-02_CG3g_AFSF3000L.txt"
+
+
+[SF1500S]
+path = "RT131A-02_CG3g_AFSF1500S.txt"
+

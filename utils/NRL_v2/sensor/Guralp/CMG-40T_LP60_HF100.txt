@@ -1,0 +1,22 @@
+[Main]
+question = "What is the sensitivity?"
+
+[800]
+description = "Guralp; CMG-40T; Long-Period_Corner 60 s; High-Frequency_Corner 100 Hz; Sensitivity 800 V/m/s; Sensor_Type groundVel"
+xml = "CMG-40T_LP60_HF100_SG800_STgroundVel.xml"
+
+
+[2000]
+description = "Guralp; CMG-40T; Long-Period_Corner 60 s; High-Frequency_Corner 100 Hz; Sensitivity 2000 V/m/s; Sensor_Type groundVel"
+xml = "CMG-40T_LP60_HF100_SG2000_STgroundVel.xml"
+
+
+[20000]
+description = "Guralp; CMG-40T; Long-Period_Corner 60 s; High-Frequency_Corner 100 Hz; Sensitivity 20000 V/m/s; Sensor_Type groundVel"
+xml = "CMG-40T_LP60_HF100_SG20000_STgroundVel.xml"
+
+
+[1600]
+description = "Guralp; CMG-40T; Long-Period_Corner 60 s; High-Frequency_Corner 100 Hz; Sensitivity 1600 V/m/s; Sensor_Type groundVel"
+xml = "CMG-40T_LP60_HF100_SG1600_STgroundVel.xml"
+

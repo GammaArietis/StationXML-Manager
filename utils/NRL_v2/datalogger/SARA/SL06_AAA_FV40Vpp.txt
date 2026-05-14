@@ -1,0 +1,10 @@
+[Main]
+question = "What is the ADC bit count?"
+
+[26]
+path = "SL06_AAA_FV40Vpp_AB26.txt"
+
+
+[24]
+path = "SL06_AAA_FV40Vpp_AB24.txt"
+

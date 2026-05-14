@@ -1,0 +1,12 @@
+[Main]
+question = "What is the final filter phase?"
+
+[Non-causal]
+description = "Kinemetrics; Etna2; Final_Sample_Rate 1 Hz; Final_Filter_Phase Non-causal"
+xml = "Etna2_FR1_FPNon-causal.xml"
+
+
+[Causal]
+description = "Kinemetrics; Etna2; Final_Sample_Rate 1 Hz; Final_Filter_Phase Causal"
+xml = "Etna2_FR1_FPCausal.xml"
+

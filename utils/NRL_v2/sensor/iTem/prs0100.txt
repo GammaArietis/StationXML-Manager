@@ -1,0 +1,6 @@
+[Main]
+question = "What is the long-period corner?"
+
+[100 s]
+path = "prs0100_LP100.txt"
+

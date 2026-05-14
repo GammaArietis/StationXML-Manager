@@ -1,0 +1,14 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[5Vpp]
+path = "Obsidian_PG8_FV5Vpp.txt"
+
+
+[40Vpp]
+path = "Obsidian_PG8_FV40Vpp.txt"
+
+
+[10Vpp]
+path = "Obsidian_PG8_FV10Vpp.txt"
+

@@ -1,0 +1,6 @@
+[Main]
+question = "What are the taps (sample rate options in Hz) for this channel?"
+
+[800-400-100-20-10-5]
+path = "CMG-CD24_TL117_TP800-400-100-20-10-5.txt"
+

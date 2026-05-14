@@ -1,0 +1,6 @@
+[Main]
+question = "Select the ASIR sensor model"
+
+[AG4.5]
+path="AG4.5.txt"
+

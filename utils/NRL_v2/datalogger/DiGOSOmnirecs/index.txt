@@ -1,0 +1,6 @@
+[Main]
+question = "Select the DiGOSOmnirecs datalogger model"
+
+[DataCube]
+path="DataCube.txt"
+

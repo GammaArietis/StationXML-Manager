@@ -1,0 +1,6 @@
+[Main]
+question = "Is the output wiring single-ended or differential?"
+
+[Single-ended]
+path = "LK-307-115_HF100_CG1g_FV7.5Vp_OWSingle-ended.txt"
+

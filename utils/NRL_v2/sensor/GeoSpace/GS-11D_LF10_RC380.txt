@@ -1,0 +1,14 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[None]
+path = "GS-11D_LF10_RC380_RSNone.txt"
+
+
+[887]
+path = "GS-11D_LF10_RC380_RS887.txt"
+
+
+[1330]
+path = "GS-11D_LF10_RC380_RS1330.txt"
+

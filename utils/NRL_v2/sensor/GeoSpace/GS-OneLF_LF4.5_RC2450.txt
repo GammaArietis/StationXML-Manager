@@ -1,0 +1,14 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[None]
+path = "GS-OneLF_LF4.5_RC2450_RSNone.txt"
+
+
+[20000]
+path = "GS-OneLF_LF4.5_RC2450_RS20000.txt"
+
+
+[17400]
+path = "GS-OneLF_LF4.5_RC2450_RS17400.txt"
+

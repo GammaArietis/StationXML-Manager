@@ -1,0 +1,58 @@
+[Main]
+question = "What is the primary sample rate?"
+
+[5 Hz]
+path = "SMART24_PG64_FV20Vpp_PR5.txt"
+
+
+[50 Hz]
+path = "SMART24_PG64_FV20Vpp_PR50.txt"
+
+
+[500 Hz]
+path = "SMART24_PG64_FV20Vpp_PR500.txt"
+
+
+[40 Hz]
+path = "SMART24_PG64_FV20Vpp_PR40.txt"
+
+
+[25 Hz]
+path = "SMART24_PG64_FV20Vpp_PR25.txt"
+
+
+[250 Hz]
+path = "SMART24_PG64_FV20Vpp_PR250.txt"
+
+
+[20 Hz]
+path = "SMART24_PG64_FV20Vpp_PR20.txt"
+
+
+[200 Hz]
+path = "SMART24_PG64_FV20Vpp_PR200.txt"
+
+
+[2000 Hz]
+path = "SMART24_PG64_FV20Vpp_PR2000.txt"
+
+
+[1 Hz]
+path = "SMART24_PG64_FV20Vpp_PR1.txt"
+
+
+[125 Hz]
+path = "SMART24_PG64_FV20Vpp_PR125.txt"
+
+
+[10 Hz]
+path = "SMART24_PG64_FV20Vpp_PR10.txt"
+
+
+[100 Hz]
+path = "SMART24_PG64_FV20Vpp_PR100.txt"
+
+
+[1000 Hz]
+path = "SMART24_PG64_FV20Vpp_PR1000.txt"
+

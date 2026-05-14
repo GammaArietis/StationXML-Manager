@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[0.5095]
+description = "Kinemetrics; FBA23; Clip_Level 0.5g; Full-Scale_Voltage 2.5Vp; High-Frequency_Corner 100 Hz; Sensitivity 0.5095 V/m/s**2; Sensor_Type groundAccel"
+xml = "FBA23_CG0.5g_FV2.5Vp_HF100_SG0.5095_STgroundAccel.xml"
+

@@ -1,0 +1,10 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[None]
+path = "HG-24HS_LF10_RC1800_RSNone.txt"
+
+
+[20000]
+path = "HG-24HS_LF10_RC1800_RS20000.txt"
+

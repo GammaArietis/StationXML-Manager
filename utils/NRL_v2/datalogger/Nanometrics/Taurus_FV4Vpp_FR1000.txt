@@ -1,0 +1,10 @@
+[Main]
+question = "Is the input impedance high or low?"
+
+[Low]
+path = "Taurus_FV4Vpp_FR1000_ZNLow.txt"
+
+
+[High]
+path = "Taurus_FV4Vpp_FR1000_ZNHigh.txt"
+

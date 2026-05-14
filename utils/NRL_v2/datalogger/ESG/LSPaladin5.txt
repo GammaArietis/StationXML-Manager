@@ -1,0 +1,12 @@
+[Main]
+question = "What is the preamp gain in dB?"
+
+[0]
+path = "LSPaladin5_PD0.txt"
+
+[-6]
+path = "LSPaladin5_PD-6.txt"
+
+[-12]
+path = "LSPaladin5_PD-12.txt"
+

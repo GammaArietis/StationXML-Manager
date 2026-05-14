@@ -1,0 +1,15 @@
+[Main]
+question = "Select the NetDAS datalogger model"
+
+[DAQ24USBXR]
+path="DAQ24USBXR.txt"
+
+[DAQ24USB5V]
+path="DAQ24USB5V.txt"
+
+[DAQ24USB4]
+path="DAQ24USB4.txt"
+
+[DAQ24USB4CH]
+path="DAQ24USB4CH.txt"
+

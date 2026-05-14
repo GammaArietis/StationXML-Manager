@@ -1,0 +1,12 @@
+[Main]
+question = "What is the final filter phase?"
+
+[Minimum]
+description = "GEObit; GEOsix; Full-Scale_Voltage 20Vpp; Final_Sample_Rate 50 Hz; Final_Filter_Phase Minimum"
+xml = "GEOsix_FV20Vpp_FR50_FPMinimum.xml"
+
+
+[Linear]
+description = "GEObit; GEOsix; Full-Scale_Voltage 20Vpp; Final_Sample_Rate 50 Hz; Final_Filter_Phase Linear"
+xml = "GEOsix_FV20Vpp_FR50_FPLinear.xml"
+

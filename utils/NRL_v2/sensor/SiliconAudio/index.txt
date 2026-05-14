@@ -1,0 +1,15 @@
+[Main]
+question = "Select the SiliconAudio sensor model"
+
+[213P-LowNoise-Vel]
+path="213P-LowNoise-Vel.txt"
+
+[203P-LowNoise-Accel]
+path="203P-LowNoise-Accel.txt"
+
+[113P-OmniTilt-Vel]
+path="113P-OmniTilt-Vel.txt"
+
+[103P-OmniTilt-Accel]
+path="103P-OmniTilt-Accel.txt"
+

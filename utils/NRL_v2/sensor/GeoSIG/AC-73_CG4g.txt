@@ -1,0 +1,6 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[100 Hz]
+path = "AC-73_CG4g_HF100.txt"
+

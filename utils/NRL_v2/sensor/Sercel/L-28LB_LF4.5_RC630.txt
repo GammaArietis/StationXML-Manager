@@ -1,0 +1,18 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[None]
+path = "L-28LB_LF4.5_RC630_RSNone.txt"
+
+
+[6097]
+path = "L-28LB_LF4.5_RC630_RS6097.txt"
+
+
+[3971]
+path = "L-28LB_LF4.5_RC630_RS3971.txt"
+
+
+[11874]
+path = "L-28LB_LF4.5_RC630_RS11874.txt"
+

@@ -1,0 +1,7 @@
+[Main]
+question = "Is the firmware date before or after 2012-10-02?"
+
+[all]
+description = "Quanterra; Q330Splus; Preamp_Gain 1; Final_Sample_Rate 10 Hz; Linear_Filter_Rates all; Firmware_Date all"
+xml = "Q330Splus_PG1_FR10_LRall_FDall.xml"
+

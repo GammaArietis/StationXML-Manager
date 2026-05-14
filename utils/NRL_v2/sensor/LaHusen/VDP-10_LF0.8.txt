@@ -1,0 +1,7 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[157 Hz]
+description = "LaHusen; VDP-10; Low-Frequency_Corner 0.8 Hz; High-Frequency_Corner 157 Hz; Sensitivity 0.01 V/Pa; Sensor_Type airPressure"
+xml = "VDP-10_LF0.8_HF157_SG0.01_STairPressure.xml"
+

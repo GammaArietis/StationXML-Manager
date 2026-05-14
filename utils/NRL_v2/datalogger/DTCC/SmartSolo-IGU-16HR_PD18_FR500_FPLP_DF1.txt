@@ -1,0 +1,12 @@
+[Main]
+question = "What are the final output units?"
+
+[mV]
+description = "DTCC; SmartSolo-IGU-16HR; Preamp_Db 18; Final_Sample_Rate 500 Hz; Final_Filter_Phase LP; DC_Filter 1; Output_Units mV"
+xml = "SmartSolo-IGU-16HR_PD18_FR500_FPLP_DF1_OUmV.xml"
+
+
+[count]
+description = "DTCC; SmartSolo-IGU-16HR; Preamp_Db 18; Final_Sample_Rate 500 Hz; Final_Filter_Phase LP; DC_Filter 1; Output_Units count"
+xml = "SmartSolo-IGU-16HR_PD18_FR500_FPLP_DF1_OUcount.xml"
+

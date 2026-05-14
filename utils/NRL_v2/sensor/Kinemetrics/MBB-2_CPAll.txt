@@ -1,0 +1,7 @@
+[Main]
+question = "What is the long-period corner?"
+
+[120 s]
+description = "Kinemetrics; MBB-2; Component All; Long-Period_Corner 120 s; Sensitivity 750 V/m/s; Sensor_Type groundVel"
+xml = "MBB-2_CPAll_LP120_SG750_STgroundVel.xml"
+

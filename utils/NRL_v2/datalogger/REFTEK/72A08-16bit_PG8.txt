@@ -1,0 +1,10 @@
+[Main]
+question = "What is the output word size in bits?"
+
+[32 bits]
+path = "72A08-16bit_PG8_WS32.txt"
+
+
+[16 bits]
+path = "72A08-16bit_PG8_WS16.txt"
+

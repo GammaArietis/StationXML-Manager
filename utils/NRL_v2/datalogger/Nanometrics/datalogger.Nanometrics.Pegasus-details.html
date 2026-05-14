@@ -1,0 +1,4 @@
+### Full-Scale Voltage
+When configuring the Pegasus, the user sets the input (full-scale) voltage range, which translates to choosing a preamplifier gain. Input range values of 40, 10, 5, 1, and 0.5 Vpp correspond to gains of 1, 4, 8, 40, and 80 respectively.
+ ### DC Filter
+The Library includes a response for a final IIR DC removal filter with a low-frequency corner of 1 mHz (0.001 Hz) as an example.  The filter corner can be set to any value of integer mHz between 1 and 1000 mHz.  For other corner frequency values, set the pole for this filter instead to the selected corner frequency times 2 * pi.

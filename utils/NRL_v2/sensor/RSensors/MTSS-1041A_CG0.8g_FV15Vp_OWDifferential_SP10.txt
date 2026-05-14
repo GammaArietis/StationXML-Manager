@@ -1,0 +1,6 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[120 Hz]
+path = "MTSS-1041A_CG0.8g_FV15Vp_OWDifferential_SP10_HF120.txt"
+

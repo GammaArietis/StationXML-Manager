@@ -1,0 +1,12 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[VeryLow]
+path = "PR6-24_PGVeryLow.txt"
+
+[Low]
+path = "PR6-24_PGLow.txt"
+
+[High]
+path = "PR6-24_PGHigh.txt"
+

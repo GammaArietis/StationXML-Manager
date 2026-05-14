@@ -1,0 +1,22 @@
+[Main]
+question = "To which sample rates are linear filters applied?"
+
+[below40]
+description = "Quanterra; Q330Mplus; Preamp_Gain 128; Final_Sample_Rate 20 Hz; Linear_Filter_Rates below40"
+xml = "Q330Mplus_PG128_FR20_LRbelow40.xml"
+
+
+[below20]
+description = "Quanterra; Q330Mplus; Preamp_Gain 128; Final_Sample_Rate 20 Hz; Linear_Filter_Rates below20"
+xml = "Q330Mplus_PG128_FR20_LRbelow20.xml"
+
+
+[below100]
+description = "Quanterra; Q330Mplus; Preamp_Gain 128; Final_Sample_Rate 20 Hz; Linear_Filter_Rates below100"
+xml = "Q330Mplus_PG128_FR20_LRbelow100.xml"
+
+
+[all]
+description = "Quanterra; Q330Mplus; Preamp_Gain 128; Final_Sample_Rate 20 Hz; Linear_Filter_Rates all"
+xml = "Q330Mplus_PG128_FR20_LRall.xml"
+

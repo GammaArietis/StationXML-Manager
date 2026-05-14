@@ -1,0 +1,6 @@
+[Main]
+question = "What is the low-frequency corner?"
+
+[2 Hz]
+path = "HS-1LTmini_LF2.txt"
+

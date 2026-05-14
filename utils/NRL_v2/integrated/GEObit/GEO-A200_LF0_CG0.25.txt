@@ -1,0 +1,10 @@
+[Main]
+question = "What is the final filter phase?"
+
+[Minimum]
+path = "GEO-A200_LF0_CG0.25_FPMinimum.txt"
+
+
+[Linear]
+path = "GEO-A200_LF0_CG0.25_FPLinear.txt"
+

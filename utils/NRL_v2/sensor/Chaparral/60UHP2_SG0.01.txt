@@ -1,0 +1,7 @@
+[Main]
+question = "What is the long-period corner?"
+
+[67 s]
+description = "Chaparral; 60UHP2; Sensitivity 0.01 V/Pa; Long-Period_Corner 67 s; High-Frequency_Corner 245 Hz; Sensor_Type airPressure"
+xml = "60UHP2_SG0.01_LP67_HF245_STairPressure.xml"
+

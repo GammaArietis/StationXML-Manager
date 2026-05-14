@@ -1,0 +1,12 @@
+[Main]
+question = "What is the final sample rate?"
+
+[200 Hz]
+description = "Lunitek; ATLAS-F-plus; Full-Scale_Voltage 40Vpp; Final_Sample_Rate 200 Hz"
+xml = "ATLAS-F-plus_FV40Vpp_FR200.xml"
+
+
+[100 Hz]
+description = "Lunitek; ATLAS-F-plus; Full-Scale_Voltage 40Vpp; Final_Sample_Rate 100 Hz"
+xml = "ATLAS-F-plus_FV40Vpp_FR100.xml"
+

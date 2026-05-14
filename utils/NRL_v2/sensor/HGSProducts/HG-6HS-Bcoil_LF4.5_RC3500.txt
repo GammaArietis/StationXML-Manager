@@ -1,0 +1,14 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[None]
+path = "HG-6HS-Bcoil_LF4.5_RC3500_RSNone.txt"
+
+
+[88700]
+path = "HG-6HS-Bcoil_LF4.5_RC3500_RS88700.txt"
+
+
+[560000]
+path = "HG-6HS-Bcoil_LF4.5_RC3500_RS560000.txt"
+

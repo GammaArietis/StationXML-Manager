@@ -1,0 +1,6 @@
+[Main]
+question = "What is the ADC bit count?"
+
+[24]
+path = "SL0624_FTpassive_FV2.5Vpp_AB24.txt"
+

@@ -1,0 +1,7 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[96 Hz]
+description = "GeoSIG; VE-53; Model_Version Old; Long-Period_Corner 1 s; High-Frequency_Corner 96 Hz; Sensitivity 1000 V/m/s; Sensor_Type groundVel"
+xml = "VE-53_MVOld_LP1_HF96_SG1000_STgroundVel.xml"
+

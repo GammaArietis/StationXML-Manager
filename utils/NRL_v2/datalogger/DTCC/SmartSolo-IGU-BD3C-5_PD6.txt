@@ -1,0 +1,34 @@
+[Main]
+question = "What is the final sample rate?"
+
+[50 Hz]
+path = "SmartSolo-IGU-BD3C-5_PD6_FR50.txt"
+
+
+[500 Hz]
+path = "SmartSolo-IGU-BD3C-5_PD6_FR500.txt"
+
+
+[4000 Hz]
+path = "SmartSolo-IGU-BD3C-5_PD6_FR4000.txt"
+
+
+[250 Hz]
+path = "SmartSolo-IGU-BD3C-5_PD6_FR250.txt"
+
+
+[2000 Hz]
+path = "SmartSolo-IGU-BD3C-5_PD6_FR2000.txt"
+
+
+[125 Hz]
+path = "SmartSolo-IGU-BD3C-5_PD6_FR125.txt"
+
+
+[100 Hz]
+path = "SmartSolo-IGU-BD3C-5_PD6_FR100.txt"
+
+
+[1000 Hz]
+path = "SmartSolo-IGU-BD3C-5_PD6_FR1000.txt"
+

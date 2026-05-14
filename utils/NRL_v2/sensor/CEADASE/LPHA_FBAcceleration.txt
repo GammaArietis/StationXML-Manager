@@ -1,0 +1,6 @@
+[Main]
+question = "What is the long-period corner?"
+
+[DC s]
+path = "LPHA_FBAcceleration_LPDC.txt"
+

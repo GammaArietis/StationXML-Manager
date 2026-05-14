@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[15.38]
+description = "HGSProducts; HG-7; Low-Frequency_Corner 14 Hz; Coil_Resistance 375; Shunt_Resistance 430; Sensitivity 15.38 V/m/s; Sensor_Type groundVel"
+xml = "HG-7_LF14_RC375_RS430_SG15.38_STgroundVel.xml"
+

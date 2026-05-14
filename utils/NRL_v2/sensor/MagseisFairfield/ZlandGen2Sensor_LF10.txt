@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[78.7]
+description = "MagseisFairfield; ZlandGen2Sensor; Low-Frequency_Corner 10 Hz; Sensitivity 78.7 V/m/s; Sensor_Type groundVel"
+xml = "ZlandGen2Sensor_LF10_SG78.7_STgroundVel.xml"
+

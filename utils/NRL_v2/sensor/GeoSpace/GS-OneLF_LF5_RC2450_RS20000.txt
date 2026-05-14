@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[89.44]
+description = "GeoSpace; GS-OneLF; Low-Frequency_Corner 5 Hz; Coil_Resistance 2450; Shunt_Resistance 20000; Sensitivity 89.44 V/m/s; Sensor_Type groundVel"
+xml = "GS-OneLF_LF5_RC2450_RS20000_SG89.44_STgroundVel.xml"
+

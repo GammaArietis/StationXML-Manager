@@ -1,0 +1,6 @@
+[Main]
+question = "Select the Eentec datalogger model"
+
+[DR-4000]
+path="DR-4000.txt"
+

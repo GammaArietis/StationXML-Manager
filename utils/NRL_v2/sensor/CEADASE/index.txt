@@ -1,0 +1,24 @@
+[Main]
+question = "Select the CEADASE sensor model"
+
+[MB3a]
+path="MB3a.txt"
+
+[MB2005]
+path="MB2005.txt"
+
+[MB2000]
+path="MB2000.txt"
+
+[LPZA]
+path="LPZA.txt"
+
+[LPHA]
+path="LPHA.txt"
+
+[CPZM-500]
+path="CPZM-500.txt"
+
+[CPHM-500]
+path="CPHM-500.txt"
+

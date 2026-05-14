@@ -1,0 +1,6 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[1400]
+path = "GS-1_CPvertical_LF2_RC450_RS1400.txt"
+

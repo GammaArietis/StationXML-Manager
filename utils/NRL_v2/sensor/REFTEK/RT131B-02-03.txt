@@ -1,0 +1,6 @@
+[Main]
+question = "What is the accelerometer clip level in +/-g?"
+
+[4g]
+path = "RT131B-02-03_CG4g.txt"
+

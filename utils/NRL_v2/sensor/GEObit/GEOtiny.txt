@@ -1,0 +1,9 @@
+[Main]
+question = "What is the long-period corner?"
+
+[10 s]
+path = "GEOtiny_LP10.txt"
+
+[0.22 s]
+path = "GEOtiny_LP0.22.txt"
+

@@ -1,0 +1,102 @@
+[Main]
+question = "What is the final sample rate?"
+
+[960 Hz]
+description = "NetDAS; DAQ24USB4CH; Preamp_Gain 64; Sensitivity_Mode Low; Final_Sample_Rate 960 Hz"
+xml = "DAQ24USB4CH_PG64_SMLow_FR960.xml"
+
+
+[800 Hz]
+description = "NetDAS; DAQ24USB4CH; Preamp_Gain 64; Sensitivity_Mode Low; Final_Sample_Rate 800 Hz"
+xml = "DAQ24USB4CH_PG64_SMLow_FR800.xml"
+
+
+[7.5 Hz]
+description = "NetDAS; DAQ24USB4CH; Preamp_Gain 64; Sensitivity_Mode Low; Final_Sample_Rate 7.5 Hz"
+xml = "DAQ24USB4CH_PG64_SMLow_FR7.5.xml"
+
+
+[60 Hz]
+description = "NetDAS; DAQ24USB4CH; Preamp_Gain 64; Sensitivity_Mode Low; Final_Sample_Rate 60 Hz"
+xml = "DAQ24USB4CH_PG64_SMLow_FR60.xml"
+
+
+[6.25 Hz]
+description = "NetDAS; DAQ24USB4CH; Preamp_Gain 64; Sensitivity_Mode Low; Final_Sample_Rate 6.25 Hz"
+xml = "DAQ24USB4CH_PG64_SMLow_FR6.25.xml"
+
+
+[50 Hz]
+description = "NetDAS; DAQ24USB4CH; Preamp_Gain 64; Sensitivity_Mode Low; Final_Sample_Rate 50 Hz"
+xml = "DAQ24USB4CH_PG64_SMLow_FR50.xml"
+
+
+[480 Hz]
+description = "NetDAS; DAQ24USB4CH; Preamp_Gain 64; Sensitivity_Mode Low; Final_Sample_Rate 480 Hz"
+xml = "DAQ24USB4CH_PG64_SMLow_FR480.xml"
+
+
+[400 Hz]
+description = "NetDAS; DAQ24USB4CH; Preamp_Gain 64; Sensitivity_Mode Low; Final_Sample_Rate 400 Hz"
+xml = "DAQ24USB4CH_PG64_SMLow_FR400.xml"
+
+
+[3840 Hz]
+description = "NetDAS; DAQ24USB4CH; Preamp_Gain 64; Sensitivity_Mode Low; Final_Sample_Rate 3840 Hz"
+xml = "DAQ24USB4CH_PG64_SMLow_FR3840.xml"
+
+
+[3200 Hz]
+description = "NetDAS; DAQ24USB4CH; Preamp_Gain 64; Sensitivity_Mode Low; Final_Sample_Rate 3200 Hz"
+xml = "DAQ24USB4CH_PG64_SMLow_FR3200.xml"
+
+
+[30 Hz]
+description = "NetDAS; DAQ24USB4CH; Preamp_Gain 64; Sensitivity_Mode Low; Final_Sample_Rate 30 Hz"
+xml = "DAQ24USB4CH_PG64_SMLow_FR30.xml"
+
+
+[25 Hz]
+description = "NetDAS; DAQ24USB4CH; Preamp_Gain 64; Sensitivity_Mode Low; Final_Sample_Rate 25 Hz"
+xml = "DAQ24USB4CH_PG64_SMLow_FR25.xml"
+
+
+[240 Hz]
+description = "NetDAS; DAQ24USB4CH; Preamp_Gain 64; Sensitivity_Mode Low; Final_Sample_Rate 240 Hz"
+xml = "DAQ24USB4CH_PG64_SMLow_FR240.xml"
+
+
+[200 Hz]
+description = "NetDAS; DAQ24USB4CH; Preamp_Gain 64; Sensitivity_Mode Low; Final_Sample_Rate 200 Hz"
+xml = "DAQ24USB4CH_PG64_SMLow_FR200.xml"
+
+
+[1920 Hz]
+description = "NetDAS; DAQ24USB4CH; Preamp_Gain 64; Sensitivity_Mode Low; Final_Sample_Rate 1920 Hz"
+xml = "DAQ24USB4CH_PG64_SMLow_FR1920.xml"
+
+
+[1600 Hz]
+description = "NetDAS; DAQ24USB4CH; Preamp_Gain 64; Sensitivity_Mode Low; Final_Sample_Rate 1600 Hz"
+xml = "DAQ24USB4CH_PG64_SMLow_FR1600.xml"
+
+
+[15 Hz]
+description = "NetDAS; DAQ24USB4CH; Preamp_Gain 64; Sensitivity_Mode Low; Final_Sample_Rate 15 Hz"
+xml = "DAQ24USB4CH_PG64_SMLow_FR15.xml"
+
+
+[120 Hz]
+description = "NetDAS; DAQ24USB4CH; Preamp_Gain 64; Sensitivity_Mode Low; Final_Sample_Rate 120 Hz"
+xml = "DAQ24USB4CH_PG64_SMLow_FR120.xml"
+
+
+[12.5 Hz]
+description = "NetDAS; DAQ24USB4CH; Preamp_Gain 64; Sensitivity_Mode Low; Final_Sample_Rate 12.5 Hz"
+xml = "DAQ24USB4CH_PG64_SMLow_FR12.5.xml"
+
+
+[100 Hz]
+description = "NetDAS; DAQ24USB4CH; Preamp_Gain 64; Sensitivity_Mode Low; Final_Sample_Rate 100 Hz"
+xml = "DAQ24USB4CH_PG64_SMLow_FR100.xml"
+

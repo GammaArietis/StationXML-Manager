@@ -1,0 +1,35 @@
+[Main]
+question = "Select the GEObit datalogger model"
+
+[SRi32S-NormalGain]
+path="SRi32S-NormalGain.txt"
+
+[SRi32S-HighGain]
+path="SRi32S-HighGain.txt"
+
+[GEOtiny-4.5HzGeophone]
+description = "GEObit; GEOtiny-4.5HzGeophone; Final_Sample_Rate 100 Hz"
+xml = "GEOtiny-4.5HzGeophone_FR100.xml"
+
+[GEOtiny-10sSensor]
+description = "GEObit; GEOtiny-10sSensor; Final_Sample_Rate 250 Hz"
+xml = "GEOtiny-10sSensor_FR250.xml"
+
+[GEOthree]
+path="GEOthree.txt"
+
+[GEOsix]
+path="GEOsix.txt"
+
+[C100-SRi32Sv32]
+path="C100-SRi32Sv32.txt"
+
+[C100-SRi32Sv31]
+path="C100-SRi32Sv31.txt"
+
+[C100-SRi32Sv30]
+path="C100-SRi32Sv30.txt"
+
+[C100-SRi32Sv1]
+path="C100-SRi32Sv1.txt"
+

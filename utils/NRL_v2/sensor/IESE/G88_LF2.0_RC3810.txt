@@ -1,0 +1,6 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[106661]
+path = "G88_LF2.0_RC3810_RS106661.txt"
+

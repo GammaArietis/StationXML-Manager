@@ -1,0 +1,10 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[374]
+path = "L-10B_LF4.5_RC374.txt"
+
+
+[3600]
+path = "L-10B_LF4.5_RC3600.txt"
+

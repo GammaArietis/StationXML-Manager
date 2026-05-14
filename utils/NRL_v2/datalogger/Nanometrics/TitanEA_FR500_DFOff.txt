@@ -1,0 +1,12 @@
+[Main]
+question = "What is the final filter phase?"
+
+[Minimum]
+description = "Nanometrics; TitanEA; Final_Sample_Rate 500 Hz; DC_Filter Off; Final_Filter_Phase Minimum"
+xml = "TitanEA_FR500_DFOff_FPMinimum.xml"
+
+
+[Linear]
+description = "Nanometrics; TitanEA; Final_Sample_Rate 500 Hz; DC_Filter Off; Final_Filter_Phase Linear"
+xml = "TitanEA_FR500_DFOff_FPLinear.xml"
+

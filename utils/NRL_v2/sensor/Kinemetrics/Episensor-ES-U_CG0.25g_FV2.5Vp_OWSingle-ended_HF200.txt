@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[1.0207]
+description = "Kinemetrics; Episensor-ES-U; Clip_Level 0.25g; Full-Scale_Voltage 2.5Vp; Output_Wiring Single-ended; High-Frequency_Corner 200 Hz; Sensitivity 1.0207 V/m/s**2; Sensor_Type groundAccel"
+xml = "Episensor-ES-U_CG0.25g_FV2.5Vp_OWSingle-ended_HF200_SG1.0207_STgroundAccel.xml"
+

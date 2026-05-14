@@ -1,0 +1,7 @@
+[Main]
+question = "What is the long-period corner?"
+
+[120 s]
+description = "Streckeisen; STS-5A; Long-Period_Corner 120 s; Sensitivity 1500 V/m/s; Sensor_Type groundVel"
+xml = "STS-5A_LP120_SG1500_STgroundVel.xml"
+

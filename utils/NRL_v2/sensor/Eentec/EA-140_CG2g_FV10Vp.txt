@@ -1,0 +1,10 @@
+[Main]
+question = "Is the output wiring single-ended or differential?"
+
+[Single-ended]
+path = "EA-140_CG2g_FV10Vp_OWSingle-ended.txt"
+
+
+[Differential]
+path = "EA-140_CG2g_FV10Vp_OWDifferential.txt"
+

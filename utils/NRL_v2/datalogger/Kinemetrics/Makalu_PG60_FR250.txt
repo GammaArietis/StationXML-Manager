@@ -1,0 +1,12 @@
+[Main]
+question = "What is the final filter phase?"
+
+[Non-causal]
+description = "Kinemetrics; Makalu; Preamp_Gain 60; Final_Sample_Rate 250 Hz; Final_Filter_Phase Non-causal"
+xml = "Makalu_PG60_FR250_FPNon-causal.xml"
+
+
+[Causal]
+description = "Kinemetrics; Makalu; Preamp_Gain 60; Final_Sample_Rate 250 Hz; Final_Filter_Phase Causal"
+xml = "Makalu_PG60_FR250_FPCausal.xml"
+

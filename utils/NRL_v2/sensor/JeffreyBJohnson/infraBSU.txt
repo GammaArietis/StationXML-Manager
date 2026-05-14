@@ -1,0 +1,15 @@
+[Main]
+question = "What is the long-period corner?"
+
+[64.5 s]
+path = "infraBSU_LP64.5.txt"
+
+[32.5 s]
+path = "infraBSU_LP32.5.txt"
+
+[29 s]
+path = "infraBSU_LP29.txt"
+
+[21 s]
+path = "infraBSU_LP21.txt"
+

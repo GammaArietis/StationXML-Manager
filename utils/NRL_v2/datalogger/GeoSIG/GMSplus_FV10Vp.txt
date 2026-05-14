@@ -1,0 +1,37 @@
+[Main]
+question = "What is the final sample rate?"
+
+[500 Hz]
+description = "GeoSIG; GMSplus; Full-Scale_Voltage 10Vp; Final_Sample_Rate 500 Hz"
+xml = "GMSplus_FV10Vp_FR500.xml"
+
+
+[50 Hz]
+description = "GeoSIG; GMSplus; Full-Scale_Voltage 10Vp; Final_Sample_Rate 50 Hz"
+xml = "GMSplus_FV10Vp_FR50.xml"
+
+
+[40 Hz]
+description = "GeoSIG; GMSplus; Full-Scale_Voltage 10Vp; Final_Sample_Rate 40 Hz"
+xml = "GMSplus_FV10Vp_FR40.xml"
+
+
+[250 Hz]
+description = "GeoSIG; GMSplus; Full-Scale_Voltage 10Vp; Final_Sample_Rate 250 Hz"
+xml = "GMSplus_FV10Vp_FR250.xml"
+
+
+[200 Hz]
+description = "GeoSIG; GMSplus; Full-Scale_Voltage 10Vp; Final_Sample_Rate 200 Hz"
+xml = "GMSplus_FV10Vp_FR200.xml"
+
+
+[1000 Hz]
+description = "GeoSIG; GMSplus; Full-Scale_Voltage 10Vp; Final_Sample_Rate 1000 Hz"
+xml = "GMSplus_FV10Vp_FR1000.xml"
+
+
+[100 Hz]
+description = "GeoSIG; GMSplus; Full-Scale_Voltage 10Vp; Final_Sample_Rate 100 Hz"
+xml = "GMSplus_FV10Vp_FR100.xml"
+

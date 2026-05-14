@@ -1,0 +1,114 @@
+[Main]
+question = "What is the tap table lookup number for this channel?"
+
+[59]
+path = "CMG-DM24-Mk2-SE_TL59.txt"
+
+[58]
+path = "CMG-DM24-Mk2-SE_TL58.txt"
+
+[57]
+path = "CMG-DM24-Mk2-SE_TL57.txt"
+
+[56]
+path = "CMG-DM24-Mk2-SE_TL56.txt"
+
+[55]
+path = "CMG-DM24-Mk2-SE_TL55.txt"
+
+[54]
+path = "CMG-DM24-Mk2-SE_TL54.txt"
+
+[53]
+path = "CMG-DM24-Mk2-SE_TL53.txt"
+
+[52]
+path = "CMG-DM24-Mk2-SE_TL52.txt"
+
+[50]
+path = "CMG-DM24-Mk2-SE_TL50.txt"
+
+[49]
+path = "CMG-DM24-Mk2-SE_TL49.txt"
+
+[48]
+path = "CMG-DM24-Mk2-SE_TL48.txt"
+
+[46]
+path = "CMG-DM24-Mk2-SE_TL46.txt"
+
+[45]
+path = "CMG-DM24-Mk2-SE_TL45.txt"
+
+[44]
+path = "CMG-DM24-Mk2-SE_TL44.txt"
+
+[43]
+path = "CMG-DM24-Mk2-SE_TL43.txt"
+
+[42]
+path = "CMG-DM24-Mk2-SE_TL42.txt"
+
+[41]
+path = "CMG-DM24-Mk2-SE_TL41.txt"
+
+[40]
+path = "CMG-DM24-Mk2-SE_TL40.txt"
+
+[39]
+path = "CMG-DM24-Mk2-SE_TL39.txt"
+
+[38]
+path = "CMG-DM24-Mk2-SE_TL38.txt"
+
+[36]
+path = "CMG-DM24-Mk2-SE_TL36.txt"
+
+[35]
+path = "CMG-DM24-Mk2-SE_TL35.txt"
+
+[34]
+path = "CMG-DM24-Mk2-SE_TL34.txt"
+
+[33]
+path = "CMG-DM24-Mk2-SE_TL33.txt"
+
+[32]
+path = "CMG-DM24-Mk2-SE_TL32.txt"
+
+[31]
+path = "CMG-DM24-Mk2-SE_TL31.txt"
+
+[30]
+path = "CMG-DM24-Mk2-SE_TL30.txt"
+
+[29]
+path = "CMG-DM24-Mk2-SE_TL29.txt"
+
+[28]
+path = "CMG-DM24-Mk2-SE_TL28.txt"
+
+[26]
+path = "CMG-DM24-Mk2-SE_TL26.txt"
+
+[25]
+path = "CMG-DM24-Mk2-SE_TL25.txt"
+
+[24]
+path = "CMG-DM24-Mk2-SE_TL24.txt"
+
+[23]
+path = "CMG-DM24-Mk2-SE_TL23.txt"
+
+[22]
+path = "CMG-DM24-Mk2-SE_TL22.txt"
+
+[21]
+path = "CMG-DM24-Mk2-SE_TL21.txt"
+
+[20]
+path = "CMG-DM24-Mk2-SE_TL20.txt"
+
+[19]
+path = "CMG-DM24-Mk2-SE_TL19.txt"
+

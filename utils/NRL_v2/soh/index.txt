@@ -1,0 +1,12 @@
+[Main]
+question = "Select the soh manufacturer"
+
+[REFTEK]
+path="REFTEK/index.txt"
+
+[Quanterra]
+path="Quanterra/index.txt"
+
+[GenericUnity]
+path="GenericUnity/index.txt"
+

@@ -1,0 +1,6 @@
+[Main]
+question = "Select the SeismologyResearchCentre datalogger model"
+
+[Gecko]
+path="Gecko.txt"
+

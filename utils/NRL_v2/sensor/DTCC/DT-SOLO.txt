@@ -1,0 +1,9 @@
+[Main]
+question = "What is the low-frequency corner?"
+
+[5 Hz]
+path = "DT-SOLO_LF5.txt"
+
+[10 Hz]
+path = "DT-SOLO_LF10.txt"
+

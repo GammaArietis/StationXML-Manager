@@ -1,0 +1,12 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[40Vpp]
+path = "SRi32S-NormalGain_FV40Vpp.txt"
+
+[20Vpp]
+path = "SRi32S-NormalGain_FV20Vpp.txt"
+
+[10Vpp]
+path = "SRi32S-NormalGain_FV10Vpp.txt"
+

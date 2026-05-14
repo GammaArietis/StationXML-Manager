@@ -1,0 +1,9 @@
+[Main]
+question = "Which chip set does this datalogger use?"
+
+[CS5323-RT331]
+path = "72A07_CSCS5323-RT331.txt"
+
+[CS5321-RT371]
+path = "72A07_CSCS5321-RT371.txt"
+

@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[1.02]
+description = "Guralp; Fortis; High-Frequency_Corner 200 Hz; Sensitivity 1.02 V/m/s**2; Sensor_Type groundAccel"
+xml = "Fortis_HF200_SG1.02_STgroundAccel.xml"
+

@@ -1,0 +1,14 @@
+[Main]
+question = "What is the final sample rate?"
+
+[250 Hz]
+path = "LSPaladin5_PD-12_FR250.txt"
+
+
+[200 Hz]
+path = "LSPaladin5_PD-12_FR200.txt"
+
+
+[100 Hz]
+path = "LSPaladin5_PD-12_FR100.txt"
+

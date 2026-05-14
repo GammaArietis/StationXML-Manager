@@ -1,0 +1,22 @@
+[Main]
+question = "What is the final sample rate?"
+
+[500 Hz]
+path = "Sigma4_PG16_FR500.txt"
+
+
+[4000 Hz]
+path = "Sigma4_PG16_FR4000.txt"
+
+
+[250 Hz]
+path = "Sigma4_PG16_FR250.txt"
+
+
+[2000 Hz]
+path = "Sigma4_PG16_FR2000.txt"
+
+
+[1000 Hz]
+path = "Sigma4_PG16_FR1000.txt"
+

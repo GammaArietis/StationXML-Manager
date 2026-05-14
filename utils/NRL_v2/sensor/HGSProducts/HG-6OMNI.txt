@@ -1,0 +1,6 @@
+[Main]
+question = "What is the low-frequency corner?"
+
+[14 Hz]
+path = "HG-6OMNI_LF14.txt"
+

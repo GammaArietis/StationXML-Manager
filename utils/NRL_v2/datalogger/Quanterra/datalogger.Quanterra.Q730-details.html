@@ -1,0 +1,12 @@
+Below is some configuration-specific information to help you locate your instrument response.
+### FIR Filters
+The responses given here are a subset of the possible Q730 responses.  The FIR cascade for the Quanterra 730 is user configurable - the user can vary the filter sequence a great deal.  Gains are user configurable as well.  The responses given here represent only the ** default** cascade described by the following macro:
+`STAGE=1,1000,0.002663,>>%CHAN_NAMES%`
+`STAGE=3,200,FS2D5M,<1,>>%CHAN_NAMES%`
+`STAGE=4,100,F96CM,<3,>%CHAN_NAMES%,>>%CHAN_NAMES%`
+`STAGE=5,40,FS2D5,<3,>%CHAN_NAMES%`
+`STAGE=6,20,FS2D5,<4,>%CHAN_NAMES%,>>%CHAN_NAMES%`
+`STAGE=7,10,F96C,<6%M10_OUT%,>>%CHAN_NAMES%`
+`%MFLAG%STAGE=8,5,F96C,<7,>%CHAN_NAMES%`
+`STAGE=9,1,F260,<7,>%CHAN_NAMES%`
+The 0.1 and 0.01 Hz sample rates apply the Quanterra VLP and ULP fir filters to the default 1 Hz sample rate described in the macro.

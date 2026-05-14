@@ -1,0 +1,9 @@
+[Main]
+question = "What is the preamp gain in dB?"
+
+[6]
+path = "SmartSolo-IGU-BD3C-5_PD6.txt"
+
+[0]
+path = "SmartSolo-IGU-BD3C-5_PD0.txt"
+

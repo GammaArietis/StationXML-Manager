@@ -1,0 +1,18 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[5Vpp]
+path = "SL0624_FTpassive_FV5Vpp.txt"
+
+
+[2Vpp]
+path = "SL0624_FTpassive_FV2Vpp.txt"
+
+
+[2.5Vpp]
+path = "SL0624_FTpassive_FV2.5Vpp.txt"
+
+
+[10Vpp]
+path = "SL0624_FTpassive_FV10Vpp.txt"
+

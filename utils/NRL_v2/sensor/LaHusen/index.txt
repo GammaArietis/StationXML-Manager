@@ -1,0 +1,6 @@
+[Main]
+question = "Select the LaHusen sensor model"
+
+[VDP-10]
+path="VDP-10.txt"
+

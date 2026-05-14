@@ -1,0 +1,9 @@
+[Main]
+question = "Which sensor component is this?"
+
+[vertical]
+path = "GS-1_CPvertical.txt"
+
+[3C]
+path = "GS-1_CP3C.txt"
+

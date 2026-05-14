@@ -1,0 +1,6 @@
+[Main]
+question = "Which sensor component is this?"
+
+[All]
+path = "MBB-2_CPAll.txt"
+

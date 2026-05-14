@@ -1,0 +1,17 @@
+[Main]
+question = "What is the final sample rate?"
+
+[500 Hz]
+description = "REFTEK; 72A08-24bit; Preamp_Gain 32; Configured_Sample_Rates 40-200-500; Final_Sample_Rate 500 Hz"
+xml = "72A08-24bit_PG32_CR40-200-500_FR500.xml"
+
+
+[40 Hz]
+description = "REFTEK; 72A08-24bit; Preamp_Gain 32; Configured_Sample_Rates 40-200-500; Final_Sample_Rate 40 Hz"
+xml = "72A08-24bit_PG32_CR40-200-500_FR40.xml"
+
+
+[200 Hz]
+description = "REFTEK; 72A08-24bit; Preamp_Gain 32; Configured_Sample_Rates 40-200-500; Final_Sample_Rate 200 Hz"
+xml = "72A08-24bit_PG32_CR40-200-500_FR200.xml"
+

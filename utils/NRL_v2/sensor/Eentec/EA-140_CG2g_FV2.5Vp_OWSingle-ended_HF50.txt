@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[0.1275]
+description = "Eentec; EA-140; Clip_Level 2g; Full-Scale_Voltage 2.5Vp; Output_Wiring Single-ended; High-Frequency_Corner 50 Hz; Sensitivity 0.1275 V/m/s**2; Sensor_Type groundAccel"
+xml = "EA-140_CG2g_FV2.5Vp_OWSingle-ended_HF50_SG0.1275_STgroundAccel.xml"
+

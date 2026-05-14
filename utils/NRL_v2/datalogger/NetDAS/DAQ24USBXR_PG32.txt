@@ -1,0 +1,82 @@
+[Main]
+question = "What is the final sample rate?"
+
+[7500 Hz]
+description = "NetDAS; DAQ24USBXR; Preamp_Gain 32; Final_Sample_Rate 7500 Hz"
+xml = "DAQ24USBXR_PG32_FR7500.xml"
+
+
+[60 Hz]
+description = "NetDAS; DAQ24USBXR; Preamp_Gain 32; Final_Sample_Rate 60 Hz"
+xml = "DAQ24USBXR_PG32_FR60.xml"
+
+
+[500 Hz]
+description = "NetDAS; DAQ24USBXR; Preamp_Gain 32; Final_Sample_Rate 500 Hz"
+xml = "DAQ24USBXR_PG32_FR500.xml"
+
+
+[50 Hz]
+description = "NetDAS; DAQ24USBXR; Preamp_Gain 32; Final_Sample_Rate 50 Hz"
+xml = "DAQ24USBXR_PG32_FR50.xml"
+
+
+[5 Hz]
+description = "NetDAS; DAQ24USBXR; Preamp_Gain 32; Final_Sample_Rate 5 Hz"
+xml = "DAQ24USBXR_PG32_FR5.xml"
+
+
+[3750 Hz]
+description = "NetDAS; DAQ24USBXR; Preamp_Gain 32; Final_Sample_Rate 3750 Hz"
+xml = "DAQ24USBXR_PG32_FR3750.xml"
+
+
+[30000 Hz]
+description = "NetDAS; DAQ24USBXR; Preamp_Gain 32; Final_Sample_Rate 30000 Hz"
+xml = "DAQ24USBXR_PG32_FR30000.xml"
+
+
+[30 Hz]
+description = "NetDAS; DAQ24USBXR; Preamp_Gain 32; Final_Sample_Rate 30 Hz"
+xml = "DAQ24USBXR_PG32_FR30.xml"
+
+
+[25 Hz]
+description = "NetDAS; DAQ24USBXR; Preamp_Gain 32; Final_Sample_Rate 25 Hz"
+xml = "DAQ24USBXR_PG32_FR25.xml"
+
+
+[2000 Hz]
+description = "NetDAS; DAQ24USBXR; Preamp_Gain 32; Final_Sample_Rate 2000 Hz"
+xml = "DAQ24USBXR_PG32_FR2000.xml"
+
+
+[2.5 Hz]
+description = "NetDAS; DAQ24USBXR; Preamp_Gain 32; Final_Sample_Rate 2.5 Hz"
+xml = "DAQ24USBXR_PG32_FR2.5.xml"
+
+
+[15000 Hz]
+description = "NetDAS; DAQ24USBXR; Preamp_Gain 32; Final_Sample_Rate 15000 Hz"
+xml = "DAQ24USBXR_PG32_FR15000.xml"
+
+
+[15 Hz]
+description = "NetDAS; DAQ24USBXR; Preamp_Gain 32; Final_Sample_Rate 15 Hz"
+xml = "DAQ24USBXR_PG32_FR15.xml"
+
+
+[1000 Hz]
+description = "NetDAS; DAQ24USBXR; Preamp_Gain 32; Final_Sample_Rate 1000 Hz"
+xml = "DAQ24USBXR_PG32_FR1000.xml"
+
+
+[100 Hz]
+description = "NetDAS; DAQ24USBXR; Preamp_Gain 32; Final_Sample_Rate 100 Hz"
+xml = "DAQ24USBXR_PG32_FR100.xml"
+
+
+[10 Hz]
+description = "NetDAS; DAQ24USBXR; Preamp_Gain 32; Final_Sample_Rate 10 Hz"
+xml = "DAQ24USBXR_PG32_FR10.xml"
+

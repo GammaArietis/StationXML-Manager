@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[26104.7]
+description = "GEObit; GEOwarning; Final_Sample_Rate 2000 Hz; Low-Frequency_Corner 0 Hz; Clip_Level 2g; Sensitivity 26104.7"
+xml = "GEOwarning_FR2000_LF0_CG2g_SG26104.7.xml"
+

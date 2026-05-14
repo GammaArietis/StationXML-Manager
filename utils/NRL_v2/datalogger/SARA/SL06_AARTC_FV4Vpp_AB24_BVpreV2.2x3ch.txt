@@ -1,0 +1,32 @@
+[Main]
+question = "What is the final sample rate?"
+
+[600 Hz]
+description = "SARA; SL06; Anti-Alias_Filter_Type RTC; Full-Scale_Voltage 4Vpp; ADC_Bits 24; Board_Version preV2.2x3ch; Final_Sample_Rate 600 Hz"
+xml = "SL06_AARTC_FV4Vpp_AB24_BVpreV2.2x3ch_FR600.xml"
+
+
+[500 Hz]
+description = "SARA; SL06; Anti-Alias_Filter_Type RTC; Full-Scale_Voltage 4Vpp; ADC_Bits 24; Board_Version preV2.2x3ch; Final_Sample_Rate 500 Hz"
+xml = "SL06_AARTC_FV4Vpp_AB24_BVpreV2.2x3ch_FR500.xml"
+
+
+[50 Hz]
+description = "SARA; SL06; Anti-Alias_Filter_Type RTC; Full-Scale_Voltage 4Vpp; ADC_Bits 24; Board_Version preV2.2x3ch; Final_Sample_Rate 50 Hz"
+xml = "SL06_AARTC_FV4Vpp_AB24_BVpreV2.2x3ch_FR50.xml"
+
+
+[250 Hz]
+description = "SARA; SL06; Anti-Alias_Filter_Type RTC; Full-Scale_Voltage 4Vpp; ADC_Bits 24; Board_Version preV2.2x3ch; Final_Sample_Rate 250 Hz"
+xml = "SL06_AARTC_FV4Vpp_AB24_BVpreV2.2x3ch_FR250.xml"
+
+
+[200 Hz]
+description = "SARA; SL06; Anti-Alias_Filter_Type RTC; Full-Scale_Voltage 4Vpp; ADC_Bits 24; Board_Version preV2.2x3ch; Final_Sample_Rate 200 Hz"
+xml = "SL06_AARTC_FV4Vpp_AB24_BVpreV2.2x3ch_FR200.xml"
+
+
+[100 Hz]
+description = "SARA; SL06; Anti-Alias_Filter_Type RTC; Full-Scale_Voltage 4Vpp; ADC_Bits 24; Board_Version preV2.2x3ch; Final_Sample_Rate 100 Hz"
+xml = "SL06_AARTC_FV4Vpp_AB24_BVpreV2.2x3ch_FR100.xml"
+

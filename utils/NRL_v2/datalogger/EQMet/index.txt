@@ -1,0 +1,6 @@
+[Main]
+question = "Select the EQMet datalogger model"
+
+[SMA]
+path="SMA.txt"
+

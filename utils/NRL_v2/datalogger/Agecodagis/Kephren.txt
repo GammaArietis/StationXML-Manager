@@ -1,0 +1,15 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[8]
+path = "Kephren_PG8.txt"
+
+[4]
+path = "Kephren_PG4.txt"
+
+[2]
+path = "Kephren_PG2.txt"
+
+[1]
+path = "Kephren_PG1.txt"
+

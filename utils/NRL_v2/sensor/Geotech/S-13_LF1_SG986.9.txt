@@ -1,0 +1,6 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[27000]
+path = "S-13_LF1_SG986.9_RC27000.txt"
+

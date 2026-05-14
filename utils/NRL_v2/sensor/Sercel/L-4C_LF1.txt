@@ -1,0 +1,14 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[5500]
+path = "L-4C_LF1_RC5500.txt"
+
+
+[500]
+path = "L-4C_LF1_RC500.txt"
+
+
+[2000]
+path = "L-4C_LF1_RC2000.txt"
+

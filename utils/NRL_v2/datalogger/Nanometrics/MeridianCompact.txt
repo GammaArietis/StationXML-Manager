@@ -1,0 +1,15 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[4Vpp]
+path = "MeridianCompact_FV4Vpp.txt"
+
+[40Vpp]
+path = "MeridianCompact_FV40Vpp.txt"
+
+[20Vpp]
+path = "MeridianCompact_FV20Vpp.txt"
+
+[10Vpp]
+path = "MeridianCompact_FV10Vpp.txt"
+

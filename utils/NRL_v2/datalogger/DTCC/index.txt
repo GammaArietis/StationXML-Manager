@@ -1,0 +1,15 @@
+[Main]
+question = "Select the DTCC datalogger model"
+
+[SmartSolo-IGU-BD3C-5]
+path="SmartSolo-IGU-BD3C-5.txt"
+
+[SmartSolo-IGU-16]
+path="SmartSolo-IGU-16.txt"
+
+[SmartSolo-IGU-16HR]
+path="SmartSolo-IGU-16HR.txt"
+
+[SmartSolo-IGU-16HR3C]
+path="SmartSolo-IGU-16HR3C.txt"
+

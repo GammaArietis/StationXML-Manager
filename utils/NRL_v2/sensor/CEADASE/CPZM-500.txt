@@ -1,0 +1,9 @@
+[Main]
+question = "What is the long-period corner?"
+
+[2 s]
+path = "CPZM-500_LP2.txt"
+
+[1 s]
+path = "CPZM-500_LP1.txt"
+

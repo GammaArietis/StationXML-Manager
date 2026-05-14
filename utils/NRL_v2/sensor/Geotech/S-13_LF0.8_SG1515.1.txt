@@ -1,0 +1,6 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[50000]
+path = "S-13_LF0.8_SG1515.1_RC50000.txt"
+

@@ -1,0 +1,10 @@
+[Main]
+question = "What is the accelerometer clip level in +/-g?"
+
+[2g]
+path = "203P-LowNoise-Accel_FV60Vpp_CG2g.txt"
+
+
+[0.5g]
+path = "203P-LowNoise-Accel_FV60Vpp_CG0.5g.txt"
+

@@ -1,0 +1,10 @@
+[Main]
+question = "What are the taps (sample rate options in Hz) for this channel?"
+
+[1000-500-250-125]
+path = "CMG-6TD_TL1_TP1000-500-250-125.txt"
+
+
+[1000-500-250-125-25-5]
+path = "CMG-6TD_TL1_TP1000-500-250-125-25-5.txt"
+

@@ -1,0 +1,24 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[8]
+path = "180-MC_PG8.txt"
+
+[64]
+path = "180-MC_PG64.txt"
+
+[4]
+path = "180-MC_PG4.txt"
+
+[32]
+path = "180-MC_PG32.txt"
+
+[2]
+path = "180-MC_PG2.txt"
+
+[1]
+path = "180-MC_PG1.txt"
+
+[16]
+path = "180-MC_PG16.txt"
+

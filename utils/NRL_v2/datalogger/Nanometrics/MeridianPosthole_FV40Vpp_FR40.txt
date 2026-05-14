@@ -1,0 +1,10 @@
+[Main]
+question = "What is the DC removal/low pass filter setting?"
+
+[Off]
+path = "MeridianPosthole_FV40Vpp_FR40_DFOff.txt"
+
+
+[0.001]
+path = "MeridianPosthole_FV40Vpp_FR40_DF0.001.txt"
+

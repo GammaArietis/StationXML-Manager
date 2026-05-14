@@ -1,0 +1,215 @@
+import numpy as np
+from scipy import signal
+import logging
+from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QFormLayout,
+                             QLineEdit, QPushButton, QTableWidget, QTableWidgetItem,
+                             QHeaderView, QSplitter, QMessageBox, QLabel, QDoubleSpinBox,
+                             QListWidget, QListWidgetItem, QComboBox, QGroupBox, QInputDialog)
+from PyQt6.QtCore import Qt
+from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
+
+from core.models.base_models import Preamplifier, AnalogStage, PoleZero
+from utils.signals import app_signals
+
+logger = logging.getLogger(__name__)
+
+class PreamplifierCatalogTab(QWidget):
+    def __init__(self, equip_ctrl):
+        super().__init__()
+        self.eq_ctrl = equip_ctrl
+        self.current_preamp = None
+        self._setup_ui()
+        self.refresh_list()
+
+    def _setup_ui(self):
+        layout = QHBoxLayout(self)
+        self.splitter = QSplitter(Qt.Orientation.Horizontal)
+        
+        # --- LEFT: LIST ---
+        left_widget = QWidget()
+        left_layout = QVBoxLayout(left_widget)
+        left_layout.addWidget(QLabel("<b>Preamplifiers in Catalog</b>"))
+        self.model_list = QListWidget()
+        self.model_list.itemClicked.connect(self._load_selected_preamp)
+        left_layout.addWidget(self.model_list)
+        
+        self.new_model_btn = QPushButton("➕ New Preamplifier")
+        self.new_model_btn.setStyleSheet("background-color: #1976D2; color: white; font-weight: bold;")
+        self.new_model_btn.clicked.connect(self._prepare_new_model)
+        left_layout.addWidget(self.new_model_btn)
+        self.splitter.addWidget(left_widget)
+        
+        # --- CENTER: EDITOR ---
+        editor_widget = QWidget()
+        editor_layout = QVBoxLayout(editor_widget)
+        
+        info_group = QGroupBox("General Data")
+        info_form = QFormLayout(info_group)
+        self.mfg_input = QLineEdit(); self.model_input = QLineEdit(); self.desc_input = QLineEdit()
+        info_form.addRow("Manufacturer:", self.mfg_input)
+        info_form.addRow("Model:", self.model_input)
+        info_form.addRow("Description:", self.desc_input)
+        editor_layout.addWidget(info_group)
+
+        # Stage Configuration
+        stage_group = QGroupBox("Analog Stages")
+        stage_layout = QVBoxLayout(stage_group)
+        
+        sel_lay = QHBoxLayout()
+        self.stage_combo = QComboBox()
+        self.stage_combo.currentIndexChanged.connect(self._on_stage_selection_changed)
+        sel_lay.addWidget(QLabel("Stage:")); sel_lay.addWidget(self.stage_combo, 1)
+        
+        add_st = QPushButton("+"); add_st.clicked.connect(self._add_new_stage)
+        rem_st = QPushButton("-"); rem_st.clicked.connect(self._remove_current_stage)
+        sel_lay.addWidget(add_st); sel_lay.addWidget(rem_st)
+        stage_layout.addLayout(sel_lay)
+
+        sf = QFormLayout()
+        self.s_gain = QDoubleSpinBox(); self.s_gain.setRange(0, 1e12); self.s_gain.setDecimals(4)
+        sf.addRow("Stage Gain:", self.s_gain)
+        stage_layout.addLayout(sf)
+
+        # PZ Tables
+        tables_lay = QHBoxLayout()
+        z_lay = QVBoxLayout(); z_lay.addWidget(QLabel("<b>Zeros</b>")); self.zt = self._create_pz_table(); z_lay.addWidget(self.zt)
+        p_lay = QVBoxLayout(); p_lay.addWidget(QLabel("<b>Poles</b>")); self.pt = self._create_pz_table(); p_lay.addWidget(self.pt)
+        tables_lay.addLayout(z_lay); tables_lay.addLayout(p_lay)
+        stage_layout.addLayout(tables_lay)
+        
+        pz_btns = QHBoxLayout()
+        az = QPushButton("+ Zero"); az.clicked.connect(lambda: self._add_row(self.zt))
+        ap = QPushButton("+ Pole"); ap.clicked.connect(lambda: self._add_row(self.pt))
+        pz_btns.addWidget(az); pz_btns.addWidget(ap)
+        stage_layout.addLayout(pz_btns)
+        editor_layout.addWidget(stage_group)
+
+        # Actions
+        self.save_btn = QPushButton("💾 SAVE"); self.save_btn.clicked.connect(self._on_save_clicked)
+        self.save_btn.setStyleSheet("background-color: #2E7D32; color: white; font-weight: bold;")
+        editor_layout.addWidget(self.save_btn)
+
+        danger_lay = QHBoxLayout()
+        self.clone_btn = QPushButton("👯 Clone")
+        self.clone_btn.setStyleSheet("background-color: #8E24AA; color: white;")
+        self.clone_btn.clicked.connect(self._on_clone_clicked); self.clone_btn.setEnabled(False)
+        
+        self.replace_btn = QPushButton("🔄 Replace"); self.replace_btn.clicked.connect(self._on_replace_clicked); self.replace_btn.setEnabled(False)
+        self.delete_btn = QPushButton("🗑️ Delete"); self.delete_btn.clicked.connect(self._on_delete_clicked); self.delete_btn.setEnabled(False)
+        
+        danger_lay.addWidget(self.clone_btn); danger_lay.addWidget(self.replace_btn); danger_lay.addWidget(self.delete_btn)
+        editor_layout.addLayout(danger_lay)
+        
+        self.splitter.addWidget(editor_widget)
+
+        # --- RIGHT: PLOT ---
+        plot_cont = QWidget(); plot_lay = QVBoxLayout(plot_cont)
+        self.canvas = FigureCanvas(Figure(figsize=(5, 4)))
+        self.ax_mag = self.canvas.figure.add_subplot(211); self.ax_phase = self.canvas.figure.add_subplot(212)
+        plot_lay.addWidget(QLabel("<b>Frequency Response</b>")); plot_lay.addWidget(self.canvas)
+        self.splitter.addWidget(plot_cont)
+        
+        layout.addWidget(self.splitter)
+
+    def _create_pz_table(self):
+        t = QTableWidget(0, 2); t.setHorizontalHeaderLabels(["Real", "Imaginary"])
+        t.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch); return t
+
+    def _add_row(self, t, r=0.0, i=0.0):
+        row = t.rowCount(); t.insertRow(row); t.setItem(row,0,QTableWidgetItem(str(r))); t.setItem(row,1,QTableWidgetItem(str(i)))
+
+    def refresh_list(self):
+        self.model_list.clear()
+        for p in self.eq_ctrl.get_all_preamplifiers():
+            item = QListWidgetItem(f"{p.manufacturer} {p.model}"); item.setData(Qt.ItemDataRole.UserRole, p); self.model_list.addItem(item)
+
+    def _prepare_new_model(self):
+        self.current_preamp = Preamplifier(manufacturer="", model="")
+        self.mfg_input.clear(); self.model_input.clear(); self.desc_input.clear()
+        self.stage_combo.clear(); self.zt.setRowCount(0); self.pt.setRowCount(0)
+        self.clone_btn.setEnabled(False); self.replace_btn.setEnabled(False); self.delete_btn.setEnabled(False)
+        self._add_new_stage()
+
+    def _load_selected_preamp(self, item):
+        p_brief = item.data(Qt.ItemDataRole.UserRole)
+        self.current_preamp = self.eq_ctrl.get_preamplifier_by_id(p_brief.id)
+        self.mfg_input.setText(self.current_preamp.manufacturer)
+        self.model_input.setText(self.current_preamp.model)
+        self.desc_input.setText(self.current_preamp.description or "")
+        self._refresh_stage_combo()
+        self.clone_btn.setEnabled(True)
+        self.replace_btn.setEnabled(True)
+        self.delete_btn.setEnabled(True)
+        self._update_total_plot()
+
+    def _on_stage_selection_changed(self, idx):
+        if idx < 0 or not self.current_preamp.analog_stages: return
+        s = self.current_preamp.analog_stages[idx]
+        self.s_gain.setValue(s.stage_gain)
+        self.zt.setRowCount(0); self.pt.setRowCount(0)
+        for pz in s.poles: self._add_row(self.pt, pz.real_val, pz.imag_val)
+        for pz in s.zeros: self._add_row(self.zt, pz.real_val, pz.imag_val)
+
+    def _add_new_stage(self):
+        new_s = AnalogStage(stage_sequence=len(self.current_preamp.analog_stages)+1, name="Stage")
+        self.current_preamp.analog_stages.append(new_s); self._refresh_stage_combo()
+
+    def _remove_current_stage(self):
+        if len(self.current_preamp.analog_stages) > 1:
+            self.current_preamp.analog_stages.pop(self.stage_combo.currentIndex())
+            self._refresh_stage_combo()
+
+    def _refresh_stage_combo(self):
+        self.stage_combo.blockSignals(True); self.stage_combo.clear()
+        for i, s in enumerate(self.current_preamp.analog_stages): self.stage_combo.addItem(f"Stage {i+1}")
+        self.stage_combo.blockSignals(False); self.stage_combo.setCurrentIndex(0); self._on_stage_selection_changed(0)
+
+    def _on_clone_clicked(self):
+        if not self.current_preamp: return
+        self.current_preamp.id = None 
+        self.model_input.setText(self.model_input.text() + " (Copy)")
+        self.clone_btn.setEnabled(False); self.replace_btn.setEnabled(False); self.delete_btn.setEnabled(False)
+        QMessageBox.information(self, "Info", "Model cloned in memory. Edit and press Save.")
+
+    def _on_save_clicked(self):
+        if not self.current_preamp: return
+        idx = self.stage_combo.currentIndex()
+        if idx >= 0:
+            s = self.current_preamp.analog_stages[idx]
+            s.stage_gain = self.s_gain.value()
+            s.poles = [PoleZero(float(self.pt.item(r,0).text()), float(self.pt.item(r,1).text())) for r in range(self.pt.rowCount())]
+            s.zeros = [PoleZero(float(self.zt.item(r,0).text()), float(self.zt.item(r,1).text())) for r in range(self.zt.rowCount())]
+        
+        self.current_preamp.manufacturer = self.mfg_input.text()
+        self.current_preamp.model = self.model_input.text()
+        if self.eq_ctrl.save_preamplifier(self.current_preamp):
+            self.refresh_list(); self._update_total_plot()
+
+    def _on_delete_clicked(self):
+        if self.current_preamp.id and self.eq_ctrl.delete_preamplifier(self.current_preamp.id):
+            self.refresh_list(); self._prepare_new_model()
+
+    def _on_replace_clicked(self):
+        others = [p for p in self.eq_ctrl.get_all_preamplifiers() if p.id != self.current_preamp.id]
+        names = [f"{p.manufacturer} {p.model}" for p in others]
+        target, ok = QInputDialog.getItem(self, "Replace", "Replace with:", names, 0, False)
+        if ok and target:
+            new_id = others[names.index(target)].id
+            if self.eq_ctrl.replace_equipment('preamplifier', self.current_preamp.id, new_id):
+                self.refresh_list(); self._prepare_new_model()
+
+    def _update_total_plot(self):
+        self.ax_mag.clear(); self.ax_phase.clear()
+        if not self.current_preamp.analog_stages: return
+        w = np.logspace(-2, 3, 1000) * 2 * np.pi
+        total_h = np.ones_like(w, dtype=complex)
+        for s in self.current_preamp.analog_stages:
+            sys = signal.lti([complex(z.real_val, z.imag_val) for z in s.zeros],
+                             [complex(p.real_val, p.imag_val) for p in s.poles] if s.poles else [complex(-1e9,0)],
+                             s.stage_gain)
+            _, h = signal.freqresp(sys, w=w); total_h *= h
+        f = w/(2*np.pi)
+        self.ax_mag.semilogx(f, 20*np.log10(np.abs(total_h))); self.ax_mag.grid(True)
+        self.ax_phase.semilogx(f, np.degrees(np.unwrap(np.angle(total_h)))); self.ax_phase.grid(True)
+        self.canvas.draw()

@@ -1,0 +1,46 @@
+[Main]
+question = "What is the final sample rate?"
+
+[80 Hz]
+path = "Trident_FV8Vpp_FR80.txt"
+
+
+[50 Hz]
+path = "Trident_FV8Vpp_FR50.txt"
+
+
+[500 Hz]
+path = "Trident_FV8Vpp_FR500.txt"
+
+
+[40 Hz]
+path = "Trident_FV8Vpp_FR40.txt"
+
+
+[250 Hz]
+path = "Trident_FV8Vpp_FR250.txt"
+
+
+[20 Hz]
+path = "Trident_FV8Vpp_FR20.txt"
+
+
+[200 Hz]
+path = "Trident_FV8Vpp_FR200.txt"
+
+
+[120 Hz]
+path = "Trident_FV8Vpp_FR120.txt"
+
+
+[10 Hz]
+path = "Trident_FV8Vpp_FR10.txt"
+
+
+[100 Hz]
+path = "Trident_FV8Vpp_FR100.txt"
+
+
+[1000 Hz]
+path = "Trident_FV8Vpp_FR1000.txt"
+

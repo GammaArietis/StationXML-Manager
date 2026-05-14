@@ -1,0 +1,9 @@
+[Main]
+question = "What is the low-frequency corner?"
+
+[5 Hz]
+path = "GS-OneLF_LF5.txt"
+
+[4.5 Hz]
+path = "GS-OneLF_LF4.5.txt"
+

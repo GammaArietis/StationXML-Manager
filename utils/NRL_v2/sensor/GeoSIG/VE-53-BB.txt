@@ -1,0 +1,6 @@
+[Main]
+question = "Which version is this model?"
+
+[Current]
+path = "VE-53-BB_MVCurrent.txt"
+

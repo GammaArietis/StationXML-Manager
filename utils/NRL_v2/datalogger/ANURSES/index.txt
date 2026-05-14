@@ -1,0 +1,9 @@
+[Main]
+question = "Select the ANURSES datalogger model"
+
+[TerraSAWR]
+path="TerraSAWR.txt"
+
+[LPR-200]
+path="LPR-200.txt"
+

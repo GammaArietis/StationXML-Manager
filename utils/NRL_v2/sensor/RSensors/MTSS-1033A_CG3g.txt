@@ -1,0 +1,6 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[7.5Vp]
+path = "MTSS-1033A_CG3g_FV7.5Vp.txt"
+

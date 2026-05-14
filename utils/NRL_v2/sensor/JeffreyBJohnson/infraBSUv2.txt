@@ -1,0 +1,7 @@
+[Main]
+question = "What is the long-period corner?"
+
+[12 s]
+description = "JeffreyBJohnson; infraBSUv2; Long-Period_Corner 12 s; Sensitivity 0.000047 V/Pa; Sensor_Type airPressure"
+xml = "infraBSUv2_LP12_SG0.000047_STairPressure.xml"
+

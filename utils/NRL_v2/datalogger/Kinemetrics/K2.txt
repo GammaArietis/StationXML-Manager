@@ -1,0 +1,18 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[3]
+path = "K2_PG3.txt"
+
+[30]
+path = "K2_PG30.txt"
+
+[1]
+path = "K2_PG1.txt"
+
+[10]
+path = "K2_PG10.txt"
+
+[100]
+path = "K2_PG100.txt"
+

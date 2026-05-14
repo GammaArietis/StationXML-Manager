@@ -1,0 +1,15 @@
+[Main]
+question = "What is the long-period corner?"
+
+[360 s]
+path = "CMG-3TB_LP360.txt"
+
+[30 s]
+path = "CMG-3TB_LP30.txt"
+
+[120 s]
+path = "CMG-3TB_LP120.txt"
+
+[100 s]
+path = "CMG-3TB_LP100.txt"
+

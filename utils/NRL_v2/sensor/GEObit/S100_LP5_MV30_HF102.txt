@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[1500]
+description = "GEObit; S100; Long-Period_Corner 5 s; Model_Version 30; High-Frequency_Corner 102 Hz; Sensitivity 1500 V/m/s; Sensor_Type groundVel"
+xml = "S100_LP5_MV30_HF102_SG1500_STgroundVel.xml"
+

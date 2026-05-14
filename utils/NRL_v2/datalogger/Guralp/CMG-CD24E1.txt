@@ -1,0 +1,33 @@
+[Main]
+question = "What is the tap table lookup number for this channel?"
+
+[180]
+path = "CMG-CD24E1_TL180.txt"
+
+[179]
+path = "CMG-CD24E1_TL179.txt"
+
+[176]
+path = "CMG-CD24E1_TL176.txt"
+
+[171]
+path = "CMG-CD24E1_TL171.txt"
+
+[168]
+path = "CMG-CD24E1_TL168.txt"
+
+[164]
+path = "CMG-CD24E1_TL164.txt"
+
+[163]
+path = "CMG-CD24E1_TL163.txt"
+
+[160]
+path = "CMG-CD24E1_TL160.txt"
+
+[155]
+path = "CMG-CD24E1_TL155.txt"
+
+[147]
+path = "CMG-CD24E1_TL147.txt"
+

@@ -1,0 +1,7 @@
+[Main]
+question = "What is the frequency lower bound for this approximation?"
+
+[1]
+description = "GenericUnity; UnityPolynomialPA; Frequency_Lower_Bound 0; Frequency_Upper_Bound 1; Approx_Lower_Bound -2000; Approx_Upper_Bound 2000"
+xml = "UnityPolynomialPA_FL0_FU1_AL-2000_AU2000.xml"
+

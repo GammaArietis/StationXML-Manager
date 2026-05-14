@@ -1,0 +1,6 @@
+[Main]
+question = "What is the accelerometer clip level in +/-g?"
+
+[3g]
+path = "MTSS-1031A_CG3g.txt"
+

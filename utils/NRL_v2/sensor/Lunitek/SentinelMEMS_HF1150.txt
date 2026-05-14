@@ -1,0 +1,14 @@
+[Main]
+question = "What is the accelerometer clip level in +/-g?"
+
+[8g]
+path = "SentinelMEMS_HF1150_CG8g.txt"
+
+
+[4g]
+path = "SentinelMEMS_HF1150_CG4g.txt"
+
+
+[2g]
+path = "SentinelMEMS_HF1150_CG2g.txt"
+

@@ -1,0 +1,10 @@
+[Main]
+question = "Which version is this model?"
+
+[1.15]
+path = "S100_LP1.2_MV1.15.txt"
+
+
+[1.06]
+path = "S100_LP1.2_MV1.06.txt"
+

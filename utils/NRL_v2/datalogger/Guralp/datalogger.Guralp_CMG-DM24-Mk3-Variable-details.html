@@ -1,0 +1,21 @@
+Below is some configuration-specific information to help you locate your instrument response.
+### Tap Table Lookup
+The DM24 Mk3 Variable Gain datalogger  generates sample rates for each channel by cascading decimation 
+filters to create successive "taps" or sample rates.  Some or all of these sample rates may be output.
+The FIR filters used for a given sample rate is determined by the tap sequence
+programmed into the datalogger at startup time.  Each unique combination of taps
+is referenced by a "Tap Table Lookup" (TTL) number.  Knowing this number is necessary
+to locate the correct instrument response, since a single sample rate can be
+generated in a variety of ways.
+The TTL can be found in one of these ways:
+
+1. running Guralp's EAMs program
+	- selecting "GDI channels display from the tools menu
+	- choosing the data stream of interest and
+	- clicking "View details".
+	- The "Metadata" table in the resulting display lists the "gcf-tap-table-lookup".
+
+1. retrieving the TTL byte by web interface 
+[(instructions here)](http://www.guralp.com/howtos/determining-fir-filter-information-from-gcf-data.shtml)
+1. reading the Decimation Index (TTL) from the Scream "ViewInfo" window 
+[(instructions here)](https://www.guralp.com/documents/html/MAN-SWA-0001/s8.html#SubSection4)

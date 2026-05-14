@@ -1,0 +1,32 @@
+[Main]
+question = "What is the final sample rate?"
+
+[400 Hz]
+description = "Guralp; CMG-DM24-Mk3-Fixed; Tap_Table_Lookup 58; Taps 400-200-100-20-4-2; Final_Sample_Rate 400 Hz"
+xml = "CMG-DM24-Mk3-Fixed_TL58_TP400-200-100-20-4-2_FR400.xml"
+
+
+[4 Hz]
+description = "Guralp; CMG-DM24-Mk3-Fixed; Tap_Table_Lookup 58; Taps 400-200-100-20-4-2; Final_Sample_Rate 4 Hz"
+xml = "CMG-DM24-Mk3-Fixed_TL58_TP400-200-100-20-4-2_FR4.xml"
+
+
+[200 Hz]
+description = "Guralp; CMG-DM24-Mk3-Fixed; Tap_Table_Lookup 58; Taps 400-200-100-20-4-2; Final_Sample_Rate 200 Hz"
+xml = "CMG-DM24-Mk3-Fixed_TL58_TP400-200-100-20-4-2_FR200.xml"
+
+
+[20 Hz]
+description = "Guralp; CMG-DM24-Mk3-Fixed; Tap_Table_Lookup 58; Taps 400-200-100-20-4-2; Final_Sample_Rate 20 Hz"
+xml = "CMG-DM24-Mk3-Fixed_TL58_TP400-200-100-20-4-2_FR20.xml"
+
+
+[2 Hz]
+description = "Guralp; CMG-DM24-Mk3-Fixed; Tap_Table_Lookup 58; Taps 400-200-100-20-4-2; Final_Sample_Rate 2 Hz"
+xml = "CMG-DM24-Mk3-Fixed_TL58_TP400-200-100-20-4-2_FR2.xml"
+
+
+[100 Hz]
+description = "Guralp; CMG-DM24-Mk3-Fixed; Tap_Table_Lookup 58; Taps 400-200-100-20-4-2; Final_Sample_Rate 100 Hz"
+xml = "CMG-DM24-Mk3-Fixed_TL58_TP400-200-100-20-4-2_FR100.xml"
+

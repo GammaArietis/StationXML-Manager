@@ -1,0 +1,7 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[7500]
+description = "GeoSpace; GS-ONE-OMNI; Low-Frequency_Corner 15 Hz; Coil_Resistance 1450; Shunt_Resistance 7500; Sensitivity 57.99 V/m/s; Sensor_Type groundVel"
+xml = "GS-ONE-OMNI_LF15_RC1450_RS7500_SG57.99_STgroundVel.xml"
+

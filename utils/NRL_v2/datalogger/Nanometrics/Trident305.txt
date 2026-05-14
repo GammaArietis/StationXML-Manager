@@ -1,0 +1,18 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[8Vpp]
+path = "Trident305_FV8Vpp.txt"
+
+[4Vpp]
+path = "Trident305_FV4Vpp.txt"
+
+[40Vpp]
+path = "Trident305_FV40Vpp.txt"
+
+[2Vpp]
+path = "Trident305_FV2Vpp.txt"
+
+[16Vpp]
+path = "Trident305_FV16Vpp.txt"
+

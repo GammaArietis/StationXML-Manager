@@ -1,0 +1,9 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[200 Hz]
+path = "Fortis_HF200.txt"
+
+[100 Hz]
+path = "Fortis_HF100.txt"
+

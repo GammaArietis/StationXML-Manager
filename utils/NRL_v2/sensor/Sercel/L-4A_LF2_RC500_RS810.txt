@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[51.5]
+description = "Sercel; L-4A; Low-Frequency_Corner 2 Hz; Coil_Resistance 500; Shunt_Resistance 810; Sensitivity 51.5 V/m/s; Sensor_Type groundVel"
+xml = "L-4A_LF2_RC500_RS810_SG51.5_STgroundVel.xml"
+

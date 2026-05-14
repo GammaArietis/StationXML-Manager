@@ -1,0 +1,10 @@
+[Main]
+question = "What is the sensitivity mode for this channel?"
+
+[Low]
+path = "DAQ24USB5V_PG2_SMLow.txt"
+
+
+[High]
+path = "DAQ24USB5V_PG2_SMHigh.txt"
+

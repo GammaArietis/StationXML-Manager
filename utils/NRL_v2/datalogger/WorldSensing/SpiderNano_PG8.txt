@@ -1,0 +1,10 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[5Vpp]
+path = "SpiderNano_PG8_FV5Vpp.txt"
+
+
+[40Vpp]
+path = "SpiderNano_PG8_FV40Vpp.txt"
+

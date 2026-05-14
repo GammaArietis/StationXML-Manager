@@ -1,0 +1,6 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[375]
+path = "PE-6B_LP4.5_RC375.txt"
+

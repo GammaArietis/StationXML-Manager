@@ -1,0 +1,24 @@
+[Main]
+question = "Which is the channel description?"
+
+[Voltage]
+path = "UNITY_CDVoltage.txt"
+
+[Temperature]
+path = "UNITY_CDTemperature.txt"
+
+[MassPosition]
+path = "UNITY_CDMassPosition.txt"
+
+[Current]
+path = "UNITY_CDCurrent.txt"
+
+[CrystalOscillator]
+path = "UNITY_CDCrystalOscillator.txt"
+
+[ClockQuality]
+path = "UNITY_CDClockQuality.txt"
+
+[ClockError]
+path = "UNITY_CDClockError.txt"
+

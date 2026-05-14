@@ -1,0 +1,7 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[None]
+description = "Sercel; SGHT-15; Low-Frequency_Corner 15 Hz; Coil_Resistance 2350; Shunt_Resistance None; Sensitivity 52.0 V/m/s; Sensor_Type groundVel"
+xml = "SGHT-15_LF15_RC2350_RSNone_SG52.0_STgroundVel.xml"
+

@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[2.0126]
+description = "GaiaCode; SIGMA; Clip_Level 1g; Full-Scale_Voltage 20Vp; Output_Wiring Differential; High-Frequency_Corner 418 Hz; Sensitivity 2.0126 V/m/s**2; Sensor_Type groundAccel"
+xml = "SIGMA_CG1g_FV20Vp_OWDifferential_HF418_SG2.0126_STgroundAccel.xml"
+

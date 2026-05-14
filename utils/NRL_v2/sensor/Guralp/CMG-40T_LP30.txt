@@ -1,0 +1,10 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[50 Hz]
+path = "CMG-40T_LP30_HF50.txt"
+
+
+[100 Hz]
+path = "CMG-40T_LP30_HF100.txt"
+

@@ -1,0 +1,10 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[32]
+path = "72A07_CSCS5323-RT331_PG32.txt"
+
+
+[1]
+path = "72A07_CSCS5323-RT331_PG1.txt"
+

@@ -1,0 +1,681 @@
+[Main]
+question = "What is the tap table lookup number for this channel?"
+
+[9]
+path = "CMG-CD24_TL9.txt"
+
+[99]
+path = "CMG-CD24_TL99.txt"
+
+[98]
+path = "CMG-CD24_TL98.txt"
+
+[97]
+path = "CMG-CD24_TL97.txt"
+
+[96]
+path = "CMG-CD24_TL96.txt"
+
+[95]
+path = "CMG-CD24_TL95.txt"
+
+[94]
+path = "CMG-CD24_TL94.txt"
+
+[93]
+path = "CMG-CD24_TL93.txt"
+
+[92]
+path = "CMG-CD24_TL92.txt"
+
+[91]
+path = "CMG-CD24_TL91.txt"
+
+[90]
+path = "CMG-CD24_TL90.txt"
+
+[8]
+path = "CMG-CD24_TL8.txt"
+
+[89]
+path = "CMG-CD24_TL89.txt"
+
+[88]
+path = "CMG-CD24_TL88.txt"
+
+[87]
+path = "CMG-CD24_TL87.txt"
+
+[86]
+path = "CMG-CD24_TL86.txt"
+
+[85]
+path = "CMG-CD24_TL85.txt"
+
+[84]
+path = "CMG-CD24_TL84.txt"
+
+[83]
+path = "CMG-CD24_TL83.txt"
+
+[82]
+path = "CMG-CD24_TL82.txt"
+
+[81]
+path = "CMG-CD24_TL81.txt"
+
+[80]
+path = "CMG-CD24_TL80.txt"
+
+[7]
+path = "CMG-CD24_TL7.txt"
+
+[79]
+path = "CMG-CD24_TL79.txt"
+
+[78]
+path = "CMG-CD24_TL78.txt"
+
+[77]
+path = "CMG-CD24_TL77.txt"
+
+[76]
+path = "CMG-CD24_TL76.txt"
+
+[75]
+path = "CMG-CD24_TL75.txt"
+
+[74]
+path = "CMG-CD24_TL74.txt"
+
+[73]
+path = "CMG-CD24_TL73.txt"
+
+[72]
+path = "CMG-CD24_TL72.txt"
+
+[71]
+path = "CMG-CD24_TL71.txt"
+
+[70]
+path = "CMG-CD24_TL70.txt"
+
+[6]
+path = "CMG-CD24_TL6.txt"
+
+[69]
+path = "CMG-CD24_TL69.txt"
+
+[68]
+path = "CMG-CD24_TL68.txt"
+
+[67]
+path = "CMG-CD24_TL67.txt"
+
+[66]
+path = "CMG-CD24_TL66.txt"
+
+[65]
+path = "CMG-CD24_TL65.txt"
+
+[64]
+path = "CMG-CD24_TL64.txt"
+
+[63]
+path = "CMG-CD24_TL63.txt"
+
+[62]
+path = "CMG-CD24_TL62.txt"
+
+[61]
+path = "CMG-CD24_TL61.txt"
+
+[60]
+path = "CMG-CD24_TL60.txt"
+
+[5]
+path = "CMG-CD24_TL5.txt"
+
+[59]
+path = "CMG-CD24_TL59.txt"
+
+[58]
+path = "CMG-CD24_TL58.txt"
+
+[57]
+path = "CMG-CD24_TL57.txt"
+
+[56]
+path = "CMG-CD24_TL56.txt"
+
+[55]
+path = "CMG-CD24_TL55.txt"
+
+[54]
+path = "CMG-CD24_TL54.txt"
+
+[53]
+path = "CMG-CD24_TL53.txt"
+
+[52]
+path = "CMG-CD24_TL52.txt"
+
+[51]
+path = "CMG-CD24_TL51.txt"
+
+[50]
+path = "CMG-CD24_TL50.txt"
+
+[4]
+path = "CMG-CD24_TL4.txt"
+
+[49]
+path = "CMG-CD24_TL49.txt"
+
+[48]
+path = "CMG-CD24_TL48.txt"
+
+[47]
+path = "CMG-CD24_TL47.txt"
+
+[46]
+path = "CMG-CD24_TL46.txt"
+
+[45]
+path = "CMG-CD24_TL45.txt"
+
+[44]
+path = "CMG-CD24_TL44.txt"
+
+[43]
+path = "CMG-CD24_TL43.txt"
+
+[42]
+path = "CMG-CD24_TL42.txt"
+
+[41]
+path = "CMG-CD24_TL41.txt"
+
+[40]
+path = "CMG-CD24_TL40.txt"
+
+[3]
+path = "CMG-CD24_TL3.txt"
+
+[39]
+path = "CMG-CD24_TL39.txt"
+
+[38]
+path = "CMG-CD24_TL38.txt"
+
+[37]
+path = "CMG-CD24_TL37.txt"
+
+[36]
+path = "CMG-CD24_TL36.txt"
+
+[35]
+path = "CMG-CD24_TL35.txt"
+
+[34]
+path = "CMG-CD24_TL34.txt"
+
+[33]
+path = "CMG-CD24_TL33.txt"
+
+[32]
+path = "CMG-CD24_TL32.txt"
+
+[31]
+path = "CMG-CD24_TL31.txt"
+
+[30]
+path = "CMG-CD24_TL30.txt"
+
+[2]
+path = "CMG-CD24_TL2.txt"
+
+[29]
+path = "CMG-CD24_TL29.txt"
+
+[28]
+path = "CMG-CD24_TL28.txt"
+
+[27]
+path = "CMG-CD24_TL27.txt"
+
+[26]
+path = "CMG-CD24_TL26.txt"
+
+[25]
+path = "CMG-CD24_TL25.txt"
+
+[24]
+path = "CMG-CD24_TL24.txt"
+
+[23]
+path = "CMG-CD24_TL23.txt"
+
+[22]
+path = "CMG-CD24_TL22.txt"
+
+[226]
+path = "CMG-CD24_TL226.txt"
+
+[225]
+path = "CMG-CD24_TL225.txt"
+
+[224]
+path = "CMG-CD24_TL224.txt"
+
+[223]
+path = "CMG-CD24_TL223.txt"
+
+[222]
+path = "CMG-CD24_TL222.txt"
+
+[221]
+path = "CMG-CD24_TL221.txt"
+
+[220]
+path = "CMG-CD24_TL220.txt"
+
+[21]
+path = "CMG-CD24_TL21.txt"
+
+[219]
+path = "CMG-CD24_TL219.txt"
+
+[218]
+path = "CMG-CD24_TL218.txt"
+
+[217]
+path = "CMG-CD24_TL217.txt"
+
+[216]
+path = "CMG-CD24_TL216.txt"
+
+[215]
+path = "CMG-CD24_TL215.txt"
+
+[214]
+path = "CMG-CD24_TL214.txt"
+
+[213]
+path = "CMG-CD24_TL213.txt"
+
+[212]
+path = "CMG-CD24_TL212.txt"
+
+[211]
+path = "CMG-CD24_TL211.txt"
+
+[210]
+path = "CMG-CD24_TL210.txt"
+
+[20]
+path = "CMG-CD24_TL20.txt"
+
+[209]
+path = "CMG-CD24_TL209.txt"
+
+[208]
+path = "CMG-CD24_TL208.txt"
+
+[207]
+path = "CMG-CD24_TL207.txt"
+
+[206]
+path = "CMG-CD24_TL206.txt"
+
+[205]
+path = "CMG-CD24_TL205.txt"
+
+[204]
+path = "CMG-CD24_TL204.txt"
+
+[203]
+path = "CMG-CD24_TL203.txt"
+
+[202]
+path = "CMG-CD24_TL202.txt"
+
+[201]
+path = "CMG-CD24_TL201.txt"
+
+[200]
+path = "CMG-CD24_TL200.txt"
+
+[1]
+path = "CMG-CD24_TL1.txt"
+
+[19]
+path = "CMG-CD24_TL19.txt"
+
+[199]
+path = "CMG-CD24_TL199.txt"
+
+[198]
+path = "CMG-CD24_TL198.txt"
+
+[197]
+path = "CMG-CD24_TL197.txt"
+
+[196]
+path = "CMG-CD24_TL196.txt"
+
+[195]
+path = "CMG-CD24_TL195.txt"
+
+[194]
+path = "CMG-CD24_TL194.txt"
+
+[193]
+path = "CMG-CD24_TL193.txt"
+
+[192]
+path = "CMG-CD24_TL192.txt"
+
+[191]
+path = "CMG-CD24_TL191.txt"
+
+[190]
+path = "CMG-CD24_TL190.txt"
+
+[18]
+path = "CMG-CD24_TL18.txt"
+
+[189]
+path = "CMG-CD24_TL189.txt"
+
+[188]
+path = "CMG-CD24_TL188.txt"
+
+[187]
+path = "CMG-CD24_TL187.txt"
+
+[186]
+path = "CMG-CD24_TL186.txt"
+
+[185]
+path = "CMG-CD24_TL185.txt"
+
+[184]
+path = "CMG-CD24_TL184.txt"
+
+[183]
+path = "CMG-CD24_TL183.txt"
+
+[182]
+path = "CMG-CD24_TL182.txt"
+
+[181]
+path = "CMG-CD24_TL181.txt"
+
+[180]
+path = "CMG-CD24_TL180.txt"
+
+[17]
+path = "CMG-CD24_TL17.txt"
+
+[179]
+path = "CMG-CD24_TL179.txt"
+
+[178]
+path = "CMG-CD24_TL178.txt"
+
+[177]
+path = "CMG-CD24_TL177.txt"
+
+[176]
+path = "CMG-CD24_TL176.txt"
+
+[175]
+path = "CMG-CD24_TL175.txt"
+
+[174]
+path = "CMG-CD24_TL174.txt"
+
+[173]
+path = "CMG-CD24_TL173.txt"
+
+[172]
+path = "CMG-CD24_TL172.txt"
+
+[171]
+path = "CMG-CD24_TL171.txt"
+
+[170]
+path = "CMG-CD24_TL170.txt"
+
+[16]
+path = "CMG-CD24_TL16.txt"
+
+[169]
+path = "CMG-CD24_TL169.txt"
+
+[168]
+path = "CMG-CD24_TL168.txt"
+
+[167]
+path = "CMG-CD24_TL167.txt"
+
+[166]
+path = "CMG-CD24_TL166.txt"
+
+[165]
+path = "CMG-CD24_TL165.txt"
+
+[164]
+path = "CMG-CD24_TL164.txt"
+
+[163]
+path = "CMG-CD24_TL163.txt"
+
+[162]
+path = "CMG-CD24_TL162.txt"
+
+[161]
+path = "CMG-CD24_TL161.txt"
+
+[160]
+path = "CMG-CD24_TL160.txt"
+
+[15]
+path = "CMG-CD24_TL15.txt"
+
+[159]
+path = "CMG-CD24_TL159.txt"
+
+[158]
+path = "CMG-CD24_TL158.txt"
+
+[157]
+path = "CMG-CD24_TL157.txt"
+
+[156]
+path = "CMG-CD24_TL156.txt"
+
+[155]
+path = "CMG-CD24_TL155.txt"
+
+[154]
+path = "CMG-CD24_TL154.txt"
+
+[153]
+path = "CMG-CD24_TL153.txt"
+
+[152]
+path = "CMG-CD24_TL152.txt"
+
+[151]
+path = "CMG-CD24_TL151.txt"
+
+[150]
+path = "CMG-CD24_TL150.txt"
+
+[14]
+path = "CMG-CD24_TL14.txt"
+
+[149]
+path = "CMG-CD24_TL149.txt"
+
+[148]
+path = "CMG-CD24_TL148.txt"
+
+[147]
+path = "CMG-CD24_TL147.txt"
+
+[146]
+path = "CMG-CD24_TL146.txt"
+
+[145]
+path = "CMG-CD24_TL145.txt"
+
+[144]
+path = "CMG-CD24_TL144.txt"
+
+[143]
+path = "CMG-CD24_TL143.txt"
+
+[142]
+path = "CMG-CD24_TL142.txt"
+
+[141]
+path = "CMG-CD24_TL141.txt"
+
+[140]
+path = "CMG-CD24_TL140.txt"
+
+[13]
+path = "CMG-CD24_TL13.txt"
+
+[139]
+path = "CMG-CD24_TL139.txt"
+
+[138]
+path = "CMG-CD24_TL138.txt"
+
+[137]
+path = "CMG-CD24_TL137.txt"
+
+[136]
+path = "CMG-CD24_TL136.txt"
+
+[135]
+path = "CMG-CD24_TL135.txt"
+
+[134]
+path = "CMG-CD24_TL134.txt"
+
+[133]
+path = "CMG-CD24_TL133.txt"
+
+[132]
+path = "CMG-CD24_TL132.txt"
+
+[131]
+path = "CMG-CD24_TL131.txt"
+
+[130]
+path = "CMG-CD24_TL130.txt"
+
+[12]
+path = "CMG-CD24_TL12.txt"
+
+[129]
+path = "CMG-CD24_TL129.txt"
+
+[128]
+path = "CMG-CD24_TL128.txt"
+
+[127]
+path = "CMG-CD24_TL127.txt"
+
+[126]
+path = "CMG-CD24_TL126.txt"
+
+[125]
+path = "CMG-CD24_TL125.txt"
+
+[124]
+path = "CMG-CD24_TL124.txt"
+
+[123]
+path = "CMG-CD24_TL123.txt"
+
+[122]
+path = "CMG-CD24_TL122.txt"
+
+[121]
+path = "CMG-CD24_TL121.txt"
+
+[120]
+path = "CMG-CD24_TL120.txt"
+
+[11]
+path = "CMG-CD24_TL11.txt"
+
+[119]
+path = "CMG-CD24_TL119.txt"
+
+[118]
+path = "CMG-CD24_TL118.txt"
+
+[117]
+path = "CMG-CD24_TL117.txt"
+
+[116]
+path = "CMG-CD24_TL116.txt"
+
+[115]
+path = "CMG-CD24_TL115.txt"
+
+[114]
+path = "CMG-CD24_TL114.txt"
+
+[113]
+path = "CMG-CD24_TL113.txt"
+
+[112]
+path = "CMG-CD24_TL112.txt"
+
+[111]
+path = "CMG-CD24_TL111.txt"
+
+[110]
+path = "CMG-CD24_TL110.txt"
+
+[10]
+path = "CMG-CD24_TL10.txt"
+
+[109]
+path = "CMG-CD24_TL109.txt"
+
+[108]
+path = "CMG-CD24_TL108.txt"
+
+[107]
+path = "CMG-CD24_TL107.txt"
+
+[106]
+path = "CMG-CD24_TL106.txt"
+
+[105]
+path = "CMG-CD24_TL105.txt"
+
+[104]
+path = "CMG-CD24_TL104.txt"
+
+[103]
+path = "CMG-CD24_TL103.txt"
+
+[102]
+path = "CMG-CD24_TL102.txt"
+
+[101]
+path = "CMG-CD24_TL101.txt"
+
+[100]
+path = "CMG-CD24_TL100.txt"
+

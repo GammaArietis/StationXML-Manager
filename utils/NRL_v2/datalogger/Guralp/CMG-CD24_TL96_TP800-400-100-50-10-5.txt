@@ -1,0 +1,32 @@
+[Main]
+question = "What is the final sample rate?"
+
+[800 Hz]
+description = "Guralp; CMG-CD24; Tap_Table_Lookup 96; Taps 800-400-100-50-10-5; Final_Sample_Rate 800 Hz"
+xml = "CMG-CD24_TL96_TP800-400-100-50-10-5_FR800.xml"
+
+
+[50 Hz]
+description = "Guralp; CMG-CD24; Tap_Table_Lookup 96; Taps 800-400-100-50-10-5; Final_Sample_Rate 50 Hz"
+xml = "CMG-CD24_TL96_TP800-400-100-50-10-5_FR50.xml"
+
+
+[5 Hz]
+description = "Guralp; CMG-CD24; Tap_Table_Lookup 96; Taps 800-400-100-50-10-5; Final_Sample_Rate 5 Hz"
+xml = "CMG-CD24_TL96_TP800-400-100-50-10-5_FR5.xml"
+
+
+[400 Hz]
+description = "Guralp; CMG-CD24; Tap_Table_Lookup 96; Taps 800-400-100-50-10-5; Final_Sample_Rate 400 Hz"
+xml = "CMG-CD24_TL96_TP800-400-100-50-10-5_FR400.xml"
+
+
+[100 Hz]
+description = "Guralp; CMG-CD24; Tap_Table_Lookup 96; Taps 800-400-100-50-10-5; Final_Sample_Rate 100 Hz"
+xml = "CMG-CD24_TL96_TP800-400-100-50-10-5_FR100.xml"
+
+
+[10 Hz]
+description = "Guralp; CMG-CD24; Tap_Table_Lookup 96; Taps 800-400-100-50-10-5; Final_Sample_Rate 10 Hz"
+xml = "CMG-CD24_TL96_TP800-400-100-50-10-5_FR10.xml"
+

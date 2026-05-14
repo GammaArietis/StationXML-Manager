@@ -1,0 +1,14 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[5363]
+path = "L-10B_LF4.5_RC374_RS5363.txt"
+
+
+[3285]
+path = "L-10B_LF4.5_RC374_RS3285.txt"
+
+
+[13287]
+path = "L-10B_LF4.5_RC374_RS13287.txt"
+

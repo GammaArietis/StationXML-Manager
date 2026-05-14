@@ -1,0 +1,21 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[4]
+path = "EDAX24_PG4.txt"
+
+[2]
+path = "EDAX24_PG2.txt"
+
+[1]
+path = "EDAX24_PG1.txt"
+
+[10]
+path = "EDAX24_PG10.txt"
+
+[100]
+path = "EDAX24_PG100.txt"
+
+[0.5]
+path = "EDAX24_PG0.5.txt"
+

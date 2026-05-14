@@ -1,0 +1,18 @@
+[Main]
+question = "What is the low-frequency corner?"
+
+[50 Hz]
+path = "HG-7_LF50.txt"
+
+[30 Hz]
+path = "HG-7_LF30.txt"
+
+[20 Hz]
+path = "HG-7_LF20.txt"
+
+[14 Hz]
+path = "HG-7_LF14.txt"
+
+[10 Hz]
+path = "HG-7_LF10.txt"
+

@@ -1,0 +1,6 @@
+[Main]
+question = "Select the GeoDevice sensor model"
+
+[BBVS]
+path="BBVS.txt"
+

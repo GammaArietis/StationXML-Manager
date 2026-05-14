@@ -1,0 +1,9 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[200 Hz]
+path = "LTFB160_HF200.txt"
+
+[100 Hz]
+path = "LTFB160_HF100.txt"
+

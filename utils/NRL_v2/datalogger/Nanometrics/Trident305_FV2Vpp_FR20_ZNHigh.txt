@@ -1,0 +1,12 @@
+[Main]
+question = "What is the DC removal/low pass filter setting?"
+
+[Off]
+description = "Nanometrics; Trident305; Full-Scale_Voltage 2Vpp; Final_Sample_Rate 20 Hz; Input_Impedance High; DC_Filter Off"
+xml = "Trident305_FV2Vpp_FR20_ZNHigh_DFOff.xml"
+
+
+[0.001]
+description = "Nanometrics; Trident305; Full-Scale_Voltage 2Vpp; Final_Sample_Rate 20 Hz; Input_Impedance High; DC_Filter 0.001"
+xml = "Trident305_FV2Vpp_FR20_ZNHigh_DF0.001.xml"
+

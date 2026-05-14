@@ -1,0 +1,18 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[8]
+path = "NDAS-8226_PG8.txt"
+
+[4]
+path = "NDAS-8226_PG4.txt"
+
+[2]
+path = "NDAS-8226_PG2.txt"
+
+[1]
+path = "NDAS-8226_PG1.txt"
+
+[12]
+path = "NDAS-8226_PG12.txt"
+

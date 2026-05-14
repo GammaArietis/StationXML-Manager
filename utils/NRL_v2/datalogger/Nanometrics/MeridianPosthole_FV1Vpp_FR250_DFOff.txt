@@ -1,0 +1,12 @@
+[Main]
+question = "What is the final filter phase?"
+
+[Minimum]
+description = "Nanometrics; MeridianPosthole; Full-Scale_Voltage 1Vpp; Final_Sample_Rate 250 Hz; DC_Filter Off; Final_Filter_Phase Minimum"
+xml = "MeridianPosthole_FV1Vpp_FR250_DFOff_FPMinimum.xml"
+
+
+[Linear]
+description = "Nanometrics; MeridianPosthole; Full-Scale_Voltage 1Vpp; Final_Sample_Rate 250 Hz; DC_Filter Off; Final_Filter_Phase Linear"
+xml = "MeridianPosthole_FV1Vpp_FR250_DFOff_FPLinear.xml"
+

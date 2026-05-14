@@ -1,0 +1,6 @@
+[Main]
+question = "What is the decimated sample rate?"
+
+[None]
+path = "NDAS-8226_PG8_MR1_DRNone.txt"
+

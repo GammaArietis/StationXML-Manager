@@ -1,0 +1,12 @@
+[Main]
+question = "What is the final filter phase?"
+
+[Non-causal]
+description = "Kinemetrics; Dolomite; Preamp_Gain 4; Full-Scale_Voltage 40Vpp; Final_Sample_Rate 500 Hz; Final_Filter_Phase Non-causal"
+xml = "Dolomite_PG4_FV40Vpp_FR500_FPNon-causal.xml"
+
+
+[Causal]
+description = "Kinemetrics; Dolomite; Preamp_Gain 4; Full-Scale_Voltage 40Vpp; Final_Sample_Rate 500 Hz; Final_Filter_Phase Causal"
+xml = "Dolomite_PG4_FV40Vpp_FR500_FPCausal.xml"
+

@@ -1,0 +1,17 @@
+[Main]
+question = "What is the sensitivity?"
+
+[0.000046]
+description = "JeffreyBJohnson; infraBSU; Long-Period_Corner 64.5 s; Sensitivity 0.000046 V/Pa; Sensor_Type airPressure"
+xml = "infraBSU_LP64.5_SG0.000046_STairPressure.xml"
+
+
+[0.000023]
+description = "JeffreyBJohnson; infraBSU; Long-Period_Corner 64.5 s; Sensitivity 0.000023 V/Pa; Sensor_Type airPressure"
+xml = "infraBSU_LP64.5_SG0.000023_STairPressure.xml"
+
+
+[0.0000091]
+description = "JeffreyBJohnson; infraBSU; Long-Period_Corner 64.5 s; Sensitivity 0.0000091 V/Pa; Sensor_Type airPressure"
+xml = "infraBSU_LP64.5_SG0.0000091_STairPressure.xml"
+

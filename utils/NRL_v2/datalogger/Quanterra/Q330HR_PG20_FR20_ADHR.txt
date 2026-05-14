@@ -1,0 +1,18 @@
+[Main]
+question = "To which sample rates are linear filters applied?"
+
+[below40]
+path = "Q330HR_PG20_FR20_ADHR_LRbelow40.txt"
+
+
+[below20]
+path = "Q330HR_PG20_FR20_ADHR_LRbelow20.txt"
+
+
+[below100]
+path = "Q330HR_PG20_FR20_ADHR_LRbelow100.txt"
+
+
+[all]
+path = "Q330HR_PG20_FR20_ADHR_LRall.txt"
+

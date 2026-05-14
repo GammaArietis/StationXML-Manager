@@ -1,0 +1,6 @@
+[Main]
+question = "What is the long-period corner?"
+
+[120 s]
+path = "GEO-S120_LP120.txt"
+

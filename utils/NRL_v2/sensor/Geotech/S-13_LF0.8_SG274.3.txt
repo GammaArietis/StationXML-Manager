@@ -1,0 +1,6 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[1520]
+path = "S-13_LF0.8_SG274.3_RC1520.txt"
+

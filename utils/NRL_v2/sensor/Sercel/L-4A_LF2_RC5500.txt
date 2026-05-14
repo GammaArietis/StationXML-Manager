@@ -1,0 +1,6 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[8905]
+path = "L-4A_LF2_RC5500_RS8905.txt"
+

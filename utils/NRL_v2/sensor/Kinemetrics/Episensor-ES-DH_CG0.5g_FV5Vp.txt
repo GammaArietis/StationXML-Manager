@@ -1,0 +1,6 @@
+[Main]
+question = "Is the output wiring single-ended or differential?"
+
+[Differential]
+path = "Episensor-ES-DH_CG0.5g_FV5Vp_OWDifferential.txt"
+

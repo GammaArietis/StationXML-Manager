@@ -1,0 +1,42 @@
+[Main]
+question = "What is the main sample rate?"
+
+[5]
+path = "NDAS-8226_PG8_MR5.txt"
+
+
+[50]
+path = "NDAS-8226_PG8_MR50.txt"
+
+
+[500]
+path = "NDAS-8226_PG8_MR500.txt"
+
+
+[25]
+path = "NDAS-8226_PG8_MR25.txt"
+
+
+[250]
+path = "NDAS-8226_PG8_MR250.txt"
+
+
+[1]
+path = "NDAS-8226_PG8_MR1.txt"
+
+
+[125]
+path = "NDAS-8226_PG8_MR125.txt"
+
+
+[10]
+path = "NDAS-8226_PG8_MR10.txt"
+
+
+[100]
+path = "NDAS-8226_PG8_MR100.txt"
+
+
+[1000]
+path = "NDAS-8226_PG8_MR1000.txt"
+

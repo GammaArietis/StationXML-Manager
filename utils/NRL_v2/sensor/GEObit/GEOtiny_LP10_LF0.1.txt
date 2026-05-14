@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[195]
+description = "GEObit; GEOtiny; Long-Period_Corner 10 s; Low-Frequency_Corner 0.1 Hz; Sensitivity 195 V/m/s; Sensor_Type groundVel"
+xml = "GEOtiny_LP10_LF0.1_SG195_STgroundVel.xml"
+

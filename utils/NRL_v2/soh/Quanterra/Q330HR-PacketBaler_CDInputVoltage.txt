@@ -1,0 +1,6 @@
+[Main]
+question = "What is the sensitivity?"
+
+[6.667]
+path = "Q330HR-PacketBaler_CDInputVoltage_SG6.667.txt"
+

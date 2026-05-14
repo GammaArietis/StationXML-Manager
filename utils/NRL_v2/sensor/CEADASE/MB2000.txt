@@ -1,0 +1,6 @@
+[Main]
+question = "What is the long-period corner?"
+
+[50 s]
+path = "MB2000_LP50.txt"
+

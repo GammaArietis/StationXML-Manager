@@ -1,0 +1,42 @@
+[Main]
+question = "What is the final sample rate?"
+
+[800 Hz]
+path = "Baykal-8_PG8_FR800.txt"
+
+
+[500 Hz]
+path = "Baykal-8_PG8_FR500.txt"
+
+
+[400 Hz]
+path = "Baykal-8_PG8_FR400.txt"
+
+
+[4000 Hz]
+path = "Baykal-8_PG8_FR4000.txt"
+
+
+[250 Hz]
+path = "Baykal-8_PG8_FR250.txt"
+
+
+[200 Hz]
+path = "Baykal-8_PG8_FR200.txt"
+
+
+[2000 Hz]
+path = "Baykal-8_PG8_FR2000.txt"
+
+
+[125 Hz]
+path = "Baykal-8_PG8_FR125.txt"
+
+
+[100 Hz]
+path = "Baykal-8_PG8_FR100.txt"
+
+
+[1000 Hz]
+path = "Baykal-8_PG8_FR1000.txt"
+

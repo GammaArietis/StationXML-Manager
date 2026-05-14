@@ -1,0 +1,6 @@
+[Main]
+question = "What is the final sample rate?"
+
+[1 Hz]
+path = "SMART24_PG64_FV5Vpp_PR1_FR1.txt"
+

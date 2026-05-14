@@ -1,0 +1,10 @@
+[Main]
+question = "What is the DC removal/low pass filter setting?"
+
+[Off]
+path = "CentaurHighGain_FV2.5Vpp_FR125_DFOff.txt"
+
+
+[0.001]
+path = "CentaurHighGain_FV2.5Vpp_FR125_DF0.001.txt"
+

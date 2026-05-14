@@ -1,0 +1,6 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[6470]
+path = "S6000_LF2_RC10000_RS6470.txt"
+

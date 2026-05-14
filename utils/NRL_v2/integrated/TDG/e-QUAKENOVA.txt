@@ -1,0 +1,27 @@
+[Main]
+question = "What is the final sample rate?"
+
+[50 Hz]
+description = "TDG; e-QUAKENOVA; Final_Sample_Rate 50 Hz; Low-Frequency_Corner 0 Hz; Clip_Level 15g; Sensitivity 1710910"
+xml = "e-QUAKENOVA_FR50_LF0_CG15g_SG1710910.xml"
+
+[500 Hz]
+description = "TDG; e-QUAKENOVA; Final_Sample_Rate 500 Hz; Low-Frequency_Corner 0 Hz; Clip_Level 15g; Sensitivity 1710910"
+xml = "e-QUAKENOVA_FR500_LF0_CG15g_SG1710910.xml"
+
+[250 Hz]
+description = "TDG; e-QUAKENOVA; Final_Sample_Rate 250 Hz; Low-Frequency_Corner 0 Hz; Clip_Level 15g; Sensitivity 1710910"
+xml = "e-QUAKENOVA_FR250_LF0_CG15g_SG1710910.xml"
+
+[200 Hz]
+description = "TDG; e-QUAKENOVA; Final_Sample_Rate 200 Hz; Low-Frequency_Corner 0 Hz; Clip_Level 15g; Sensitivity 1710910"
+xml = "e-QUAKENOVA_FR200_LF0_CG15g_SG1710910.xml"
+
+[100 Hz]
+description = "TDG; e-QUAKENOVA; Final_Sample_Rate 100 Hz; Low-Frequency_Corner 0 Hz; Clip_Level 15g; Sensitivity 1710910"
+xml = "e-QUAKENOVA_FR100_LF0_CG15g_SG1710910.xml"
+
+[1000 Hz]
+description = "TDG; e-QUAKENOVA; Final_Sample_Rate 1000 Hz; Low-Frequency_Corner 0 Hz; Clip_Level 15g; Sensitivity 1710910"
+xml = "e-QUAKENOVA_FR1000_LF0_CG15g_SG1710910.xml"
+

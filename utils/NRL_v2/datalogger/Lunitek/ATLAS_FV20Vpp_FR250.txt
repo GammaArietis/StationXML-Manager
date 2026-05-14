@@ -1,0 +1,12 @@
+[Main]
+question = "What is the final filter phase?"
+
+[Minimum]
+description = "Lunitek; ATLAS; Full-Scale_Voltage 20Vpp; Final_Sample_Rate 250 Hz; Final_Filter_Phase Minimum"
+xml = "ATLAS_FV20Vpp_FR250_FPMinimum.xml"
+
+
+[Linear]
+description = "Lunitek; ATLAS; Full-Scale_Voltage 20Vpp; Final_Sample_Rate 250 Hz; Final_Filter_Phase Linear"
+xml = "ATLAS_FV20Vpp_FR250_FPLinear.xml"
+

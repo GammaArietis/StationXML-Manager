@@ -1,0 +1,7 @@
+[Main]
+question = "What is the long-period corner?"
+
+[120 s]
+description = "Nanometrics; TrilliumAllTerrain; Long-Period_Corner 120 s; Sensitivity 754 V/m/s; Sensor_Type groundVel"
+xml = "TrilliumAllTerrain_LP120_SG754_STgroundVel.xml"
+

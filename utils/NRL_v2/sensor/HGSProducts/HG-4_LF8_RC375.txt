@@ -1,0 +1,14 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[None]
+path = "HG-4_LF8_RC375_RSNone.txt"
+
+
+[2257]
+path = "HG-4_LF8_RC375_RS2257.txt"
+
+
+[1600]
+path = "HG-4_LF8_RC375_RS1600.txt"
+

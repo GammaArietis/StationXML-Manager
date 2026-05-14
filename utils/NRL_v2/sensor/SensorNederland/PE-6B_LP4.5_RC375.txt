@@ -1,0 +1,7 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[None]
+description = "SensorNederland; PE-6B; Long-Period_Corner 4.5 s; Coil_Resistance 375; Shunt_Resistance None; Sensitivity 28.8 V/m/s; Sensor_Type groundVel"
+xml = "PE-6B_LP4.5_RC375_RSNone_SG28.8_STgroundVel.xml"
+

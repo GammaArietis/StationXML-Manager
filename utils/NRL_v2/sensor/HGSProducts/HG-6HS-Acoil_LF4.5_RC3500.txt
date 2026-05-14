@@ -1,0 +1,14 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[None]
+path = "HG-6HS-Acoil_LF4.5_RC3500_RSNone.txt"
+
+
+[20000]
+path = "HG-6HS-Acoil_LF4.5_RC3500_RS20000.txt"
+
+
+[14000]
+path = "HG-6HS-Acoil_LF4.5_RC3500_RS14000.txt"
+

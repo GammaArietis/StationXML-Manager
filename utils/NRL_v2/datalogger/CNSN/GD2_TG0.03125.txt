@@ -1,0 +1,17 @@
+[Main]
+question = "What is the final sample rate?"
+
+[40 Hz]
+description = "CNSN; GD2; Transmission_Gain 0.03125; Final_Sample_Rate 40 Hz"
+xml = "GD2_TG0.03125_FR40.xml"
+
+
+[20 Hz]
+description = "CNSN; GD2; Transmission_Gain 0.03125; Final_Sample_Rate 20 Hz"
+xml = "GD2_TG0.03125_FR20.xml"
+
+
+[100 Hz]
+description = "CNSN; GD2; Transmission_Gain 0.03125; Final_Sample_Rate 100 Hz"
+xml = "GD2_TG0.03125_FR100.xml"
+

@@ -1,0 +1,22 @@
+[Main]
+question = "What is the final sample rate?"
+
+[500 Hz]
+path = "SRi32S-NormalGain_FV40Vpp_FR500.txt"
+
+
+[250 Hz]
+path = "SRi32S-NormalGain_FV40Vpp_FR250.txt"
+
+
+[200 Hz]
+path = "SRi32S-NormalGain_FV40Vpp_FR200.txt"
+
+
+[100 Hz]
+path = "SRi32S-NormalGain_FV40Vpp_FR100.txt"
+
+
+[1000 Hz]
+path = "SRi32S-NormalGain_FV40Vpp_FR1000.txt"
+

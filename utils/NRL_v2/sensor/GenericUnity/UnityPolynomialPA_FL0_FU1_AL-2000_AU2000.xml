@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<FDSNStationXML xmlns="http://www.fdsn.org/xml/station/1" schemaVersion="1.1">
+  <Source>IRIS-DMC</Source>
+  <Module>IRIS NRL service | version: 1</Module>
+  <ModuleURI>https://service.iris.edu/irisws/nrl/1/</ModuleURI>
+  <Created>2026-04-20T01:00:03.466603Z</Created>
+  <Network code="XX" startDate="1970-01-01T00:00:00Z">
+    <Station code="YY" startDate="1970-01-01T00:00:00Z">
+      <Comment>
+        <Value>This is a comment.</Value>
+      </Comment>
+      <Latitude>0.0</Latitude>
+      <Longitude>0.0</Longitude>
+      <Elevation>0.0</Elevation>
+      <Site>
+        <Name>Long site name</Name>
+      </Site>
+      <Channel code="ZZZ" locationCode="00" startDate="1970-01-01T00:00:00Z">
+        <Latitude>0.0</Latitude>
+        <Longitude>0.0</Longitude>
+        <Elevation>0.0</Elevation>
+        <Depth>0.0</Depth>
+        <Azimuth>0.0</Azimuth>
+        <Dip>0.0</Dip>
+        <Sensor>
+          <Description>The sensor name</Description>
+        </Sensor>
+        <Response>
+          <InstrumentPolynomial resourceId="NRL:AnaPNM_IUPa_OUV_ALm2000_AU2000_FL0_FU1_NC2_CHc6d521d">
+            <InputUnits>
+              <Name>Pa</Name>
+              <Description>Pascals</Description>
+            </InputUnits>
+            <OutputUnits>
+              <Name>V</Name>
+              <Description>Volts</Description>
+            </OutputUnits>
+            <ApproximationType>MACLAURIN</ApproximationType>
+            <FrequencyLowerBound unit="HERTZ">+0.00000E+00</FrequencyLowerBound>
+            <FrequencyUpperBound unit="HERTZ">+1.00000E+00</FrequencyUpperBound>
+            <ApproximationLowerBound>-2.00000E+03</ApproximationLowerBound>
+            <ApproximationUpperBound>+2.00000E+03</ApproximationUpperBound>
+            <MaximumError>+1.00000E-02</MaximumError>
+            <Coefficient number="0">0.00000e+00</Coefficient>
+            <Coefficient number="1">1.00000e+00</Coefficient>
+          </InstrumentPolynomial>
+        </Response>
+      </Channel>
+    </Station>
+  </Network>
+</FDSNStationXML>
+

@@ -1,0 +1,12 @@
+[Main]
+question = "Is extended bandwidth filtering On or Off?"
+
+[On]
+description = "RSensors; Baykal-8; Preamp_Gain 32; Final_Sample_Rate 500 Hz; Extended_Bandwidth On "
+xml = "Baykal-8_PG32_FR500_EBOn.xml"
+
+
+[Off]
+description = "RSensors; Baykal-8; Preamp_Gain 32; Final_Sample_Rate 500 Hz; Extended_Bandwidth Off "
+xml = "Baykal-8_PG32_FR500_EBOff.xml"
+

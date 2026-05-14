@@ -1,0 +1,12 @@
+[Main]
+question = "What is the final filter phase?"
+
+[Minimum]
+description = "GEObit; GEOthree; Full-Scale_Voltage 40Vpp; Final_Sample_Rate 500 Hz; Final_Filter_Phase Minimum"
+xml = "GEOthree_FV40Vpp_FR500_FPMinimum.xml"
+
+
+[Linear]
+description = "GEObit; GEOthree; Full-Scale_Voltage 40Vpp; Final_Sample_Rate 500 Hz; Final_Filter_Phase Linear"
+xml = "GEOthree_FV40Vpp_FR500_FPLinear.xml"
+

@@ -1,0 +1,15 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[VeryLow]
+path = "EDR-210_PGVeryLow.txt"
+
+[VeryHigh]
+path = "EDR-210_PGVeryHigh.txt"
+
+[Low]
+path = "EDR-210_PGLow.txt"
+
+[High]
+path = "EDR-210_PGHigh.txt"
+

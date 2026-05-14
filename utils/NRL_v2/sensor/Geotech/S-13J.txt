@@ -1,0 +1,6 @@
+[Main]
+question = "What is the long-period corner?"
+
+[1 s]
+path = "S-13J_LP1.txt"
+

@@ -1,0 +1,18 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[8Vpp]
+path = "EuropaT_FV8Vpp.txt"
+
+[4Vpp]
+path = "EuropaT_FV4Vpp.txt"
+
+[40Vpp]
+path = "EuropaT_FV40Vpp.txt"
+
+[2Vpp]
+path = "EuropaT_FV2Vpp.txt"
+
+[16Vpp]
+path = "EuropaT_FV16Vpp.txt"
+

@@ -1,0 +1,10 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[640]
+path = "S6000_LF2_RC640.txt"
+
+
+[10000]
+path = "S6000_LF2_RC10000.txt"
+

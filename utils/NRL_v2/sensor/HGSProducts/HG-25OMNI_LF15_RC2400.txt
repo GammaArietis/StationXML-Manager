@@ -1,0 +1,10 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[None]
+path = "HG-25OMNI_LF15_RC2400_RSNone.txt"
+
+
+[13000]
+path = "HG-25OMNI_LF15_RC2400_RS13000.txt"
+

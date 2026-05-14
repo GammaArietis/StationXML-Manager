@@ -1,0 +1,9 @@
+[Main]
+question = "Which onboard sensor does this datalogger use?"
+
+[SentinelMEMS]
+path = "Sentinel-rev1_OSSentinelMEMS.txt"
+
+[SentinelGeophone]
+path = "Sentinel-rev1_OSSentinelGeophone.txt"
+

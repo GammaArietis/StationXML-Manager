@@ -1,0 +1,15 @@
+[Main]
+question = "Select the EQMet sensor model"
+
+[TSA-SMA]
+path="TSA-SMA.txt"
+
+[TSA-100S]
+path="TSA-100S.txt"
+
+[PBB-200S]
+path="PBB-200S.txt"
+
+[MBB-1]
+path="MBB-1.txt"
+

@@ -1,0 +1,7 @@
+[Main]
+question = "What is the final filter phase?"
+
+[Linear]
+description = "Nanometrics; MeridianCompact; Full-Scale_Voltage 10Vpp; Final_Sample_Rate 2000 Hz; DC_Filter 0.001; Final_Filter_Phase Linear"
+xml = "MeridianCompact_FV10Vpp_FR2000_DF0.001_FPLinear.xml"
+

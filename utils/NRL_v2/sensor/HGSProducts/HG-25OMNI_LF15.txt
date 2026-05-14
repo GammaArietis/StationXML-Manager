@@ -1,0 +1,6 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[2400]
+path = "HG-25OMNI_LF15_RC2400.txt"
+

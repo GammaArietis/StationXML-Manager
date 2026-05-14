@@ -1,0 +1,10 @@
+[Main]
+question = "What is the ADC bit count?"
+
+[30]
+path = "180-MC_PG64_AB30.txt"
+
+
+[24]
+path = "180-MC_PG64_AB24.txt"
+

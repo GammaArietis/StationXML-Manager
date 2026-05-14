@@ -1,0 +1,18 @@
+[Main]
+question = "Select the Streckeisen sensor model"
+
+[STS-5A]
+path="STS-5A.txt"
+
+[STS-3]
+path="STS-3.txt"
+
+[STS-2]
+path="STS-2.txt"
+
+[STS-2.5]
+path="STS-2.5.txt"
+
+[STS-1]
+path="STS-1.txt"
+

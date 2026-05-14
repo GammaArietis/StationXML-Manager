@@ -1,0 +1,7 @@
+[Main]
+question = "What is the long-period corner?"
+
+[150 s]
+description = "Hyperion; IFS-4000; Long-Period_Corner 150 s; Sensitivity 0.02 V/Pa; Sensor_Type airPressure"
+xml = "IFS-4000_LP150_SG0.02_STairPressure.xml"
+

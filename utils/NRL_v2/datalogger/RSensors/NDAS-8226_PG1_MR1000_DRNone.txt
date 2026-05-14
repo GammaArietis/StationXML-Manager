@@ -1,0 +1,7 @@
+[Main]
+question = "What is the final sample rate?"
+
+[1000 Hz]
+description = "RSensors; NDAS-8226; Preamp_Gain 1; Main_Sample_Rate 1000; Decimated_Sample_Rate None; Final_Sample_Rate 1000 Hz"
+xml = "NDAS-8226_PG1_MR1000_DRNone_FR1000.xml"
+

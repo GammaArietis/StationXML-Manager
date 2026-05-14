@@ -1,0 +1,9 @@
+[Main]
+question = "What is the ADC range?"
+
+[1]
+path = "GemInfrasoundV1.0_AR1.txt"
+
+[0]
+path = "GemInfrasoundV1.0_AR0.txt"
+

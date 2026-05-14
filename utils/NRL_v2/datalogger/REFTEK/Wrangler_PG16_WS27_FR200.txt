@@ -1,0 +1,12 @@
+[Main]
+question = "What is the final filter phase?"
+
+[Min]
+description = "REFTEK; Wrangler; Preamp_Gain 16; Word_Size 27 bits; Final_Sample_Rate 200 Hz; Final_Filter_Phase Min"
+xml = "Wrangler_PG16_WS27_FR200_FPMin.xml"
+
+
+[Lin]
+description = "REFTEK; Wrangler; Preamp_Gain 16; Word_Size 27 bits; Final_Sample_Rate 200 Hz; Final_Filter_Phase Lin"
+xml = "Wrangler_PG16_WS27_FR200_FPLin.xml"
+

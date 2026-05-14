@@ -1,0 +1,6 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[1850]
+path = "HG-5HS_LF5_RC1850.txt"
+

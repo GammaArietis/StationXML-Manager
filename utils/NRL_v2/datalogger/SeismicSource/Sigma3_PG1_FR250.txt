@@ -1,0 +1,27 @@
+[Main]
+question = "What is the DC removal/low pass filter setting?"
+
+[Off]
+description = "SeismicSource; Sigma3; Preamp_Gain 1; Final_Sample_Rate 250 Hz; DC_Filter Off"
+xml = "Sigma3_PG1_FR250_DFOff.xml"
+
+
+[2]
+description = "SeismicSource; Sigma3; Preamp_Gain 1; Final_Sample_Rate 250 Hz; DC_Filter 2"
+xml = "Sigma3_PG1_FR250_DF2.xml"
+
+
+[0.1]
+description = "SeismicSource; Sigma3; Preamp_Gain 1; Final_Sample_Rate 250 Hz; DC_Filter 0.1"
+xml = "Sigma3_PG1_FR250_DF0.1.xml"
+
+
+[0.01]
+description = "SeismicSource; Sigma3; Preamp_Gain 1; Final_Sample_Rate 250 Hz; DC_Filter 0.01"
+xml = "Sigma3_PG1_FR250_DF0.01.xml"
+
+
+[0.001]
+description = "SeismicSource; Sigma3; Preamp_Gain 1; Final_Sample_Rate 250 Hz; DC_Filter 0.001"
+xml = "Sigma3_PG1_FR250_DF0.001.xml"
+

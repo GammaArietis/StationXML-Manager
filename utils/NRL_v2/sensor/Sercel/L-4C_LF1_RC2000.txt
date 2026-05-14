@@ -1,0 +1,6 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[3238]
+path = "L-4C_LF1_RC2000_RS3238.txt"
+

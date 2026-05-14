@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[1189]
+description = "Nanometrics; Trillium240OBS; Electronics_Generation 2; Long-Period_Corner 244 s; Sensitivity 1189 V/m/s; Sensor_Type groundVel"
+xml = "Trillium240OBS_EG2_LP244_SG1189_STgroundVel.xml"
+

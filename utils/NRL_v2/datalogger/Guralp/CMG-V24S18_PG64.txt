@@ -1,0 +1,67 @@
+[Main]
+question = "What is the final sample rate?"
+
+[80 Hz]
+description = "Guralp; CMG-V24S18; Preamp_Gain 64; Final_Sample_Rate 80 Hz"
+xml = "CMG-V24S18_PG64_FR80.xml"
+
+
+[500 Hz]
+description = "Guralp; CMG-V24S18; Preamp_Gain 64; Final_Sample_Rate 500 Hz"
+xml = "CMG-V24S18_PG64_FR500.xml"
+
+
+[50 Hz]
+description = "Guralp; CMG-V24S18; Preamp_Gain 64; Final_Sample_Rate 50 Hz"
+xml = "CMG-V24S18_PG64_FR50.xml"
+
+
+[400 Hz]
+description = "Guralp; CMG-V24S18; Preamp_Gain 64; Final_Sample_Rate 400 Hz"
+xml = "CMG-V24S18_PG64_FR400.xml"
+
+
+[40 Hz]
+description = "Guralp; CMG-V24S18; Preamp_Gain 64; Final_Sample_Rate 40 Hz"
+xml = "CMG-V24S18_PG64_FR40.xml"
+
+
+[32 Hz]
+description = "Guralp; CMG-V24S18; Preamp_Gain 64; Final_Sample_Rate 32 Hz"
+xml = "CMG-V24S18_PG64_FR32.xml"
+
+
+[250 Hz]
+description = "Guralp; CMG-V24S18; Preamp_Gain 64; Final_Sample_Rate 250 Hz"
+xml = "CMG-V24S18_PG64_FR250.xml"
+
+
+[2000 Hz]
+description = "Guralp; CMG-V24S18; Preamp_Gain 64; Final_Sample_Rate 2000 Hz"
+xml = "CMG-V24S18_PG64_FR2000.xml"
+
+
+[200 Hz]
+description = "Guralp; CMG-V24S18; Preamp_Gain 64; Final_Sample_Rate 200 Hz"
+xml = "CMG-V24S18_PG64_FR200.xml"
+
+
+[160 Hz]
+description = "Guralp; CMG-V24S18; Preamp_Gain 64; Final_Sample_Rate 160 Hz"
+xml = "CMG-V24S18_PG64_FR160.xml"
+
+
+[125 Hz]
+description = "Guralp; CMG-V24S18; Preamp_Gain 64; Final_Sample_Rate 125 Hz"
+xml = "CMG-V24S18_PG64_FR125.xml"
+
+
+[1000 Hz]
+description = "Guralp; CMG-V24S18; Preamp_Gain 64; Final_Sample_Rate 1000 Hz"
+xml = "CMG-V24S18_PG64_FR1000.xml"
+
+
+[100 Hz]
+description = "Guralp; CMG-V24S18; Preamp_Gain 64; Final_Sample_Rate 100 Hz"
+xml = "CMG-V24S18_PG64_FR100.xml"
+

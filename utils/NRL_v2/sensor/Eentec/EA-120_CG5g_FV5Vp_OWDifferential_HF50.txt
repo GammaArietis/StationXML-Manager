@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[0.1020]
+description = "Eentec; EA-120; Clip_Level 5g; Full-Scale_Voltage 5Vp; Output_Wiring Differential; High-Frequency_Corner 50 Hz; Sensitivity 0.1020 V/m/s**2; Sensor_Type groundAccel"
+xml = "EA-120_CG5g_FV5Vp_OWDifferential_HF50_SG0.1020_STgroundAccel.xml"
+

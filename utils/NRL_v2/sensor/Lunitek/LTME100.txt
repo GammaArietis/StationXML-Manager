@@ -1,0 +1,12 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[700 Hz]
+path = "LTME100_HF700.txt"
+
+[1150 Hz]
+path = "LTME100_HF1150.txt"
+
+[1000 Hz]
+path = "LTME100_HF1000.txt"
+

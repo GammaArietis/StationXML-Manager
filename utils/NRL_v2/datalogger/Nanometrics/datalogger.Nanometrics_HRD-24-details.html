@@ -1,0 +1,4 @@
+### Gains
+These responses reflect a preamplifier gain of 1.  Gains can be adjusted by adding resistors to the A/D board to adjust for sensor impedance.  If the gain has been adjusted in this manner, these responses will need to have their gain adjusted accordingly.
+### DC Filter
+The Library includes a response for a final IIR DC removal filter with a low-frequency corner of 1 mHz (0.001 Hz) as an example.  The filter corner can be set to any value of integer mHz between 1 and 1000 mHz.  For other corner frequency values, set the pole for this filter instead to the selected corner frequency times 2 * pi.

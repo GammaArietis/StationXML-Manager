@@ -1,0 +1,24 @@
+[Main]
+question = "What is the preamp gain in dB?"
+
+[6]
+path = "ZlandGen2_PD6.txt"
+
+[36]
+path = "ZlandGen2_PD36.txt"
+
+[30]
+path = "ZlandGen2_PD30.txt"
+
+[24]
+path = "ZlandGen2_PD24.txt"
+
+[18]
+path = "ZlandGen2_PD18.txt"
+
+[12]
+path = "ZlandGen2_PD12.txt"
+
+[0]
+path = "ZlandGen2_PD0.txt"
+

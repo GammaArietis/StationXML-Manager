@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[0.4893]
+description = "RSensors; MTSS-1031A; Clip_Level 3g; Full-Scale_Voltage 15Vp; Output_Wiring Differential; Long-Period_Corner 10 s; High-Frequency_Corner 120 Hz; Sensitivity 0.4893 V/m/s**2; Sensor_Type groundAccel"
+xml = "MTSS-1031A_CG3g_FV15Vp_OWDifferential_LP10_HF120_SG0.4893_STgroundAccel.xml"
+

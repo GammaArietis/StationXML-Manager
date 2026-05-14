@@ -1,0 +1,10 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[7.5Vp]
+path = "LK-307-115_HF200_CG4g_FV7.5Vp.txt"
+
+
+[20Vp]
+path = "LK-307-115_HF200_CG4g_FV20Vp.txt"
+

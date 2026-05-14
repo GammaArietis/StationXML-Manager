@@ -1,0 +1,15 @@
+[Main]
+question = "What is the sensitivity?"
+
+[2000]
+description = "Nanometrics; TrilliumSlimPosthole120; Sensitivity 2000 V/m/s; Long-Period_Corner 120 s; Sensor_Type groundVel"
+xml = "TrilliumSlimPosthole120_SG2000_LP120_STgroundVel.xml"
+
+[1500]
+description = "Nanometrics; TrilliumSlimPosthole120; Sensitivity 1500 V/m/s; Long-Period_Corner 120 s; Sensor_Type groundVel"
+xml = "TrilliumSlimPosthole120_SG1500_LP120_STgroundVel.xml"
+
+[1203]
+description = "Nanometrics; TrilliumSlimPosthole120; Sensitivity 1203 V/m/s; Long-Period_Corner 120 s; Sensor_Type groundVel"
+xml = "TrilliumSlimPosthole120_SG1203_LP120_STgroundVel.xml"
+

@@ -1,0 +1,6 @@
+[Main]
+question = "What is the long-period corner?"
+
+[60 s]
+path = "CME-6111_LP60.txt"
+

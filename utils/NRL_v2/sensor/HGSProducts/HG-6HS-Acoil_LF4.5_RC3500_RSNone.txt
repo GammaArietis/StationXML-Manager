@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[78.9]
+description = "HGSProducts; HG-6HS-Acoil; Low-Frequency_Corner 4.5 Hz; Coil_Resistance 3500; Shunt_Resistance None; Sensitivity 78.9 V/m/s; Sensor_Type groundVel"
+xml = "HG-6HS-Acoil_LF4.5_RC3500_RSNone_SG78.9_STgroundVel.xml"
+

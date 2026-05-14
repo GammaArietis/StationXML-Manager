@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[2180]
+description = "Geotech; GS-13; Long-Period_Corner 1 s; Sensitivity 2180 V/m/s; Coil_Resistance 9100; Sensor_Type groundVel"
+xml = "GS-13_LP1_SG2180_RC9100_STgroundVel.xml"
+

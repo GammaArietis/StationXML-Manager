@@ -1,0 +1,22 @@
+[Main]
+question = "What is the accelerometer clip level in +/-g?"
+
+[4g]
+path = "LTFB160_HF200_CG4g.txt"
+
+
+[2g]
+path = "LTFB160_HF200_CG2g.txt"
+
+
+[1g]
+path = "LTFB160_HF200_CG1g.txt"
+
+
+[0.5g]
+path = "LTFB160_HF200_CG0.5g.txt"
+
+
+[0.25g]
+path = "LTFB160_HF200_CG0.25g.txt"
+

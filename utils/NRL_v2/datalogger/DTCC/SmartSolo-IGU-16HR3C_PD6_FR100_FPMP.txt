@@ -1,0 +1,14 @@
+[Main]
+question = "What is the DC removal/low pass filter setting?"
+
+[Off]
+path = "SmartSolo-IGU-16HR3C_PD6_FR100_FPMP_DFOff.txt"
+
+
+[DC]
+path = "SmartSolo-IGU-16HR3C_PD6_FR100_FPMP_DFDC.txt"
+
+
+[1]
+path = "SmartSolo-IGU-16HR3C_PD6_FR100_FPMP_DF1.txt"
+

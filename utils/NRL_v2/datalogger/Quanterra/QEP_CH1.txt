@@ -1,0 +1,22 @@
+[Main]
+question = "What is the final sample rate?"
+
+[40 Hz]
+description = "Quanterra; QEP; Channels 1; Final_Sample_Rate 40 Hz"
+xml = "QEP_CH1_FR40.xml"
+
+
+[20 Hz]
+description = "Quanterra; QEP; Channels 1; Final_Sample_Rate 20 Hz"
+xml = "QEP_CH1_FR20.xml"
+
+
+[10 Hz]
+description = "Quanterra; QEP; Channels 1; Final_Sample_Rate 10 Hz"
+xml = "QEP_CH1_FR10.xml"
+
+
+[1 Hz]
+description = "Quanterra; QEP; Channels 1; Final_Sample_Rate 1 Hz"
+xml = "QEP_CH1_FR1.xml"
+

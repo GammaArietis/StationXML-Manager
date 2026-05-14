@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[0.50986]
+description = "SiliconAudio; 203P-LowNoise-Accel; Full-Scale_Voltage 20Vpp; Clip_Level 2g; Sensitivity 0.50986 V/m/s**2; Long-Period_Corner 200 s; High-Frequency_Corner 1000 Hz; Sensor_Type groundAccel"
+xml = "203P-LowNoise-Accel_FV20Vpp_CG2g_SG0.50986_LP200_HF1000_STgroundAccel.xml"
+

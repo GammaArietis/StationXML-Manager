@@ -1,0 +1,6 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[200 Hz]
+path = "GEO-FBA200_CG2g_FV40Vp_HF200.txt"
+

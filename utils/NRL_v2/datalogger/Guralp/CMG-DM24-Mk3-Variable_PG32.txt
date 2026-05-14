@@ -1,0 +1,382 @@
+[Main]
+question = "What is the tap table lookup number for this channel?"
+
+[9]
+path = "CMG-DM24-Mk3-Variable_PG32_TL9.txt"
+
+
+[95]
+path = "CMG-DM24-Mk3-Variable_PG32_TL95.txt"
+
+
+[94]
+path = "CMG-DM24-Mk3-Variable_PG32_TL94.txt"
+
+
+[93]
+path = "CMG-DM24-Mk3-Variable_PG32_TL93.txt"
+
+
+[92]
+path = "CMG-DM24-Mk3-Variable_PG32_TL92.txt"
+
+
+[91]
+path = "CMG-DM24-Mk3-Variable_PG32_TL91.txt"
+
+
+[90]
+path = "CMG-DM24-Mk3-Variable_PG32_TL90.txt"
+
+
+[8]
+path = "CMG-DM24-Mk3-Variable_PG32_TL8.txt"
+
+
+[89]
+path = "CMG-DM24-Mk3-Variable_PG32_TL89.txt"
+
+
+[88]
+path = "CMG-DM24-Mk3-Variable_PG32_TL88.txt"
+
+
+[87]
+path = "CMG-DM24-Mk3-Variable_PG32_TL87.txt"
+
+
+[86]
+path = "CMG-DM24-Mk3-Variable_PG32_TL86.txt"
+
+
+[85]
+path = "CMG-DM24-Mk3-Variable_PG32_TL85.txt"
+
+
+[84]
+path = "CMG-DM24-Mk3-Variable_PG32_TL84.txt"
+
+
+[83]
+path = "CMG-DM24-Mk3-Variable_PG32_TL83.txt"
+
+
+[82]
+path = "CMG-DM24-Mk3-Variable_PG32_TL82.txt"
+
+
+[81]
+path = "CMG-DM24-Mk3-Variable_PG32_TL81.txt"
+
+
+[80]
+path = "CMG-DM24-Mk3-Variable_PG32_TL80.txt"
+
+
+[7]
+path = "CMG-DM24-Mk3-Variable_PG32_TL7.txt"
+
+
+[79]
+path = "CMG-DM24-Mk3-Variable_PG32_TL79.txt"
+
+
+[78]
+path = "CMG-DM24-Mk3-Variable_PG32_TL78.txt"
+
+
+[77]
+path = "CMG-DM24-Mk3-Variable_PG32_TL77.txt"
+
+
+[76]
+path = "CMG-DM24-Mk3-Variable_PG32_TL76.txt"
+
+
+[75]
+path = "CMG-DM24-Mk3-Variable_PG32_TL75.txt"
+
+
+[74]
+path = "CMG-DM24-Mk3-Variable_PG32_TL74.txt"
+
+
+[73]
+path = "CMG-DM24-Mk3-Variable_PG32_TL73.txt"
+
+
+[72]
+path = "CMG-DM24-Mk3-Variable_PG32_TL72.txt"
+
+
+[71]
+path = "CMG-DM24-Mk3-Variable_PG32_TL71.txt"
+
+
+[70]
+path = "CMG-DM24-Mk3-Variable_PG32_TL70.txt"
+
+
+[6]
+path = "CMG-DM24-Mk3-Variable_PG32_TL6.txt"
+
+
+[69]
+path = "CMG-DM24-Mk3-Variable_PG32_TL69.txt"
+
+
+[68]
+path = "CMG-DM24-Mk3-Variable_PG32_TL68.txt"
+
+
+[67]
+path = "CMG-DM24-Mk3-Variable_PG32_TL67.txt"
+
+
+[66]
+path = "CMG-DM24-Mk3-Variable_PG32_TL66.txt"
+
+
+[65]
+path = "CMG-DM24-Mk3-Variable_PG32_TL65.txt"
+
+
+[64]
+path = "CMG-DM24-Mk3-Variable_PG32_TL64.txt"
+
+
+[63]
+path = "CMG-DM24-Mk3-Variable_PG32_TL63.txt"
+
+
+[62]
+path = "CMG-DM24-Mk3-Variable_PG32_TL62.txt"
+
+
+[61]
+path = "CMG-DM24-Mk3-Variable_PG32_TL61.txt"
+
+
+[60]
+path = "CMG-DM24-Mk3-Variable_PG32_TL60.txt"
+
+
+[5]
+path = "CMG-DM24-Mk3-Variable_PG32_TL5.txt"
+
+
+[59]
+path = "CMG-DM24-Mk3-Variable_PG32_TL59.txt"
+
+
+[58]
+path = "CMG-DM24-Mk3-Variable_PG32_TL58.txt"
+
+
+[57]
+path = "CMG-DM24-Mk3-Variable_PG32_TL57.txt"
+
+
+[56]
+path = "CMG-DM24-Mk3-Variable_PG32_TL56.txt"
+
+
+[55]
+path = "CMG-DM24-Mk3-Variable_PG32_TL55.txt"
+
+
+[54]
+path = "CMG-DM24-Mk3-Variable_PG32_TL54.txt"
+
+
+[53]
+path = "CMG-DM24-Mk3-Variable_PG32_TL53.txt"
+
+
+[52]
+path = "CMG-DM24-Mk3-Variable_PG32_TL52.txt"
+
+
+[51]
+path = "CMG-DM24-Mk3-Variable_PG32_TL51.txt"
+
+
+[50]
+path = "CMG-DM24-Mk3-Variable_PG32_TL50.txt"
+
+
+[4]
+path = "CMG-DM24-Mk3-Variable_PG32_TL4.txt"
+
+
+[49]
+path = "CMG-DM24-Mk3-Variable_PG32_TL49.txt"
+
+
+[48]
+path = "CMG-DM24-Mk3-Variable_PG32_TL48.txt"
+
+
+[47]
+path = "CMG-DM24-Mk3-Variable_PG32_TL47.txt"
+
+
+[46]
+path = "CMG-DM24-Mk3-Variable_PG32_TL46.txt"
+
+
+[45]
+path = "CMG-DM24-Mk3-Variable_PG32_TL45.txt"
+
+
+[44]
+path = "CMG-DM24-Mk3-Variable_PG32_TL44.txt"
+
+
+[43]
+path = "CMG-DM24-Mk3-Variable_PG32_TL43.txt"
+
+
+[42]
+path = "CMG-DM24-Mk3-Variable_PG32_TL42.txt"
+
+
+[41]
+path = "CMG-DM24-Mk3-Variable_PG32_TL41.txt"
+
+
+[40]
+path = "CMG-DM24-Mk3-Variable_PG32_TL40.txt"
+
+
+[3]
+path = "CMG-DM24-Mk3-Variable_PG32_TL3.txt"
+
+
+[39]
+path = "CMG-DM24-Mk3-Variable_PG32_TL39.txt"
+
+
+[38]
+path = "CMG-DM24-Mk3-Variable_PG32_TL38.txt"
+
+
+[37]
+path = "CMG-DM24-Mk3-Variable_PG32_TL37.txt"
+
+
+[36]
+path = "CMG-DM24-Mk3-Variable_PG32_TL36.txt"
+
+
+[35]
+path = "CMG-DM24-Mk3-Variable_PG32_TL35.txt"
+
+
+[34]
+path = "CMG-DM24-Mk3-Variable_PG32_TL34.txt"
+
+
+[33]
+path = "CMG-DM24-Mk3-Variable_PG32_TL33.txt"
+
+
+[32]
+path = "CMG-DM24-Mk3-Variable_PG32_TL32.txt"
+
+
+[31]
+path = "CMG-DM24-Mk3-Variable_PG32_TL31.txt"
+
+
+[30]
+path = "CMG-DM24-Mk3-Variable_PG32_TL30.txt"
+
+
+[2]
+path = "CMG-DM24-Mk3-Variable_PG32_TL2.txt"
+
+
+[29]
+path = "CMG-DM24-Mk3-Variable_PG32_TL29.txt"
+
+
+[28]
+path = "CMG-DM24-Mk3-Variable_PG32_TL28.txt"
+
+
+[27]
+path = "CMG-DM24-Mk3-Variable_PG32_TL27.txt"
+
+
+[26]
+path = "CMG-DM24-Mk3-Variable_PG32_TL26.txt"
+
+
+[25]
+path = "CMG-DM24-Mk3-Variable_PG32_TL25.txt"
+
+
+[24]
+path = "CMG-DM24-Mk3-Variable_PG32_TL24.txt"
+
+
+[23]
+path = "CMG-DM24-Mk3-Variable_PG32_TL23.txt"
+
+
+[22]
+path = "CMG-DM24-Mk3-Variable_PG32_TL22.txt"
+
+
+[21]
+path = "CMG-DM24-Mk3-Variable_PG32_TL21.txt"
+
+
+[20]
+path = "CMG-DM24-Mk3-Variable_PG32_TL20.txt"
+
+
+[1]
+path = "CMG-DM24-Mk3-Variable_PG32_TL1.txt"
+
+
+[19]
+path = "CMG-DM24-Mk3-Variable_PG32_TL19.txt"
+
+
+[18]
+path = "CMG-DM24-Mk3-Variable_PG32_TL18.txt"
+
+
+[17]
+path = "CMG-DM24-Mk3-Variable_PG32_TL17.txt"
+
+
+[16]
+path = "CMG-DM24-Mk3-Variable_PG32_TL16.txt"
+
+
+[15]
+path = "CMG-DM24-Mk3-Variable_PG32_TL15.txt"
+
+
+[14]
+path = "CMG-DM24-Mk3-Variable_PG32_TL14.txt"
+
+
+[13]
+path = "CMG-DM24-Mk3-Variable_PG32_TL13.txt"
+
+
+[12]
+path = "CMG-DM24-Mk3-Variable_PG32_TL12.txt"
+
+
+[11]
+path = "CMG-DM24-Mk3-Variable_PG32_TL11.txt"
+
+
+[10]
+path = "CMG-DM24-Mk3-Variable_PG32_TL10.txt"
+

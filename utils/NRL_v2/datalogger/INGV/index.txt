@@ -1,0 +1,9 @@
+[Main]
+question = "Select the INGV datalogger model"
+
+[GAIA2]
+path="GAIA2.txt"
+
+[GAIA-IV]
+path="GAIA-IV.txt"
+

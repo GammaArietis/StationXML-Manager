@@ -1,0 +1,18 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[5Vpp]
+path = "Pegasus_FV5Vpp.txt"
+
+[40Vpp]
+path = "Pegasus_FV40Vpp.txt"
+
+[1Vpp]
+path = "Pegasus_FV1Vpp.txt"
+
+[10Vpp]
+path = "Pegasus_FV10Vpp.txt"
+
+[0.5Vpp]
+path = "Pegasus_FV0.5Vpp.txt"
+

@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[32.1]
+description = "HGSProducts; HG-6HT; Low-Frequency_Corner 10 Hz; Coil_Resistance 900; Shunt_Resistance 2700; Sensitivity 32.1 V/m/s; Sensor_Type groundVel"
+xml = "HG-6HT_LF10_RC900_RS2700_SG32.1_STgroundVel.xml"
+

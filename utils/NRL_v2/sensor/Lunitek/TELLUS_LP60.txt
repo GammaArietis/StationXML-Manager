@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[2000]
+description = "Lunitek; TELLUS; Long-Period_Corner 60 s; Sensitivity 2000 V/m/s; Sensor_Type groundVel"
+xml = "TELLUS_LP60_SG2000_STgroundVel.xml"
+

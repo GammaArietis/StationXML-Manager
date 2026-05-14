@@ -1,0 +1,27 @@
+[Main]
+question = "Select the SARA sensor model"
+
+[SS45]
+path="SS45.txt"
+
+[SS20]
+path="SS20.txt"
+
+[SS10]
+path="SS10.txt"
+
+[SS08]
+path="SS08.txt"
+
+[SS05]
+path="SS05.txt"
+
+[SS02]
+path="SS02.txt"
+
+[SS01]
+path="SS01.txt"
+
+[SA10]
+path="SA10.txt"
+

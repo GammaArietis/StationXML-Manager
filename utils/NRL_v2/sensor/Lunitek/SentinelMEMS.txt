@@ -1,0 +1,6 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[1150 Hz]
+path = "SentinelMEMS_HF1150.txt"
+

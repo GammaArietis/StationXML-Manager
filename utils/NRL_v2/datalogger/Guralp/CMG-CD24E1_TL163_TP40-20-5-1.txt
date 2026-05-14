@@ -1,0 +1,22 @@
+[Main]
+question = "What is the final sample rate?"
+
+[5 Hz]
+description = "Guralp; CMG-CD24E1; Tap_Table_Lookup 163; Taps 40-20-5-1; Final_Sample_Rate 5 Hz"
+xml = "CMG-CD24E1_TL163_TP40-20-5-1_FR5.xml"
+
+
+[40 Hz]
+description = "Guralp; CMG-CD24E1; Tap_Table_Lookup 163; Taps 40-20-5-1; Final_Sample_Rate 40 Hz"
+xml = "CMG-CD24E1_TL163_TP40-20-5-1_FR40.xml"
+
+
+[20 Hz]
+description = "Guralp; CMG-CD24E1; Tap_Table_Lookup 163; Taps 40-20-5-1; Final_Sample_Rate 20 Hz"
+xml = "CMG-CD24E1_TL163_TP40-20-5-1_FR20.xml"
+
+
+[1 Hz]
+description = "Guralp; CMG-CD24E1; Tap_Table_Lookup 163; Taps 40-20-5-1; Final_Sample_Rate 1 Hz"
+xml = "CMG-CD24E1_TL163_TP40-20-5-1_FR1.xml"
+

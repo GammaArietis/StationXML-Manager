@@ -1,0 +1,9 @@
+[Main]
+question = "What is the datalogger channel number(s)?"
+
+[2-3]
+path = "QEP_CH2-3.txt"
+
+[1]
+path = "QEP_CH1.txt"
+

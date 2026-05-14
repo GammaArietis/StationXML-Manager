@@ -1,0 +1,6 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[810]
+path = "L-4A_LF2_RC500_RS810.txt"
+

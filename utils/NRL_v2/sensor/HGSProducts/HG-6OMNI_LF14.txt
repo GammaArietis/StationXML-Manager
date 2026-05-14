@@ -1,0 +1,10 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[375]
+path = "HG-6OMNI_LF14_RC375.txt"
+
+
+[3500]
+path = "HG-6OMNI_LF14_RC3500.txt"
+

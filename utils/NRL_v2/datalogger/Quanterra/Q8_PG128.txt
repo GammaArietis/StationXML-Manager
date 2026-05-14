@@ -1,0 +1,10 @@
+[Main]
+question = "What is the highest simultaneous sample rate configured?"
+
+[belowOrEqual200 Hz]
+path = "Q8_PG128_HRbelowOrEqual200.txt"
+
+
+[above200 Hz]
+path = "Q8_PG128_HRabove200.txt"
+

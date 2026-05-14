@@ -1,0 +1,7 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[20 Hz]
+description = "Geotech; BB-13; High-Frequency_Corner 20 Hz; Sensitivity 102 V/m/s**2; Sensor_Type groundAccel"
+xml = "BB-13_HF20_SG102_STgroundAccel.xml"
+

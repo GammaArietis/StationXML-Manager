@@ -1,0 +1,15 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[64]
+path = "Wrangler_PG64.txt"
+
+[4]
+path = "Wrangler_PG4.txt"
+
+[1]
+path = "Wrangler_PG1.txt"
+
+[16]
+path = "Wrangler_PG16.txt"
+

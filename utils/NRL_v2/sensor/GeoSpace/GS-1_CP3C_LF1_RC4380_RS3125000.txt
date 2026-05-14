@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[383]
+description = "GeoSpace; GS-1; Component 3C; Low-Frequency_Corner 1 Hz; Coil_Resistance 4380; Shunt_Resistance 3125000; Sensitivity 383 V/m/s; Sensor_Type groundVel"
+xml = "GS-1_CP3C_LF1_RC4380_RS3125000_SG383_STgroundVel.xml"
+

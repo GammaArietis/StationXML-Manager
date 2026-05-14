@@ -1,0 +1,14 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[5Vpp]
+path = "SMART24_PG16_FV5Vpp.txt"
+
+
+[40Vpp]
+path = "SMART24_PG16_FV40Vpp.txt"
+
+
+[20Vpp]
+path = "SMART24_PG16_FV20Vpp.txt"
+

@@ -1,0 +1,10 @@
+[Main]
+question = "What is the final sample rate?"
+
+[5 Hz]
+path = "SMART24_PG1_FV5Vpp_PR25_FR5.txt"
+
+
+[25 Hz]
+path = "SMART24_PG1_FV5Vpp_PR25_FR25.txt"
+

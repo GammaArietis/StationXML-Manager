@@ -1,0 +1,10 @@
+[Main]
+question = "What is the final filter phase?"
+
+[MP]
+path = "SmartSolo-IGU-16_PD0_FR1000_FPMP.txt"
+
+
+[LP]
+path = "SmartSolo-IGU-16_PD0_FR1000_FPLP.txt"
+

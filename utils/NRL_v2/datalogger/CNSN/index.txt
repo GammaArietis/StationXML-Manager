@@ -1,0 +1,6 @@
+[Main]
+question = "Select the CNSN datalogger model"
+
+[GD2]
+path="GD2.txt"
+

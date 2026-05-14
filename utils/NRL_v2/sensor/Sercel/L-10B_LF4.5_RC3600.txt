@@ -1,0 +1,6 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[31247]
+path = "L-10B_LF4.5_RC3600_RS31247.txt"
+

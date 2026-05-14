@@ -1,0 +1,10 @@
+[Main]
+question = "How many output bits should be used?"
+
+[32]
+path = "D3-6-9HG_PG8_OB32.txt"
+
+
+[24]
+path = "D3-6-9HG_PG8_OB24.txt"
+

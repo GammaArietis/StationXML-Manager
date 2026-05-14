@@ -1,0 +1,12 @@
+[Main]
+question = "What is the final filter phase?"
+
+[Non-causal]
+description = "Kinemetrics; Obsidian; Preamp_Gain 4; Full-Scale_Voltage 5Vpp; Final_Sample_Rate 250 Hz; Final_Filter_Phase Non-causal"
+xml = "Obsidian_PG4_FV5Vpp_FR250_FPNon-causal.xml"
+
+
+[Causal]
+description = "Kinemetrics; Obsidian; Preamp_Gain 4; Full-Scale_Voltage 5Vpp; Final_Sample_Rate 250 Hz; Final_Filter_Phase Causal"
+xml = "Obsidian_PG4_FV5Vpp_FR250_FPCausal.xml"
+

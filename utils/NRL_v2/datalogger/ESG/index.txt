@@ -1,0 +1,6 @@
+[Main]
+question = "Select the ESG datalogger model"
+
+[LSPaladin5]
+path="LSPaladin5.txt"
+

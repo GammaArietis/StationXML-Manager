@@ -1,0 +1,6 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[2500]
+path = "HS-1LTmini_LF2_RC2500.txt"
+

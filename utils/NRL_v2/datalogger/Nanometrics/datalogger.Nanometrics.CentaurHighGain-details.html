@@ -1,0 +1,6 @@
+### Full-Scale Voltage
+When configuring the CentaurHighGain, the user sets the input (full-scale) voltage range.  Input range values of 10, 5, 2.5, 1, 0.5 and 0.25 Vpp correspond to gains of 4, 8, 16, 40, 80 and 160 respectively.
+### Final Filter Phase
+The operator can configure the digitizer to use linear-phase or minimum-phase decimation filters.
+### DC Filter
+The Library includes a response for a final IIR DC removal filter with a low-frequency corner of 1 mHz (0.001 Hz) as an example.  The filter corner can be set to any value of integer mHz between 1 and 1000 mHz.  For other corner frequency values, set the pole for this filter instead to the selected corner frequency times 2 * pi.

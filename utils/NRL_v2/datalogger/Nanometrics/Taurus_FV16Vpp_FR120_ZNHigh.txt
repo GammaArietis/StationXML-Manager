@@ -1,0 +1,12 @@
+[Main]
+question = "What is the DC removal/low pass filter setting?"
+
+[Off]
+description = "Nanometrics; Taurus; Full-Scale_Voltage 16Vpp; Final_Sample_Rate 120 Hz; Input_Impedance High; DC_Filter Off"
+xml = "Taurus_FV16Vpp_FR120_ZNHigh_DFOff.xml"
+
+
+[0.001]
+description = "Nanometrics; Taurus; Full-Scale_Voltage 16Vpp; Final_Sample_Rate 120 Hz; Input_Impedance High; DC_Filter 0.001"
+xml = "Taurus_FV16Vpp_FR120_ZNHigh_DF0.001.xml"
+

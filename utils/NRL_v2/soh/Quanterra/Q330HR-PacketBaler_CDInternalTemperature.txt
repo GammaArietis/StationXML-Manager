@@ -1,0 +1,6 @@
+[Main]
+question = "What is the sensitivity?"
+
+[1]
+path = "Q330HR-PacketBaler_CDInternalTemperature_SG1.txt"
+

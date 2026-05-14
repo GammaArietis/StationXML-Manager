@@ -1,0 +1,6 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[10Vp]
+path = "RT131A-02_CG3g_AFSF3000L_FV10Vp.txt"
+

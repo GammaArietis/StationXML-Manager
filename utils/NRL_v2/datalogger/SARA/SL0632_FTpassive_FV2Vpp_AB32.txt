@@ -1,0 +1,32 @@
+[Main]
+question = "What is the final sample rate?"
+
+[500 Hz]
+description = "SARA; SL0632; Feedback Type passive; Full-Scale_Voltage 2Vpp; ADC_Bits 32; Final_Sample_Rate 500 Hz"
+xml = "SL0632_FTpassive_FV2Vpp_AB32_FR500.xml"
+
+
+[50 Hz]
+description = "SARA; SL0632; Feedback Type passive; Full-Scale_Voltage 2Vpp; ADC_Bits 32; Final_Sample_Rate 50 Hz"
+xml = "SL0632_FTpassive_FV2Vpp_AB32_FR50.xml"
+
+
+[250 Hz]
+description = "SARA; SL0632; Feedback Type passive; Full-Scale_Voltage 2Vpp; ADC_Bits 32; Final_Sample_Rate 250 Hz"
+xml = "SL0632_FTpassive_FV2Vpp_AB32_FR250.xml"
+
+
+[200 Hz]
+description = "SARA; SL0632; Feedback Type passive; Full-Scale_Voltage 2Vpp; ADC_Bits 32; Final_Sample_Rate 200 Hz"
+xml = "SL0632_FTpassive_FV2Vpp_AB32_FR200.xml"
+
+
+[1000 Hz]
+description = "SARA; SL0632; Feedback Type passive; Full-Scale_Voltage 2Vpp; ADC_Bits 32; Final_Sample_Rate 1000 Hz"
+xml = "SL0632_FTpassive_FV2Vpp_AB32_FR1000.xml"
+
+
+[100 Hz]
+description = "SARA; SL0632; Feedback Type passive; Full-Scale_Voltage 2Vpp; ADC_Bits 32; Final_Sample_Rate 100 Hz"
+xml = "SL0632_FTpassive_FV2Vpp_AB32_FR100.xml"
+

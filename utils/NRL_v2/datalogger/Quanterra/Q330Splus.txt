@@ -1,0 +1,12 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[8]
+path = "Q330Splus_PG8.txt"
+
+[32]
+path = "Q330Splus_PG32.txt"
+
+[1]
+path = "Q330Splus_PG1.txt"
+

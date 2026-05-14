@@ -1,0 +1,9 @@
+[Main]
+question = "Which sensor component is this?"
+
+[Vertical]
+path = "CME-4211_CPVertical.txt"
+
+[Horizontal]
+path = "CME-4211_CPHorizontal.txt"
+

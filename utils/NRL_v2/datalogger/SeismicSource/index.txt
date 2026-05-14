@@ -1,0 +1,12 @@
+[Main]
+question = "Select the SeismicSource datalogger model"
+
+[Sigma4]
+path="Sigma4.txt"
+
+[Sigma3]
+path="Sigma3.txt"
+
+[DAQ3-3]
+path="DAQ3-3.txt"
+

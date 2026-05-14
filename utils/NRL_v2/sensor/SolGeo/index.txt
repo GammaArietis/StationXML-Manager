@@ -1,0 +1,6 @@
+[Main]
+question = "Select the SolGeo sensor model"
+
+[Veloget]
+path="Veloget.txt"
+

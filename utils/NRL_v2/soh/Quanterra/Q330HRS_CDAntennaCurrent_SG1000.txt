@@ -1,0 +1,7 @@
+[Main]
+question = "What is the final sample rate?"
+
+[0.1 Hz]
+description = "Quanterra; Q330HRS; Channel_Description AntennaCurrent; Sensitivity 1000; Final_Sample_Rate 0.1 Hz"
+xml = "Q330HRS_CDAntennaCurrent_SG1000_FR0.1.xml"
+

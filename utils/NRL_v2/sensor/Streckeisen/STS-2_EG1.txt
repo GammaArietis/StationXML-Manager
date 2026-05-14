@@ -1,0 +1,12 @@
+[Main]
+question = "What is the sensitivity?"
+
+[20000]
+description = "Streckeisen; STS-2; Electronics_Generation 1; Sensitivity 20000 V/m/s; Long-Period_Corner 120 s; Sensor_Type groundVel"
+xml = "STS-2_EG1_SG20000_LP120_STgroundVel.xml"
+
+
+[1500]
+description = "Streckeisen; STS-2; Electronics_Generation 1; Sensitivity 1500 V/m/s; Long-Period_Corner 120 s; Sensor_Type groundVel"
+xml = "STS-2_EG1_SG1500_LP120_STgroundVel.xml"
+

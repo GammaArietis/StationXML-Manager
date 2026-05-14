@@ -1,0 +1,10 @@
+[Main]
+question = "What is the serial number range?"
+
+[to2000224]
+path = "Gecko_PG1_SNto2000224.txt"
+
+
+[from2000225]
+path = "Gecko_PG1_SNfrom2000225.txt"
+

@@ -1,0 +1,18 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[8Vpp]
+path = "SL0624_FTactive_FV8Vpp.txt"
+
+
+[40Vpp]
+path = "SL0624_FTactive_FV40Vpp.txt"
+
+
+[20Vpp]
+path = "SL0624_FTactive_FV20Vpp.txt"
+
+
+[10Vpp]
+path = "SL0624_FTactive_FV10Vpp.txt"
+

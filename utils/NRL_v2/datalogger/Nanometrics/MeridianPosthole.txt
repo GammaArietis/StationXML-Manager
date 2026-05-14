@@ -1,0 +1,21 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[4Vpp]
+path = "MeridianPosthole_FV4Vpp.txt"
+
+[40Vpp]
+path = "MeridianPosthole_FV40Vpp.txt"
+
+[2Vpp]
+path = "MeridianPosthole_FV2Vpp.txt"
+
+[20Vpp]
+path = "MeridianPosthole_FV20Vpp.txt"
+
+[1Vpp]
+path = "MeridianPosthole_FV1Vpp.txt"
+
+[10Vpp]
+path = "MeridianPosthole_FV10Vpp.txt"
+

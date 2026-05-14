@@ -1,0 +1,37 @@
+[Main]
+question = "What is the final sample rate?"
+
+[500 Hz]
+description = "REFTEK; 72A06; Preamp_Gain 512; Word_Size 32 bits; Final_Sample_Rate 500 Hz"
+xml = "72A06_PG512_WS32_FR500.xml"
+
+
+[50 Hz]
+description = "REFTEK; 72A06; Preamp_Gain 512; Word_Size 32 bits; Final_Sample_Rate 50 Hz"
+xml = "72A06_PG512_WS32_FR50.xml"
+
+
+[250 Hz]
+description = "REFTEK; 72A06; Preamp_Gain 512; Word_Size 32 bits; Final_Sample_Rate 250 Hz"
+xml = "72A06_PG512_WS32_FR250.xml"
+
+
+[200 Hz]
+description = "REFTEK; 72A06; Preamp_Gain 512; Word_Size 32 bits; Final_Sample_Rate 200 Hz"
+xml = "72A06_PG512_WS32_FR200.xml"
+
+
+[125 Hz]
+description = "REFTEK; 72A06; Preamp_Gain 512; Word_Size 32 bits; Final_Sample_Rate 125 Hz"
+xml = "72A06_PG512_WS32_FR125.xml"
+
+
+[1000 Hz]
+description = "REFTEK; 72A06; Preamp_Gain 512; Word_Size 32 bits; Final_Sample_Rate 1000 Hz"
+xml = "72A06_PG512_WS32_FR1000.xml"
+
+
+[100 Hz]
+description = "REFTEK; 72A06; Preamp_Gain 512; Word_Size 32 bits; Final_Sample_Rate 100 Hz"
+xml = "72A06_PG512_WS32_FR100.xml"
+

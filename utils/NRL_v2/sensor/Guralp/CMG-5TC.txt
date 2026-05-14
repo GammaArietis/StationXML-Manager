@@ -1,0 +1,11 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[200 Hz]
+description = "Guralp; CMG-5TC; High-Frequency_Corner 200 Hz; Sensitivity 1.02 V/m/s**2; Sensor_Type groundAccel"
+xml = "CMG-5TC_HF200_SG1.02_STgroundAccel.xml"
+
+[100 Hz]
+description = "Guralp; CMG-5TC; High-Frequency_Corner 100 Hz; Sensitivity 1.02 V/m/s**2; Sensor_Type groundAccel"
+xml = "CMG-5TC_HF100_SG1.02_STgroundAccel.xml"
+

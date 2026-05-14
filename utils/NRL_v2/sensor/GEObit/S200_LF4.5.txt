@@ -1,0 +1,12 @@
+[Main]
+question = "What is the sensitivity?"
+
+[57.6]
+description = "GEObit; S200; Low-Frequency_Corner 4.5 Hz; Sensitivity 57.6 V/m/s; Sensor_Type groundVel"
+xml = "S200_LF4.5_SG57.6_STgroundVel.xml"
+
+
+[184]
+description = "GEObit; S200; Low-Frequency_Corner 4.5 Hz; Sensitivity 184 V/m/s; Sensor_Type groundVel"
+xml = "S200_LF4.5_SG184_STgroundVel.xml"
+

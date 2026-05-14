@@ -1,0 +1,6 @@
+[Main]
+question = "What are the taps (sample rate options in Hz) for this channel?"
+
+[1000-200-50-10-5]
+path = "CMG-6TD_TL55_TP1000-200-50-10-5.txt"
+

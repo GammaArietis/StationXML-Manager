@@ -1,0 +1,10 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[None]
+path = "L-4C_LF1_RC5500_RSNone.txt"
+
+
+[8905]
+path = "L-4C_LF1_RC5500_RS8905.txt"
+

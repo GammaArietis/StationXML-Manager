@@ -1,0 +1,18 @@
+[Main]
+question = "What is the final sample rate?"
+
+[500 Hz]
+path = "Sentinel-rev1_OSSentinelMEMS_FR500.txt"
+
+
+[250 Hz]
+path = "Sentinel-rev1_OSSentinelMEMS_FR250.txt"
+
+
+[125 Hz]
+path = "Sentinel-rev1_OSSentinelMEMS_FR125.txt"
+
+
+[1000 Hz]
+path = "Sentinel-rev1_OSSentinelMEMS_FR1000.txt"
+

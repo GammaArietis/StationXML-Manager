@@ -1,0 +1,12 @@
+[Main]
+question = "What is the anti-alias filter type?"
+
+[RTC]
+path = "SL06_AARTC.txt"
+
+[B]
+path = "SL06_AAB.txt"
+
+[A]
+path = "SL06_AAA.txt"
+

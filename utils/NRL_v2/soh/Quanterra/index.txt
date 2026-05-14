@@ -1,0 +1,12 @@
+[Main]
+question = "Select the Quanterra soh model"
+
+[Q330SR-PacketBaler]
+path="Q330SR-PacketBaler.txt"
+
+[Q330HRS]
+path="Q330HRS.txt"
+
+[Q330HR-PacketBaler]
+path="Q330HR-PacketBaler.txt"
+

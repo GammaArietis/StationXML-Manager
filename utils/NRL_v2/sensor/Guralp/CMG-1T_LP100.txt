@@ -1,0 +1,6 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[50 Hz]
+path = "CMG-1T_LP100_HF50.txt"
+

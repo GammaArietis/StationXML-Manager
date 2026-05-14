@@ -1,0 +1,6 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[9530]
+path = "GS-1LF_LF1_RC450_RS9530.txt"
+

@@ -1,0 +1,6 @@
+[Main]
+question = "What is the long-period corner?"
+
+[120 s]
+path = "Arolla_LP120.txt"
+

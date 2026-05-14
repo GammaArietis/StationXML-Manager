@@ -1,0 +1,11 @@
+[Main]
+question = "Which sensor component is this?"
+
+[Vertical]
+description = "EQMet; PBB-200S; Component Vertical; Long-Period_Corner 119 s; Sensitivity 1500 V/m/s; Sensor_Type groundVel"
+xml = "PBB-200S_CPVertical_LP119_SG1500_STgroundVel.xml"
+
+[Horizontal]
+description = "EQMet; PBB-200S; Component Horizontal; Long-Period_Corner 119 s; Sensitivity 1500 V/m/s; Sensor_Type groundVel"
+xml = "PBB-200S_CPHorizontal_LP119_SG1500_STgroundVel.xml"
+

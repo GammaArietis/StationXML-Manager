@@ -1,0 +1,6 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[374]
+path = "L-10AR_LF14_RC374.txt"
+

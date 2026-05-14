@@ -1,0 +1,6 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[104 Hz]
+path = "S100_LP10_MV33_HF104.txt"
+

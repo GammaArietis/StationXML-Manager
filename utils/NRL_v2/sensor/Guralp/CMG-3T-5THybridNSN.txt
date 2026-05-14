@@ -1,0 +1,6 @@
+[Main]
+question = "What is the long-period corner?"
+
+[32 s]
+path = "CMG-3T-5THybridNSN_LP32.txt"
+

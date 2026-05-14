@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[12.5]
+description = "Sprengnether; S6000; Low-Frequency_Corner 2 Hz; Coil_Resistance 640; Shunt_Resistance 213.3; Sensitivity 12.5 V/m/s; Sensor_Type groundVel"
+xml = "S6000_LF2_RC640_RS213.3_SG12.5_STgroundVel.xml"
+

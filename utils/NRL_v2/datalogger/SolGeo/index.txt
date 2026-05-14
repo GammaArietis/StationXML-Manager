@@ -1,0 +1,12 @@
+[Main]
+question = "Select the SolGeo datalogger model"
+
+[EDAX24]
+path="EDAX24.txt"
+
+[DYMAS32]
+path="DYMAS32.txt"
+
+[DYMAS24]
+path="DYMAS24.txt"
+

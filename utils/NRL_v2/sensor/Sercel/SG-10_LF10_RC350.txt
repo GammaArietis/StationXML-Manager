@@ -1,0 +1,7 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[None]
+description = "Sercel; SG-10; Low-Frequency_Corner 10 Hz; Coil_Resistance 350; Shunt_Resistance None; Sensitivity 22.48 V/m/s; Sensor_Type groundVel"
+xml = "SG-10_LF10_RC350_RSNone_SG22.48_STgroundVel.xml"
+

@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[4.077471]
+description = "Lunitek; LK-307-115; High-Frequency_Corner 80 Hz; Clip_Level 0.5g; Full-Scale_Voltage 20Vp; Output_Wiring Single-ended; Sensitivity 4.077471 V/m/s**2; Sensor_Type groundAccel"
+xml = "LK-307-115_HF80_CG0.5g_FV20Vp_OWSingle-ended_SG4.077471_STgroundAccel.xml"
+

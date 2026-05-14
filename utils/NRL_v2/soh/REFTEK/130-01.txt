@@ -1,0 +1,7 @@
+[Main]
+question = "Which is the channel description?"
+
+[MassPosition]
+description = "REFTEK; 130-01; Channel_Description MassPosition; Sensitivity 3276.54; Final_Sample_Rate 0.1 Hz"
+xml = "130-01_CDMassPosition_SG3276.54_FR0.1.xml"
+

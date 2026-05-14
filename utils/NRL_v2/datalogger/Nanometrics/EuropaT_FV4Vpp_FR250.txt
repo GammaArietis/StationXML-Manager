@@ -1,0 +1,12 @@
+[Main]
+question = "What is the DC removal/low pass filter setting?"
+
+[Off]
+description = "Nanometrics; EuropaT; Full-Scale_Voltage 4Vpp; Final_Sample_Rate 250 Hz; DC_Filter Off"
+xml = "EuropaT_FV4Vpp_FR250_DFOff.xml"
+
+
+[0.001]
+description = "Nanometrics; EuropaT; Full-Scale_Voltage 4Vpp; Final_Sample_Rate 250 Hz; DC_Filter 0.001"
+xml = "EuropaT_FV4Vpp_FR250_DF0.001.xml"
+

@@ -1,0 +1,30 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[8Vpp]
+path = "GAIA-IV_FV8Vpp.txt"
+
+[5Vpp]
+path = "GAIA-IV_FV5Vpp.txt"
+
+[4Vpp]
+path = "GAIA-IV_FV4Vpp.txt"
+
+[40Vpp]
+path = "GAIA-IV_FV40Vpp.txt"
+
+[2Vpp]
+path = "GAIA-IV_FV2Vpp.txt"
+
+[20Vpp]
+path = "GAIA-IV_FV20Vpp.txt"
+
+[2.5Vpp]
+path = "GAIA-IV_FV2.5Vpp.txt"
+
+[16Vpp]
+path = "GAIA-IV_FV16Vpp.txt"
+
+[10Vpp]
+path = "GAIA-IV_FV10Vpp.txt"
+

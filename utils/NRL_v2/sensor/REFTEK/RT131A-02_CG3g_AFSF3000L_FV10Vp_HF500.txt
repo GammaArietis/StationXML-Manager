@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[0.33991]
+description = "REFTEK; RT131A-02; Clip_Level 3g; Analog_Filter_Type SF3000L; Full-Scale_Voltage 10Vp; High-Frequency_Corner 500 Hz; Sensitivity 0.33991 V/m/s**2; Sensor_Type groundAccel"
+xml = "RT131A-02_CG3g_AFSF3000L_FV10Vp_HF500_SG0.33991_STgroundAccel.xml"
+

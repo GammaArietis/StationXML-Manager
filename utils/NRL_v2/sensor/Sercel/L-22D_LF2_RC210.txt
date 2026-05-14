@@ -1,0 +1,6 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[857]
+path = "L-22D_LF2_RC210_RS857.txt"
+

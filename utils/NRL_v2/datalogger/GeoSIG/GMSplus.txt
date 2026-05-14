@@ -1,0 +1,9 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[2.5Vp]
+path = "GMSplus_FV2.5Vp.txt"
+
+[10Vp]
+path = "GMSplus_FV10Vp.txt"
+

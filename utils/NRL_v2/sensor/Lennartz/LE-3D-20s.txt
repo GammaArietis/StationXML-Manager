@@ -1,0 +1,7 @@
+[Main]
+question = "What is the long-period corner?"
+
+[20 s]
+description = "Lennartz; LE-3D-20s; Long-Period_Corner 20 s; Sensitivity 1000 V/m/s; Sensor_Type groundVel"
+xml = "LE-3D-20s_LP20_SG1000_STgroundVel.xml"
+

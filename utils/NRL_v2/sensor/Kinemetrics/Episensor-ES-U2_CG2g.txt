@@ -1,0 +1,18 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[5Vp]
+path = "Episensor-ES-U2_CG2g_FV5Vp.txt"
+
+
+[20Vp]
+path = "Episensor-ES-U2_CG2g_FV20Vp.txt"
+
+
+[2.5Vp]
+path = "Episensor-ES-U2_CG2g_FV2.5Vp.txt"
+
+
+[10Vp]
+path = "Episensor-ES-U2_CG2g_FV10Vp.txt"
+

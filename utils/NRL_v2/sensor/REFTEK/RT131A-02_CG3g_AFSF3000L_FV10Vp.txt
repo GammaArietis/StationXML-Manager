@@ -1,0 +1,6 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[500 Hz]
+path = "RT131A-02_CG3g_AFSF3000L_FV10Vp_HF500.txt"
+

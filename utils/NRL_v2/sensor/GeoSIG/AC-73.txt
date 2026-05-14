@@ -1,0 +1,18 @@
+[Main]
+question = "What is the accelerometer clip level in +/-g?"
+
+[4g]
+path = "AC-73_CG4g.txt"
+
+[3g]
+path = "AC-73_CG3g.txt"
+
+[2g]
+path = "AC-73_CG2g.txt"
+
+[1g]
+path = "AC-73_CG1g.txt"
+
+[0.5g]
+path = "AC-73_CG0.5g.txt"
+

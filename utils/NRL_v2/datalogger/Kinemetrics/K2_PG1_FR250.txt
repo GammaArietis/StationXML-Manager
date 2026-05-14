@@ -1,0 +1,12 @@
+[Main]
+question = "What is the final filter phase?"
+
+[Non-causal]
+description = "Kinemetrics; K2; Preamp_Gain 1; Final_Sample_Rate 250 Hz; Final_Filter_Phase Non-causal"
+xml = "K2_PG1_FR250_FPNon-causal.xml"
+
+
+[Causal]
+description = "Kinemetrics; K2; Preamp_Gain 1; Final_Sample_Rate 250 Hz; Final_Filter_Phase Causal"
+xml = "K2_PG1_FR250_FPCausal.xml"
+

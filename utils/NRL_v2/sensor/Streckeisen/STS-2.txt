@@ -1,0 +1,12 @@
+[Main]
+question = "What is the feedback electronics generation?"
+
+[3]
+path = "STS-2_EG3.txt"
+
+[2]
+path = "STS-2_EG2.txt"
+
+[1]
+path = "STS-2_EG1.txt"
+

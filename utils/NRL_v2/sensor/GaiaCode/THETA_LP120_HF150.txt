@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[2400]
+description = "GaiaCode; THETA; Long-Period_Corner 120 s; High-Frequency_Corner 150 Hz; Sensitivity 2400 V/m/s; Sensor_Type groundVel"
+xml = "THETA_LP120_HF150_SG2400_STgroundVel.xml"
+

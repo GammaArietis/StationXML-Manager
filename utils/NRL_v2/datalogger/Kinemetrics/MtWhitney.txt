@@ -1,0 +1,18 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[3]
+path = "MtWhitney_PG3.txt"
+
+[30]
+path = "MtWhitney_PG30.txt"
+
+[1]
+path = "MtWhitney_PG1.txt"
+
+[10]
+path = "MtWhitney_PG10.txt"
+
+[100]
+path = "MtWhitney_PG100.txt"
+

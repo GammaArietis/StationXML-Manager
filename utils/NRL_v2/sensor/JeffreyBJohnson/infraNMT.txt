@@ -1,0 +1,7 @@
+[Main]
+question = "What is the long-period corner?"
+
+[33.3 s]
+description = "JeffreyBJohnson; infraNMT; Long-Period_Corner 33.3 s; Sensitivity 0.000026 V/Pa; Sensor_Type airPressure"
+xml = "infraNMT_LP33.3_SG0.000026_STairPressure.xml"
+

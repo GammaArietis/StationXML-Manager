@@ -1,0 +1,6 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[395]
+path = "GS-30CT_LF10_RC395.txt"
+

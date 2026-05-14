@@ -1,0 +1,14 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[None]
+path = "HG-6OMNI_LF14_RC3500_RSNone.txt"
+
+
+[5100]
+path = "HG-6OMNI_LF14_RC3500_RS5100.txt"
+
+
+[3400]
+path = "HG-6OMNI_LF14_RC3500_RS3400.txt"
+

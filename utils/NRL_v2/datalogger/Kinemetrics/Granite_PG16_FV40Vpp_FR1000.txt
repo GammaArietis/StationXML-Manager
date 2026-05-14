@@ -1,0 +1,12 @@
+[Main]
+question = "What is the final filter phase?"
+
+[Non-causal]
+description = "Kinemetrics; Granite; Preamp_Gain 16; Full-Scale_Voltage 40Vpp; Final_Sample_Rate 1000 Hz; Final_Filter_Phase Non-causal"
+xml = "Granite_PG16_FV40Vpp_FR1000_FPNon-causal.xml"
+
+
+[Causal]
+description = "Kinemetrics; Granite; Preamp_Gain 16; Full-Scale_Voltage 40Vpp; Final_Sample_Rate 1000 Hz; Final_Filter_Phase Causal"
+xml = "Granite_PG16_FV40Vpp_FR1000_FPCausal.xml"
+

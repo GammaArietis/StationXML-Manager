@@ -1,0 +1,7 @@
+[Main]
+question = "Select the GenericUnity datalogger model"
+
+[UnityDatalogger]
+description = "GenericUnity; UnityDatalogger; Final_Sample_Rate 40 Hz"
+xml = "UnityDatalogger_FR40.xml"
+

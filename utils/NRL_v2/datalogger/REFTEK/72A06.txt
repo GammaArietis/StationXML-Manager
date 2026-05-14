@@ -1,0 +1,24 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[8]
+path = "72A06_PG8.txt"
+
+[8192]
+path = "72A06_PG8192.txt"
+
+[512]
+path = "72A06_PG512.txt"
+
+[32]
+path = "72A06_PG32.txt"
+
+[2048]
+path = "72A06_PG2048.txt"
+
+[1]
+path = "72A06_PG1.txt"
+
+[128]
+path = "72A06_PG128.txt"
+

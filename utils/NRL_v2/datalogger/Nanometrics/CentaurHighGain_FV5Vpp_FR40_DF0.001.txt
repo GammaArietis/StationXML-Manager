@@ -1,0 +1,12 @@
+[Main]
+question = "What is the final filter phase?"
+
+[Minimum]
+description = "Nanometrics; CentaurHighGain; Full-Scale_Voltage 5Vpp; Final_Sample_Rate 40 Hz; DC_Filter 0.001; Final_Filter_Phase Minimum"
+xml = "CentaurHighGain_FV5Vpp_FR40_DF0.001_FPMinimum.xml"
+
+
+[Linear]
+description = "Nanometrics; CentaurHighGain; Full-Scale_Voltage 5Vpp; Final_Sample_Rate 40 Hz; DC_Filter 0.001; Final_Filter_Phase Linear"
+xml = "CentaurHighGain_FV5Vpp_FR40_DF0.001_FPLinear.xml"
+

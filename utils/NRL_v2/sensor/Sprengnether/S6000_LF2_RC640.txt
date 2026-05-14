@@ -1,0 +1,6 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[213.3]
+path = "S6000_LF2_RC640_RS213.3.txt"
+

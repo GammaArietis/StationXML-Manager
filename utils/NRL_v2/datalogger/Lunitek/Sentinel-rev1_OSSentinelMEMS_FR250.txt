@@ -1,0 +1,7 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[10Vpp]
+description = "Lunitek; Sentinel-rev1; Onboard_Sensor SentinelMEMS; Final_Sample_Rate 250 Hz; Full-Scale_Voltage 10Vpp"
+xml = "Sentinel-rev1_OSSentinelMEMS_FR250_FV10Vpp.xml"
+

@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[78.7]
+description = "DTCC; DT-SOLO; Low-Frequency_Corner 10 Hz; Coil_Resistance 1800; Shunt_Resistance 20000; Sensitivity 78.7 V/m/s; Sensor_Type groundVel"
+xml = "DT-SOLO_LF10_RC1800_RS20000_SG78.7_STgroundVel.xml"
+

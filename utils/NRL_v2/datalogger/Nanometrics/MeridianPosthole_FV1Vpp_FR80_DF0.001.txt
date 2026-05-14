@@ -1,0 +1,7 @@
+[Main]
+question = "What is the final filter phase?"
+
+[Linear]
+description = "Nanometrics; MeridianPosthole; Full-Scale_Voltage 1Vpp; Final_Sample_Rate 80 Hz; DC_Filter 0.001; Final_Filter_Phase Linear"
+xml = "MeridianPosthole_FV1Vpp_FR80_DF0.001_FPLinear.xml"
+

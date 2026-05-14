@@ -1,0 +1,9 @@
+[Main]
+question = "What is the low-frequency corner?"
+
+[4.5 Hz]
+path = "GS-11D_LF4.5.txt"
+
+[10 Hz]
+path = "GS-11D_LF10.txt"
+

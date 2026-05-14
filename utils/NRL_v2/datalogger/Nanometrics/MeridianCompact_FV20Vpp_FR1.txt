@@ -1,0 +1,10 @@
+[Main]
+question = "What is the DC removal/low pass filter setting?"
+
+[Off]
+path = "MeridianCompact_FV20Vpp_FR1_DFOff.txt"
+
+
+[0.001]
+path = "MeridianCompact_FV20Vpp_FR1_DF0.001.txt"
+

@@ -1,0 +1,9 @@
+[Main]
+question = "What is the feedback electronics board type?"
+
+[Velocity]
+path = "LPZA_FBVelocity.txt"
+
+[Acceleration]
+path = "LPZA_FBAcceleration.txt"
+

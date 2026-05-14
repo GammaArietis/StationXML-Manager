@@ -1,0 +1,12 @@
+[Main]
+question = "What is the accelerometer clip level in +/-g?"
+
+[5g]
+path = "EA-140_CG5g.txt"
+
+[2g]
+path = "EA-140_CG2g.txt"
+
+[0.5g]
+path = "EA-140_CG0.5g.txt"
+

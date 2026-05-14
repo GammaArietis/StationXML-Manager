@@ -1,0 +1,6 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[100000]
+path = "GS-1_CPvertical_LF1_RC4550_RS100000.txt"
+

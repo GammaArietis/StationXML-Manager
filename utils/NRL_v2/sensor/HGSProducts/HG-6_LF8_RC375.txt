@@ -1,0 +1,6 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[1500]
+path = "HG-6_LF8_RC375_RS1500.txt"
+

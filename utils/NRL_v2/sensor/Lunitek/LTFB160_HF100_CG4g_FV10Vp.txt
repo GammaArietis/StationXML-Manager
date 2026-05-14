@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[0.255]
+description = "Lunitek; LTFB160; High-Frequency_Corner 100 Hz; Clip_Level 4g; Full-Scale_Voltage 10Vp; Sensitivity 0.255 V/m/s**2; Sensor_Type groundAccel"
+xml = "LTFB160_HF100_CG4g_FV10Vp_SG0.255_STgroundAccel.xml"
+

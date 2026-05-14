@@ -1,0 +1,6 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[380]
+path = "GS-11D_LF10_RC380.txt"
+

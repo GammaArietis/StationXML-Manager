@@ -1,0 +1,9 @@
+[Main]
+question = "Select the Hyperion sensor model"
+
+[IFS-4000]
+path="IFS-4000.txt"
+
+[5313A]
+path="5313A.txt"
+

@@ -1,0 +1,12 @@
+[Main]
+question = "What is the decimation filter type?"
+
+[VLP389]
+description = "Quanterra; Q330HR; Preamp_Gain 1; Final_Sample_Rate 0.1 Hz; ADC_Type HR; Linear_Filter_Rates below20; Decimation_Filter VLP389"
+xml = "Q330HR_PG1_FR0.1_ADHR_LRbelow20_DEVLP389.xml"
+
+
+[DEC10]
+description = "Quanterra; Q330HR; Preamp_Gain 1; Final_Sample_Rate 0.1 Hz; ADC_Type HR; Linear_Filter_Rates below20; Decimation_Filter DEC10"
+xml = "Q330HR_PG1_FR0.1_ADHR_LRbelow20_DEDEC10.xml"
+

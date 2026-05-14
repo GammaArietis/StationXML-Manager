@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[23.49]
+description = "HGSProducts; HG-11; Low-Frequency_Corner 30 Hz; Coil_Resistance 360; Shunt_Resistance 1300; Sensitivity 23.49 V/m/s; Sensor_Type groundVel"
+xml = "HG-11_LF30_RC360_RS1300_SG23.49_STgroundVel.xml"
+

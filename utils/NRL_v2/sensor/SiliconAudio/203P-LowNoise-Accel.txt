@@ -1,0 +1,12 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[60Vpp]
+path = "203P-LowNoise-Accel_FV60Vpp.txt"
+
+[5Vpp]
+path = "203P-LowNoise-Accel_FV5Vpp.txt"
+
+[20Vpp]
+path = "203P-LowNoise-Accel_FV20Vpp.txt"
+

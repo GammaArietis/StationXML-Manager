@@ -1,0 +1,6 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[395]
+path = "JF-30DX_LF10_RC395.txt"
+

@@ -1,0 +1,6 @@
+[Main]
+question = "Which version is this model?"
+
+[30]
+path = "C100_LP5_MV30.txt"
+

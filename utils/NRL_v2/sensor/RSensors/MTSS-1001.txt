@@ -1,0 +1,6 @@
+[Main]
+question = "What is the low-frequency corner?"
+
+[1 Hz]
+path = "MTSS-1001_LF1.txt"
+

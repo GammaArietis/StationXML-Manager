@@ -1,0 +1,6 @@
+[Main]
+question = "What is the low-frequency corner?"
+
+[4.5 Hz]
+path = "PS-4.5C1_LF4.5.txt"
+

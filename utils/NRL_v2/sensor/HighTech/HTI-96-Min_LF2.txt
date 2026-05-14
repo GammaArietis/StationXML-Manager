@@ -1,0 +1,7 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[300000 Hz]
+description = "HighTech; HTI-96-Min; Low-Frequency_Corner 2 Hz; High-Frequency_Corner 300000 Hz; Sensitivity 0.36 V/Pa; Sensor_Type airPressure"
+xml = "HTI-96-Min_LF2_HF300000_SG0.36_STairPressure.xml"
+

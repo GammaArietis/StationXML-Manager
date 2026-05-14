@@ -1,0 +1,10 @@
+[Main]
+question = "What is the firmware version?"
+
+[920812N]
+path = "Q380_FR0.01_FW920812N.txt"
+
+
+[900616]
+path = "Q380_FR0.01_FW900616.txt"
+

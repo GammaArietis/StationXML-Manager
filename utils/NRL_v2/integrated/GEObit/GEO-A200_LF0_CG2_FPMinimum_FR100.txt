@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[679698.78]
+description = "GEObit; GEO-A200; Low-Frequency_Corner 0 Hz; Clip_Level 2; Final_Filter_Phase Minimum; Final_Sample_Rate 100 Hz; Sensitivity 679698.78"
+xml = "GEO-A200_LF0_CG2_FPMinimum_FR100_SG679698.78.xml"
+

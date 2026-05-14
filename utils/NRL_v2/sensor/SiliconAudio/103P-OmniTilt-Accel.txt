@@ -1,0 +1,9 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[5Vpp]
+path = "103P-OmniTilt-Accel_FV5Vpp.txt"
+
+[15Vpp]
+path = "103P-OmniTilt-Accel_FV15Vpp.txt"
+

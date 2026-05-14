@@ -1,0 +1,7 @@
+[Main]
+question = "What is the long-period corner?"
+
+[30 s]
+description = "Guralp; CMG-EDU-T; Long-Period_Corner 30 s; Sensitivity 2400 V/m/s; Sensor_Type groundVel"
+xml = "CMG-EDU-T_LP30_SG2400_STgroundVel.xml"
+

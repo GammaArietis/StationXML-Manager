@@ -1,0 +1,15 @@
+[Main]
+question = "What is the final sample rate?"
+
+[250 Hz]
+description = "Kinemetrics; Etna; Final_Sample_Rate 250 Hz"
+xml = "Etna_FR250.xml"
+
+[200 Hz]
+description = "Kinemetrics; Etna; Final_Sample_Rate 200 Hz"
+xml = "Etna_FR200.xml"
+
+[100 Hz]
+description = "Kinemetrics; Etna; Final_Sample_Rate 100 Hz"
+xml = "Etna_FR100.xml"
+

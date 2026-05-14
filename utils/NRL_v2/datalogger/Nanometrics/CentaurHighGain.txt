@@ -1,0 +1,21 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[5Vpp]
+path = "CentaurHighGain_FV5Vpp.txt"
+
+[2.5Vpp]
+path = "CentaurHighGain_FV2.5Vpp.txt"
+
+[1Vpp]
+path = "CentaurHighGain_FV1Vpp.txt"
+
+[10Vpp]
+path = "CentaurHighGain_FV10Vpp.txt"
+
+[0.5Vpp]
+path = "CentaurHighGain_FV0.5Vpp.txt"
+
+[0.25Vpp]
+path = "CentaurHighGain_FV0.25Vpp.txt"
+

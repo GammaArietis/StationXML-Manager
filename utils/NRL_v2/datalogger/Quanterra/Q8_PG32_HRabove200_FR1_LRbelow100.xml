@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<FDSNStationXML xmlns="http://www.fdsn.org/xml/station/1" schemaVersion="1.1">
+  <Source>IRIS-DMC</Source>
+  <Module>IRIS NRL service | version: 1</Module>
+  <ModuleURI>https://service.iris.edu/irisws/nrl/1/</ModuleURI>
+  <Created>2026-04-20T01:00:03.466603Z</Created>
+  <Network code="XX" startDate="1970-01-01T00:00:00Z">
+    <Station code="YY" startDate="1970-01-01T00:00:00Z">
+      <Comment>
+        <Value>This is a comment.</Value>
+      </Comment>
+      <Latitude>0.0</Latitude>
+      <Longitude>0.0</Longitude>
+      <Elevation>0.0</Elevation>
+      <Site>
+        <Name>Long site name</Name>
+      </Site>
+      <Channel code="ZZZ" locationCode="00" startDate="1970-01-01T00:00:00Z">
+        <Latitude>0.0</Latitude>
+        <Longitude>0.0</Longitude>
+        <Elevation>0.0</Elevation>
+        <Depth>0.0</Depth>
+        <Azimuth>0.0</Azimuth>
+        <Dip>0.0</Dip>
+        <SampleRate>1</SampleRate>
+        <Sensor>
+          <Description>The sensor name</Description>
+        </Sensor>
+        <Response>
+          <InstrumentSensitivity>
+            <Value>+1.36225E+07</Value>
+            <Frequency>0.25</Frequency>
+            <InputUnits>
+              <Name>V</Name>
+              <Description>Volt</Description>
+            </InputUnits>
+            <OutputUnits>
+              <Name>count</Name>
+              <Description>Digital Counts</Description>
+            </OutputUnits>
+          </InstrumentSensitivity>
+          <Stage number="1" resourceId="NRL:AnaPAZ_IUV_NZ0_NP0_PHd41d8cd_AN1_FN1::NRL:Gain_SG32_FN1">
+            <PolesZeros>
+              <InputUnits>
+                <Name>V</Name>
+                <Description>Volt</Description>
+              </InputUnits>
+              <OutputUnits>
+                <Name>V</Name>
+                <Description>Volt</Description>
+              </OutputUnits>
+              <PzTransferFunctionType>LAPLACE (RADIANS/SECOND)</PzTransferFunctionType>
+              <NormalizationFactor>1</NormalizationFactor>
+              <NormalizationFrequency>1</NormalizationFrequency>
+            </PolesZeros>
+            <StageGain>
+              <Value>32</Value>
+              <Frequency>1</Frequency>
+            </StageGain>
+          </Stage>
+          <Stage number="2" resourceId="NRL:ADC_SF419430_IR1_ED0">
+            <Coefficients>
+              <InputUnits>
+                <Name>V</Name>
+                <Description>Volt</Description>
+              </InputUnits>
+              <OutputUnits>
+                <Name>count</Name>
+                <Description>Digital Counts</Description>
+              </OutputUnits>
+              <CfTransferFunctionType>DIGITAL</CfTransferFunctionType>
+              <Numerator number="0">1.000000e+00</Numerator>
+            </Coefficients>
+            <Decimation>
+              <InputSampleRate>1</InputSampleRate>
+              <Factor>1</Factor>
+              <Offset>0</Offset>
+              <Delay>0</Delay>
+              <Correction>0</Correction>
+            </Decimation>
+            <StageGain>
+              <Value>419430</Value>
+              <Frequency>0</Frequency>
+            </StageGain>
+          </Stage>
+          <Stage number="3" resourceId="NRL:Dec_IR1_OR1_NS1-DC32-1_NH1fe40fa">
+            <Coefficients>
+              <InputUnits>
+                <Name>count</Name>
+                <Description>Digital Counts</Description>
+              </InputUnits>
+              <OutputUnits>
+                <Name>count</Name>
+                <Description>Digital Counts</Description>
+              </OutputUnits>
+              <CfTransferFunctionType>DIGITAL</CfTransferFunctionType>
+              <Numerator number="0">0.000000e+00</Numerator>
+              <Numerator number="1">-1.019883e-13</Numerator>
+              <Numerator number="2">-4.706900e-10</Numerator>
+              <Numerator number="3">-1.199527e-07</Numerator>
+              <Numerator number="4">5.400951e-07</Numerator>
+              <Numerator number="5">2.181262e-04</Numerator>
+              <Numerator number="6">1.022851e-03</Numerator>
+              <Numerator number="7">-2.402046e-03</Numerator>
+              <Numerator number="8">-7.216864e-03</Numerator>
+              <Numerator number="9">1.023874e-02</Numerator>
+              <Numerator number="10">2.585060e-03</Numerator>
+              <Numerator number="11">-3.200049e-02</Numerator>
+              <Numerator number="12">4.476857e-02</Numerator>
+              <Numerator number="13">4.205698e-03</Numerator>
+              <Numerator number="14">-1.309215e-01</Numerator>
+              <Numerator number="15">3.049268e-01</Numerator>
+              <Numerator number="16">6.931742e-01</Numerator>
+              <Numerator number="17">2.130356e-01</Numerator>
+              <Numerator number="18">-1.360363e-01</Numerator>
+              <Numerator number="19">2.829085e-02</Numerator>
+              <Numerator number="20">3.120478e-02</Numerator>
+              <Numerator number="21">-3.234471e-02</Numerator>
+              <Numerator number="22">8.008233e-03</Numerator>
+              <Numerator number="23">7.101360e-03</Numerator>
+              <Numerator number="24">-7.556143e-03</Numerator>
+              <Numerator number="25">-1.413053e-03</Numerator>
+              <Numerator number="26">9.673842e-04</Numerator>
+              <Numerator number="27">1.433119e-04</Numerator>
+              <Numerator number="28">-7.981809e-07</Numerator>
+              <Numerator number="29">-8.483921e-08</Numerator>
+              <Numerator number="30">3.231746e-10</Numerator>
+              <Numerator number="31">1.468943e-13</Numerator>
+            </Coefficients>
+            <Decimation>
+              <InputSampleRate>1</InputSampleRate>
+              <Factor>1</Factor>
+              <Offset>0</Offset>
+              <Delay>15.5</Delay>
+              <Correction>15.5</Correction>
+            </Decimation>
+            <StageGain>
+              <Value>1</Value>
+              <Frequency>0</Frequency>
+            </StageGain>
+          </Stage>
+        </Response>
+      </Channel>
+    </Station>
+  </Network>
+</FDSNStationXML>
+

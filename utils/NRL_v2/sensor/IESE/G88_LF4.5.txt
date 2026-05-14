@@ -1,0 +1,6 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[3810]
+path = "G88_LF4.5_RC3810.txt"
+

@@ -1,0 +1,15 @@
+PyQt6
+obspy
+requests
+numpy
+scipy
+matplotlib
+PyYAML
+jsonschema
+jsonref
+pydantic
+pydantic-settings
+fastapi
+uvicorn
+nicegui
+pytest>=7.4

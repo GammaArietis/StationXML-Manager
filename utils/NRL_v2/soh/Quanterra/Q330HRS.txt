@@ -1,0 +1,30 @@
+[Main]
+question = "Which is the channel description?"
+
+[SystemCurrent]
+path = "Q330HRS_CDSystemCurrent.txt"
+
+[MassPosition]
+path = "Q330HRS_CDMassPosition.txt"
+
+[InternalTemperature]
+path = "Q330HRS_CDInternalTemperature.txt"
+
+[InputVoltage]
+path = "Q330HRS_CDInputVoltage.txt"
+
+[CrystalOscillator]
+path = "Q330HRS_CDCrystalOscillator.txt"
+
+[ClockQuality]
+path = "Q330HRS_CDClockQuality.txt"
+
+[ClockError]
+path = "Q330HRS_CDClockError.txt"
+
+[BufferUsage]
+path = "Q330HRS_CDBufferUsage.txt"
+
+[AntennaCurrent]
+path = "Q330HRS_CDAntennaCurrent.txt"
+

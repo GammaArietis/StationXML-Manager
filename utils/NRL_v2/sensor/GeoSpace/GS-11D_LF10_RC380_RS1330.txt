@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[24.8]
+description = "GeoSpace; GS-11D; Low-Frequency_Corner 10 Hz; Coil_Resistance 380; Shunt_Resistance 1330; Sensitivity 24.8 V/m/s; Sensor_Type groundVel"
+xml = "GS-11D_LF10_RC380_RS1330_SG24.8_STgroundVel.xml"
+

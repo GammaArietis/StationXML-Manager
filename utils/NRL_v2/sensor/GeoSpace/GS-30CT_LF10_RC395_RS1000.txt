@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[19.7]
+description = "GeoSpace; GS-30CT; Low-Frequency_Corner 10 Hz; Coil_Resistance 395; Shunt_Resistance 1000; Sensitivity 19.7 V/m/s; Sensor_Type groundVel"
+xml = "GS-30CT_LF10_RC395_RS1000_SG19.7_STgroundVel.xml"
+

@@ -1,0 +1,27 @@
+[Main]
+question = "What is the final sample rate?"
+
+[500 Hz]
+path = "GEOwarning_FR500.txt"
+
+[4000 Hz]
+path = "GEOwarning_FR4000.txt"
+
+[250 Hz]
+path = "GEOwarning_FR250.txt"
+
+[200 Hz]
+path = "GEOwarning_FR200.txt"
+
+[2000 Hz]
+path = "GEOwarning_FR2000.txt"
+
+[125 Hz]
+path = "GEOwarning_FR125.txt"
+
+[100 Hz]
+path = "GEOwarning_FR100.txt"
+
+[1000 Hz]
+path = "GEOwarning_FR1000.txt"
+

@@ -1,0 +1,27 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[8]
+path = "Pebble_PG8.txt"
+
+[64]
+path = "Pebble_PG64.txt"
+
+[4]
+path = "Pebble_PG4.txt"
+
+[32]
+path = "Pebble_PG32.txt"
+
+[2]
+path = "Pebble_PG2.txt"
+
+[1]
+path = "Pebble_PG1.txt"
+
+[16]
+path = "Pebble_PG16.txt"
+
+[128]
+path = "Pebble_PG128.txt"
+

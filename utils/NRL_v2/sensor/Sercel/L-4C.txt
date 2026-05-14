@@ -1,0 +1,6 @@
+[Main]
+question = "What is the low-frequency corner?"
+
+[1 Hz]
+path = "L-4C_LF1.txt"
+

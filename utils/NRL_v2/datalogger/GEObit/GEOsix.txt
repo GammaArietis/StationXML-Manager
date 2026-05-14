@@ -1,0 +1,24 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[6Vpp]
+path = "GEOsix_FV6Vpp.txt"
+
+[40Vpp]
+path = "GEOsix_FV40Vpp.txt"
+
+[20Vpp]
+path = "GEOsix_FV20Vpp.txt"
+
+[2.5Vpp]
+path = "GEOsix_FV2.5Vpp.txt"
+
+[10Vpp]
+path = "GEOsix_FV10Vpp.txt"
+
+[1.25Vpp]
+path = "GEOsix_FV1.25Vpp.txt"
+
+[0.625Vpp]
+path = "GEOsix_FV0.625Vpp.txt"
+

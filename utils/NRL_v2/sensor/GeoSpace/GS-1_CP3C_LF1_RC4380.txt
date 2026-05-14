@@ -1,0 +1,6 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[3125000]
+path = "GS-1_CP3C_LF1_RC4380_RS3125000.txt"
+

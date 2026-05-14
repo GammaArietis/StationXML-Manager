@@ -1,0 +1,10 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[None]
+path = "DT-SOLO_LF5_RC1850_RSNone.txt"
+
+
+[43000]
+path = "DT-SOLO_LF5_RC1850_RS43000.txt"
+

@@ -1,0 +1,34 @@
+[Main]
+question = "What is the final sample rate?"
+
+[50 Hz]
+path = "SmartSolo-IGU-16HR3C_PD36_FR50.txt"
+
+
+[500 Hz]
+path = "SmartSolo-IGU-16HR3C_PD36_FR500.txt"
+
+
+[4000 Hz]
+path = "SmartSolo-IGU-16HR3C_PD36_FR4000.txt"
+
+
+[250 Hz]
+path = "SmartSolo-IGU-16HR3C_PD36_FR250.txt"
+
+
+[2000 Hz]
+path = "SmartSolo-IGU-16HR3C_PD36_FR2000.txt"
+
+
+[125 Hz]
+path = "SmartSolo-IGU-16HR3C_PD36_FR125.txt"
+
+
+[100 Hz]
+path = "SmartSolo-IGU-16HR3C_PD36_FR100.txt"
+
+
+[1000 Hz]
+path = "SmartSolo-IGU-16HR3C_PD36_FR1000.txt"
+

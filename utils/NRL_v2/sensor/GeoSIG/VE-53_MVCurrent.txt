@@ -1,0 +1,6 @@
+[Main]
+question = "What is the long-period corner?"
+
+[1.1 s]
+path = "VE-53_MVCurrent_LP1.1.txt"
+

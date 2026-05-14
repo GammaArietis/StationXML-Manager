@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[30.3]
+description = "Sercel; L-22D; Low-Frequency_Corner 2 Hz; Coil_Resistance 510; Shunt_Resistance 2516; Sensitivity 30.3 V/m/s; Sensor_Type groundVel"
+xml = "L-22D_LF2_RC510_RS2516_SG30.3_STgroundVel.xml"
+

@@ -1,0 +1,12 @@
+[Main]
+question = "What is the low-frequency corner?"
+
+[8 Hz]
+path = "HG-4_LF8.txt"
+
+[14 Hz]
+path = "HG-4_LF14.txt"
+
+[10 Hz]
+path = "HG-4_LF10.txt"
+

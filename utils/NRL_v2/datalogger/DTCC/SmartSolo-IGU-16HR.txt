@@ -1,0 +1,24 @@
+[Main]
+question = "What is the preamp gain in dB?"
+
+[6]
+path = "SmartSolo-IGU-16HR_PD6.txt"
+
+[36]
+path = "SmartSolo-IGU-16HR_PD36.txt"
+
+[30]
+path = "SmartSolo-IGU-16HR_PD30.txt"
+
+[24]
+path = "SmartSolo-IGU-16HR_PD24.txt"
+
+[18]
+path = "SmartSolo-IGU-16HR_PD18.txt"
+
+[12]
+path = "SmartSolo-IGU-16HR_PD12.txt"
+
+[0]
+path = "SmartSolo-IGU-16HR_PD0.txt"
+

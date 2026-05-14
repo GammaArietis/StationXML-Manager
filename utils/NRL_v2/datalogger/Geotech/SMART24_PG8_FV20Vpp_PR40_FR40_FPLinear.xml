@@ -1,0 +1,549 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<FDSNStationXML xmlns="http://www.fdsn.org/xml/station/1" schemaVersion="1.1">
+  <Source>IRIS-DMC</Source>
+  <Module>IRIS NRL service | version: 1</Module>
+  <ModuleURI>https://service.iris.edu/irisws/nrl/1/</ModuleURI>
+  <Created>2026-04-20T01:00:03.466603Z</Created>
+  <Network code="XX" startDate="1970-01-01T00:00:00Z">
+    <Station code="YY" startDate="1970-01-01T00:00:00Z">
+      <Comment>
+        <Value>This is a comment.</Value>
+      </Comment>
+      <Latitude>0.0</Latitude>
+      <Longitude>0.0</Longitude>
+      <Elevation>0.0</Elevation>
+      <Site>
+        <Name>Long site name</Name>
+      </Site>
+      <Channel code="ZZZ" locationCode="00" startDate="1970-01-01T00:00:00Z">
+        <Latitude>0.0</Latitude>
+        <Longitude>0.0</Longitude>
+        <Elevation>0.0</Elevation>
+        <Depth>0.0</Depth>
+        <Azimuth>0.0</Azimuth>
+        <Dip>0.0</Dip>
+        <SampleRate>40</SampleRate>
+        <Sensor>
+          <Description>The sensor name</Description>
+        </Sensor>
+        <Response>
+          <InstrumentSensitivity>
+            <Value>+4.89115E+06</Value>
+            <Frequency>10</Frequency>
+            <InputUnits>
+              <Name>V</Name>
+              <Description>Volt</Description>
+            </InputUnits>
+            <OutputUnits>
+              <Name>count</Name>
+              <Description>Digital Counts</Description>
+            </OutputUnits>
+          </InstrumentSensitivity>
+          <Stage number="1" resourceId="NRL:AnaPAZ_IUV_NZ0_NP0_PHd41d8cd_AN1_FN1::NRL:Gain_SG8_FN1">
+            <PolesZeros>
+              <InputUnits>
+                <Name>V</Name>
+                <Description>Volt</Description>
+              </InputUnits>
+              <OutputUnits>
+                <Name>V</Name>
+                <Description>Volt</Description>
+              </OutputUnits>
+              <PzTransferFunctionType>LAPLACE (RADIANS/SECOND)</PzTransferFunctionType>
+              <NormalizationFactor>1</NormalizationFactor>
+              <NormalizationFrequency>1</NormalizationFrequency>
+            </PolesZeros>
+            <StageGain>
+              <Value>8</Value>
+              <Frequency>1</Frequency>
+            </StageGain>
+          </Stage>
+          <Stage number="2" resourceId="NRL:ADC_SF611416_IR512000_ED0">
+            <Coefficients>
+              <InputUnits>
+                <Name>V</Name>
+                <Description>Volt</Description>
+              </InputUnits>
+              <OutputUnits>
+                <Name>count</Name>
+                <Description>Digital Counts</Description>
+              </OutputUnits>
+              <CfTransferFunctionType>DIGITAL</CfTransferFunctionType>
+              <Numerator number="0">1.000000e+00</Numerator>
+            </Coefficients>
+            <Decimation>
+              <InputSampleRate>512000</InputSampleRate>
+              <Factor>1</Factor>
+              <Offset>0</Offset>
+              <Delay>0</Delay>
+              <Correction>0</Correction>
+            </Decimation>
+            <StageGain>
+              <Value>611416</Value>
+              <Frequency>0</Frequency>
+            </StageGain>
+          </Stage>
+          <Stage number="3" resourceId="NRL:Dec_IR512000_OR40_NS8-DC36-8-DC7-2-DC17-5-DC17-5-DC6-2-DC7-2-DC48-4-DC128-2_NHa3dd7c9">
+            <Coefficients>
+              <InputUnits>
+                <Name>count</Name>
+                <Description>Digital Counts</Description>
+              </InputUnits>
+              <OutputUnits>
+                <Name>count</Name>
+                <Description>Digital Counts</Description>
+              </OutputUnits>
+              <CfTransferFunctionType>DIGITAL</CfTransferFunctionType>
+              <Numerator number="0">3.051758e-05</Numerator>
+              <Numerator number="1">1.525879e-04</Numerator>
+              <Numerator number="2">4.577637e-04</Numerator>
+              <Numerator number="3">1.068115e-03</Numerator>
+              <Numerator number="4">2.136230e-03</Numerator>
+              <Numerator number="5">3.845215e-03</Numerator>
+              <Numerator number="6">6.408691e-03</Numerator>
+              <Numerator number="7">1.007080e-02</Numerator>
+              <Numerator number="8">1.495361e-02</Numerator>
+              <Numerator number="9">2.105713e-02</Numerator>
+              <Numerator number="10">2.825928e-02</Numerator>
+              <Numerator number="11">3.631592e-02</Numerator>
+              <Numerator number="12">4.486084e-02</Numerator>
+              <Numerator number="13">5.340576e-02</Numerator>
+              <Numerator number="14">6.134033e-02</Numerator>
+              <Numerator number="15">6.793213e-02</Numerator>
+              <Numerator number="16">7.263184e-02</Numerator>
+              <Numerator number="17">7.507324e-02</Numerator>
+              <Numerator number="18">7.507324e-02</Numerator>
+              <Numerator number="19">7.263184e-02</Numerator>
+              <Numerator number="20">6.793213e-02</Numerator>
+              <Numerator number="21">6.134033e-02</Numerator>
+              <Numerator number="22">5.340576e-02</Numerator>
+              <Numerator number="23">4.486084e-02</Numerator>
+              <Numerator number="24">3.631592e-02</Numerator>
+              <Numerator number="25">2.825928e-02</Numerator>
+              <Numerator number="26">2.105713e-02</Numerator>
+              <Numerator number="27">1.495361e-02</Numerator>
+              <Numerator number="28">1.007080e-02</Numerator>
+              <Numerator number="29">6.408691e-03</Numerator>
+              <Numerator number="30">3.845215e-03</Numerator>
+              <Numerator number="31">2.136230e-03</Numerator>
+              <Numerator number="32">1.068115e-03</Numerator>
+              <Numerator number="33">4.577637e-04</Numerator>
+              <Numerator number="34">1.525879e-04</Numerator>
+              <Numerator number="35">3.051758e-05</Numerator>
+            </Coefficients>
+            <Decimation>
+              <InputSampleRate>512000</InputSampleRate>
+              <Factor>8</Factor>
+              <Offset>0</Offset>
+              <Delay>3.41797e-05</Delay>
+              <Correction>3.41797e-05</Correction>
+            </Decimation>
+            <StageGain>
+              <Value>1</Value>
+              <Frequency>0</Frequency>
+            </StageGain>
+          </Stage>
+          <Stage number="4" resourceId="NRL:Dec_IR512000_OR40_NS8-DC36-8-DC7-2-DC17-5-DC17-5-DC6-2-DC7-2-DC48-4-DC128-2_NHa3dd7c9">
+            <Coefficients>
+              <InputUnits>
+                <Name>count</Name>
+                <Description>Digital Counts</Description>
+              </InputUnits>
+              <OutputUnits>
+                <Name>count</Name>
+                <Description>Digital Counts</Description>
+              </OutputUnits>
+              <CfTransferFunctionType>DIGITAL</CfTransferFunctionType>
+              <Numerator number="0">1.562500e-02</Numerator>
+              <Numerator number="1">9.375000e-02</Numerator>
+              <Numerator number="2">2.343750e-01</Numerator>
+              <Numerator number="3">3.125000e-01</Numerator>
+              <Numerator number="4">2.343750e-01</Numerator>
+              <Numerator number="5">9.375000e-02</Numerator>
+              <Numerator number="6">1.562500e-02</Numerator>
+            </Coefficients>
+            <Decimation>
+              <InputSampleRate>64000</InputSampleRate>
+              <Factor>2</Factor>
+              <Offset>0</Offset>
+              <Delay>4.6875e-05</Delay>
+              <Correction>4.6875e-05</Correction>
+            </Decimation>
+            <StageGain>
+              <Value>1</Value>
+              <Frequency>0</Frequency>
+            </StageGain>
+          </Stage>
+          <Stage number="5" resourceId="NRL:Dec_IR512000_OR40_NS8-DC36-8-DC7-2-DC17-5-DC17-5-DC6-2-DC7-2-DC48-4-DC128-2_NHa3dd7c9">
+            <Coefficients>
+              <InputUnits>
+                <Name>count</Name>
+                <Description>Digital Counts</Description>
+              </InputUnits>
+              <OutputUnits>
+                <Name>count</Name>
+                <Description>Digital Counts</Description>
+              </OutputUnits>
+              <CfTransferFunctionType>DIGITAL</CfTransferFunctionType>
+              <Numerator number="0">1.600000e-03</Numerator>
+              <Numerator number="1">6.400000e-03</Numerator>
+              <Numerator number="2">1.600000e-02</Numerator>
+              <Numerator number="3">3.200000e-02</Numerator>
+              <Numerator number="4">5.600000e-02</Numerator>
+              <Numerator number="5">8.320000e-02</Numerator>
+              <Numerator number="6">1.088000e-01</Numerator>
+              <Numerator number="7">1.280000e-01</Numerator>
+              <Numerator number="8">1.360000e-01</Numerator>
+              <Numerator number="9">1.280000e-01</Numerator>
+              <Numerator number="10">1.088000e-01</Numerator>
+              <Numerator number="11">8.320000e-02</Numerator>
+              <Numerator number="12">5.600000e-02</Numerator>
+              <Numerator number="13">3.200000e-02</Numerator>
+              <Numerator number="14">1.600000e-02</Numerator>
+              <Numerator number="15">6.400000e-03</Numerator>
+              <Numerator number="16">1.600000e-03</Numerator>
+            </Coefficients>
+            <Decimation>
+              <InputSampleRate>32000</InputSampleRate>
+              <Factor>5</Factor>
+              <Offset>0</Offset>
+              <Delay>0.00025</Delay>
+              <Correction>0.00025</Correction>
+            </Decimation>
+            <StageGain>
+              <Value>1</Value>
+              <Frequency>0</Frequency>
+            </StageGain>
+          </Stage>
+          <Stage number="6" resourceId="NRL:Dec_IR512000_OR40_NS8-DC36-8-DC7-2-DC17-5-DC17-5-DC6-2-DC7-2-DC48-4-DC128-2_NHa3dd7c9">
+            <Coefficients>
+              <InputUnits>
+                <Name>count</Name>
+                <Description>Digital Counts</Description>
+              </InputUnits>
+              <OutputUnits>
+                <Name>count</Name>
+                <Description>Digital Counts</Description>
+              </OutputUnits>
+              <CfTransferFunctionType>DIGITAL</CfTransferFunctionType>
+              <Numerator number="0">1.600000e-03</Numerator>
+              <Numerator number="1">6.400000e-03</Numerator>
+              <Numerator number="2">1.600000e-02</Numerator>
+              <Numerator number="3">3.200000e-02</Numerator>
+              <Numerator number="4">5.600000e-02</Numerator>
+              <Numerator number="5">8.320000e-02</Numerator>
+              <Numerator number="6">1.088000e-01</Numerator>
+              <Numerator number="7">1.280000e-01</Numerator>
+              <Numerator number="8">1.360000e-01</Numerator>
+              <Numerator number="9">1.280000e-01</Numerator>
+              <Numerator number="10">1.088000e-01</Numerator>
+              <Numerator number="11">8.320000e-02</Numerator>
+              <Numerator number="12">5.600000e-02</Numerator>
+              <Numerator number="13">3.200000e-02</Numerator>
+              <Numerator number="14">1.600000e-02</Numerator>
+              <Numerator number="15">6.400000e-03</Numerator>
+              <Numerator number="16">1.600000e-03</Numerator>
+            </Coefficients>
+            <Decimation>
+              <InputSampleRate>6400</InputSampleRate>
+              <Factor>5</Factor>
+              <Offset>0</Offset>
+              <Delay>0.00125</Delay>
+              <Correction>0.00125</Correction>
+            </Decimation>
+            <StageGain>
+              <Value>1</Value>
+              <Frequency>0</Frequency>
+            </StageGain>
+          </Stage>
+          <Stage number="7" resourceId="NRL:Dec_IR512000_OR40_NS8-DC36-8-DC7-2-DC17-5-DC17-5-DC6-2-DC7-2-DC48-4-DC128-2_NHa3dd7c9">
+            <Coefficients>
+              <InputUnits>
+                <Name>count</Name>
+                <Description>Digital Counts</Description>
+              </InputUnits>
+              <OutputUnits>
+                <Name>count</Name>
+                <Description>Digital Counts</Description>
+              </OutputUnits>
+              <CfTransferFunctionType>DIGITAL</CfTransferFunctionType>
+              <Numerator number="0">3.125000e-02</Numerator>
+              <Numerator number="1">1.562500e-01</Numerator>
+              <Numerator number="2">3.125000e-01</Numerator>
+              <Numerator number="3">3.125000e-01</Numerator>
+              <Numerator number="4">1.562500e-01</Numerator>
+              <Numerator number="5">3.125000e-02</Numerator>
+            </Coefficients>
+            <Decimation>
+              <InputSampleRate>1280</InputSampleRate>
+              <Factor>2</Factor>
+              <Offset>0</Offset>
+              <Delay>0.00195312</Delay>
+              <Correction>0.00195312</Correction>
+            </Decimation>
+            <StageGain>
+              <Value>1</Value>
+              <Frequency>0</Frequency>
+            </StageGain>
+          </Stage>
+          <Stage number="8" resourceId="NRL:Dec_IR512000_OR40_NS8-DC36-8-DC7-2-DC17-5-DC17-5-DC6-2-DC7-2-DC48-4-DC128-2_NHa3dd7c9">
+            <Coefficients>
+              <InputUnits>
+                <Name>count</Name>
+                <Description>Digital Counts</Description>
+              </InputUnits>
+              <OutputUnits>
+                <Name>count</Name>
+                <Description>Digital Counts</Description>
+              </OutputUnits>
+              <CfTransferFunctionType>DIGITAL</CfTransferFunctionType>
+              <Numerator number="0">1.562500e-02</Numerator>
+              <Numerator number="1">9.375000e-02</Numerator>
+              <Numerator number="2">2.343750e-01</Numerator>
+              <Numerator number="3">3.125000e-01</Numerator>
+              <Numerator number="4">2.343750e-01</Numerator>
+              <Numerator number="5">9.375000e-02</Numerator>
+              <Numerator number="6">1.562500e-02</Numerator>
+            </Coefficients>
+            <Decimation>
+              <InputSampleRate>640</InputSampleRate>
+              <Factor>2</Factor>
+              <Offset>0</Offset>
+              <Delay>0.0046875</Delay>
+              <Correction>0.0046875</Correction>
+            </Decimation>
+            <StageGain>
+              <Value>1</Value>
+              <Frequency>0</Frequency>
+            </StageGain>
+          </Stage>
+          <Stage number="9" resourceId="NRL:Dec_IR512000_OR40_NS8-DC36-8-DC7-2-DC17-5-DC17-5-DC6-2-DC7-2-DC48-4-DC128-2_NHa3dd7c9">
+            <Coefficients>
+              <InputUnits>
+                <Name>count</Name>
+                <Description>Digital Counts</Description>
+              </InputUnits>
+              <OutputUnits>
+                <Name>count</Name>
+                <Description>Digital Counts</Description>
+              </OutputUnits>
+              <CfTransferFunctionType>DIGITAL</CfTransferFunctionType>
+              <Numerator number="0">1.428251e-05</Numerator>
+              <Numerator number="1">4.876019e-05</Numerator>
+              <Numerator number="2">9.813468e-05</Numerator>
+              <Numerator number="3">1.309998e-04</Numerator>
+              <Numerator number="4">9.342504e-06</Numerator>
+              <Numerator number="5">-3.716013e-04</Numerator>
+              <Numerator number="6">-1.018384e-03</Numerator>
+              <Numerator number="7">-1.724268e-03</Numerator>
+              <Numerator number="8">-1.789384e-03</Numerator>
+              <Numerator number="9">-4.978403e-04</Numerator>
+              <Numerator number="10">2.493911e-03</Numerator>
+              <Numerator number="11">6.626292e-03</Numerator>
+              <Numerator number="12">9.612848e-03</Numerator>
+              <Numerator number="13">8.507233e-03</Numerator>
+              <Numerator number="14">1.020355e-03</Numerator>
+              <Numerator number="15">-1.270481e-02</Numerator>
+              <Numerator number="16">-2.774928e-02</Numerator>
+              <Numerator number="17">-3.565066e-02</Numerator>
+              <Numerator number="18">-2.696024e-02</Numerator>
+              <Numerator number="19">4.848785e-03</Numerator>
+              <Numerator number="20">5.801127e-02</Numerator>
+              <Numerator number="21">1.220655e-01</Numerator>
+              <Numerator number="22">1.802648e-01</Numerator>
+              <Numerator number="23">2.147140e-01</Numerator>
+              <Numerator number="24">2.147140e-01</Numerator>
+              <Numerator number="25">1.802648e-01</Numerator>
+              <Numerator number="26">1.220655e-01</Numerator>
+              <Numerator number="27">5.801127e-02</Numerator>
+              <Numerator number="28">4.848785e-03</Numerator>
+              <Numerator number="29">-2.696024e-02</Numerator>
+              <Numerator number="30">-3.565066e-02</Numerator>
+              <Numerator number="31">-2.774928e-02</Numerator>
+              <Numerator number="32">-1.270481e-02</Numerator>
+              <Numerator number="33">1.020355e-03</Numerator>
+              <Numerator number="34">8.507233e-03</Numerator>
+              <Numerator number="35">9.612848e-03</Numerator>
+              <Numerator number="36">6.626292e-03</Numerator>
+              <Numerator number="37">2.493911e-03</Numerator>
+              <Numerator number="38">-4.978403e-04</Numerator>
+              <Numerator number="39">-1.789384e-03</Numerator>
+              <Numerator number="40">-1.724268e-03</Numerator>
+              <Numerator number="41">-1.018384e-03</Numerator>
+              <Numerator number="42">-3.716013e-04</Numerator>
+              <Numerator number="43">9.342504e-06</Numerator>
+              <Numerator number="44">1.309998e-04</Numerator>
+              <Numerator number="45">9.813468e-05</Numerator>
+              <Numerator number="46">4.876019e-05</Numerator>
+              <Numerator number="47">1.428251e-05</Numerator>
+            </Coefficients>
+            <Decimation>
+              <InputSampleRate>320</InputSampleRate>
+              <Factor>4</Factor>
+              <Offset>0</Offset>
+              <Delay>0.0734375</Delay>
+              <Correction>0.0734375</Correction>
+            </Decimation>
+            <StageGain>
+              <Value>1</Value>
+              <Frequency>0</Frequency>
+            </StageGain>
+          </Stage>
+          <Stage number="10" resourceId="NRL:Dec_IR512000_OR40_NS8-DC36-8-DC7-2-DC17-5-DC17-5-DC6-2-DC7-2-DC48-4-DC128-2_NHa3dd7c9">
+            <Coefficients>
+              <InputUnits>
+                <Name>count</Name>
+                <Description>Digital Counts</Description>
+              </InputUnits>
+              <OutputUnits>
+                <Name>count</Name>
+                <Description>Digital Counts</Description>
+              </OutputUnits>
+              <CfTransferFunctionType>DIGITAL</CfTransferFunctionType>
+              <Numerator number="0">0.000000e+00</Numerator>
+              <Numerator number="1">-3.417523e-06</Numerator>
+              <Numerator number="2">-1.785776e-05</Numerator>
+              <Numerator number="3">-4.187669e-05</Numerator>
+              <Numerator number="4">-4.746025e-05</Numerator>
+              <Numerator number="5">1.636560e-06</Numerator>
+              <Numerator number="6">8.596755e-05</Numerator>
+              <Numerator number="7">1.102753e-04</Numerator>
+              <Numerator number="8">1.400703e-05</Numerator>
+              <Numerator number="9">-9.800109e-05</Numerator>
+              <Numerator number="10">-4.539048e-05</Numerator>
+              <Numerator number="11">1.436804e-04</Numerator>
+              <Numerator number="12">1.821395e-04</Numerator>
+              <Numerator number="13">-7.017956e-05</Numerator>
+              <Numerator number="14">-2.795630e-04</Numerator>
+              <Numerator number="15">-4.847107e-05</Numerator>
+              <Numerator number="16">3.733283e-04</Numerator>
+              <Numerator number="17">2.856761e-04</Numerator>
+              <Numerator number="18">-3.434370e-04</Numerator>
+              <Numerator number="19">-5.627361e-04</Numerator>
+              <Numerator number="20">1.699616e-04</Numerator>
+              <Numerator number="21">8.423473e-04</Numerator>
+              <Numerator number="22">2.112126e-04</Numerator>
+              <Numerator number="23">-9.944992e-04</Numerator>
+              <Numerator number="24">-7.682207e-04</Numerator>
+              <Numerator number="25">9.111791e-04</Numerator>
+              <Numerator number="26">1.434782e-03</Numerator>
+              <Numerator number="27">-4.714738e-04</Numerator>
+              <Numerator number="28">-2.049214e-03</Numerator>
+              <Numerator number="29">-3.727988e-04</Numerator>
+              <Numerator number="30">2.406418e-03</Numerator>
+              <Numerator number="31">1.589437e-03</Numerator>
+              <Numerator number="32">-2.266732e-03</Numerator>
+              <Numerator number="33">-3.015651e-03</Numerator>
+              <Numerator number="34">1.429680e-03</Numerator>
+              <Numerator number="35">4.367883e-03</Numerator>
+              <Numerator number="36">2.135230e-04</Numerator>
+              <Numerator number="37">-5.255717e-03</Numerator>
+              <Numerator number="38">-2.607522e-03</Numerator>
+              <Numerator number="39">5.247053e-03</Numerator>
+              <Numerator number="40">5.494703e-03</Numerator>
+              <Numerator number="41">-3.946662e-03</Numerator>
+              <Numerator number="42">-8.397095e-03</Numerator>
+              <Numerator number="43">1.099865e-03</Numerator>
+              <Numerator number="44">1.064780e-02</Numerator>
+              <Numerator number="45">3.314661e-03</Numerator>
+              <Numerator number="46">-1.145713e-02</Numerator>
+              <Numerator number="47">-9.007869e-03</Numerator>
+              <Numerator number="48">1.001277e-02</Numerator>
+              <Numerator number="49">1.534338e-02</Numerator>
+              <Numerator number="50">-5.583800e-03</Numerator>
+              <Numerator number="51">-2.133651e-02</Numerator>
+              <Numerator number="52">-2.404685e-03</Numerator>
+              <Numerator number="53">2.567157e-02</Numerator>
+              <Numerator number="54">1.439090e-02</Numerator>
+              <Numerator number="55">-2.666019e-02</Numerator>
+              <Numerator number="56">-3.092497e-02</Numerator>
+              <Numerator number="57">2.190055e-02</Numerator>
+              <Numerator number="58">5.361121e-02</Numerator>
+              <Numerator number="59">-6.602992e-03</Numerator>
+              <Numerator number="60">-8.925685e-02</Numerator>
+              <Numerator number="61">-3.688181e-02</Numerator>
+              <Numerator number="62">1.865349e-01</Numerator>
+              <Numerator number="63">4.037783e-01</Numerator>
+              <Numerator number="64">4.037783e-01</Numerator>
+              <Numerator number="65">1.865349e-01</Numerator>
+              <Numerator number="66">-3.688181e-02</Numerator>
+              <Numerator number="67">-8.925685e-02</Numerator>
+              <Numerator number="68">-6.602992e-03</Numerator>
+              <Numerator number="69">5.361121e-02</Numerator>
+              <Numerator number="70">2.190055e-02</Numerator>
+              <Numerator number="71">-3.092497e-02</Numerator>
+              <Numerator number="72">-2.666019e-02</Numerator>
+              <Numerator number="73">1.439090e-02</Numerator>
+              <Numerator number="74">2.567157e-02</Numerator>
+              <Numerator number="75">-2.404685e-03</Numerator>
+              <Numerator number="76">-2.133651e-02</Numerator>
+              <Numerator number="77">-5.583800e-03</Numerator>
+              <Numerator number="78">1.534338e-02</Numerator>
+              <Numerator number="79">1.001277e-02</Numerator>
+              <Numerator number="80">-9.007869e-03</Numerator>
+              <Numerator number="81">-1.145713e-02</Numerator>
+              <Numerator number="82">3.314661e-03</Numerator>
+              <Numerator number="83">1.064780e-02</Numerator>
+              <Numerator number="84">1.099865e-03</Numerator>
+              <Numerator number="85">-8.397095e-03</Numerator>
+              <Numerator number="86">-3.946662e-03</Numerator>
+              <Numerator number="87">5.494703e-03</Numerator>
+              <Numerator number="88">5.247053e-03</Numerator>
+              <Numerator number="89">-2.607522e-03</Numerator>
+              <Numerator number="90">-5.255717e-03</Numerator>
+              <Numerator number="91">2.135230e-04</Numerator>
+              <Numerator number="92">4.367883e-03</Numerator>
+              <Numerator number="93">1.429680e-03</Numerator>
+              <Numerator number="94">-3.015651e-03</Numerator>
+              <Numerator number="95">-2.266732e-03</Numerator>
+              <Numerator number="96">1.589437e-03</Numerator>
+              <Numerator number="97">2.406418e-03</Numerator>
+              <Numerator number="98">-3.727988e-04</Numerator>
+              <Numerator number="99">-2.049214e-03</Numerator>
+              <Numerator number="100">-4.714738e-04</Numerator>
+              <Numerator number="101">1.434782e-03</Numerator>
+              <Numerator number="102">9.111791e-04</Numerator>
+              <Numerator number="103">-7.682207e-04</Numerator>
+              <Numerator number="104">-9.944992e-04</Numerator>
+              <Numerator number="105">2.112126e-04</Numerator>
+              <Numerator number="106">8.423473e-04</Numerator>
+              <Numerator number="107">1.699616e-04</Numerator>
+              <Numerator number="108">-5.627361e-04</Numerator>
+              <Numerator number="109">-3.434370e-04</Numerator>
+              <Numerator number="110">2.856761e-04</Numerator>
+              <Numerator number="111">3.733283e-04</Numerator>
+              <Numerator number="112">-4.847107e-05</Numerator>
+              <Numerator number="113">-2.795630e-04</Numerator>
+              <Numerator number="114">-7.017956e-05</Numerator>
+              <Numerator number="115">1.821395e-04</Numerator>
+              <Numerator number="116">1.436804e-04</Numerator>
+              <Numerator number="117">-4.539048e-05</Numerator>
+              <Numerator number="118">-9.800109e-05</Numerator>
+              <Numerator number="119">1.400703e-05</Numerator>
+              <Numerator number="120">1.102753e-04</Numerator>
+              <Numerator number="121">8.596755e-05</Numerator>
+              <Numerator number="122">1.636560e-06</Numerator>
+              <Numerator number="123">-4.746025e-05</Numerator>
+              <Numerator number="124">-4.187669e-05</Numerator>
+              <Numerator number="125">-1.785776e-05</Numerator>
+              <Numerator number="126">-3.417523e-06</Numerator>
+              <Numerator number="127">0.000000e+00</Numerator>
+            </Coefficients>
+            <Decimation>
+              <InputSampleRate>80</InputSampleRate>
+              <Factor>2</Factor>
+              <Offset>0</Offset>
+              <Delay>0.79375</Delay>
+              <Correction>0.79375</Correction>
+            </Decimation>
+            <StageGain>
+              <Value>1</Value>
+              <Frequency>0</Frequency>
+            </StageGain>
+          </Stage>
+        </Response>
+      </Channel>
+    </Station>
+  </Network>
+</FDSNStationXML>
+

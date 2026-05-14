@@ -1,0 +1,6 @@
+[Main]
+question = "What is the accelerometer clip level in +/-g?"
+
+[1g]
+path = "FBA-11_CG1g.txt"
+

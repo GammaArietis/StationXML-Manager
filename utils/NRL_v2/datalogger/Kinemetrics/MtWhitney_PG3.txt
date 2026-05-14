@@ -1,0 +1,26 @@
+[Main]
+question = "What is the final sample rate?"
+
+[50 Hz]
+path = "MtWhitney_PG3_FR50.txt"
+
+
+[40 Hz]
+path = "MtWhitney_PG3_FR40.txt"
+
+
+[250 Hz]
+path = "MtWhitney_PG3_FR250.txt"
+
+
+[20 Hz]
+path = "MtWhitney_PG3_FR20.txt"
+
+
+[200 Hz]
+path = "MtWhitney_PG3_FR200.txt"
+
+
+[100 Hz]
+path = "MtWhitney_PG3_FR100.txt"
+

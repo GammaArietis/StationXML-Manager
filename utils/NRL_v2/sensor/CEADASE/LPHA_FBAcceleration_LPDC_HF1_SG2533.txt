@@ -1,0 +1,7 @@
+[Main]
+question = "What property does this sensor measure?"
+
+[groundAccel V/m/s**2]
+description = "CEADASE; LPHA; Feedback_Loop_Board_Type Acceleration; Long-Period_Corner DC s; High-Frequency_Corner 1 Hz; Sensitivity 2533 V/m/s**2; Sensor_Type groundAccel"
+xml = "LPHA_FBAcceleration_LPDC_HF1_SG2533_STgroundAccel.xml"
+

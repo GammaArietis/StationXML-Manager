@@ -1,0 +1,12 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[5Vp]
+path = "EDAS-24IP_FV5Vp.txt"
+
+[2.5Vp]
+path = "EDAS-24IP_FV2.5Vp.txt"
+
+[10Vp]
+path = "EDAS-24IP_FV10Vp.txt"
+

@@ -1,0 +1,10 @@
+[Main]
+question = "Which ADC type recorded this channel?"
+
+[SR]
+path = "Q330HR_PG20_FR0.1_ADSR.txt"
+
+
+[HR]
+path = "Q330HR_PG20_FR0.1_ADHR.txt"
+

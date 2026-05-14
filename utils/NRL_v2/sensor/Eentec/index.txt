@@ -1,0 +1,18 @@
+[Main]
+question = "Select the Eentec sensor model"
+
+[SP-400]
+path="SP-400.txt"
+
+[EP-300]
+path="EP-300.txt"
+
+[EP-105]
+path="EP-105.txt"
+
+[EA-140]
+path="EA-140.txt"
+
+[EA-120]
+path="EA-120.txt"
+

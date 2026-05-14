@@ -1,0 +1,7 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[227]
+description = "Geotech; S-13; Low-Frequency_Corner 1 Hz; Sensitivity 76.6 V/m/s; Coil_Resistance 160; Shunt_Resistance 227; Sensor_Type groundVel"
+xml = "S-13_LF1_SG76.6_RC160_RS227_STgroundVel.xml"
+

@@ -1,0 +1,7 @@
+[Main]
+question = "What is the final sample rate?"
+
+[1 Hz]
+description = "Quanterra; Q330HRS; Channel_Description ClockError; Sensitivity 1000000; Final_Sample_Rate 1 Hz"
+xml = "Q330HRS_CDClockError_SG1000000_FR1.xml"
+

@@ -1,0 +1,12 @@
+[Main]
+question = "What is the feedback electronics generation?"
+
+[3]
+path = "Trillium120Q_EG3.txt"
+
+[2]
+path = "Trillium120Q_EG2.txt"
+
+[1]
+path = "Trillium120Q_EG1.txt"
+

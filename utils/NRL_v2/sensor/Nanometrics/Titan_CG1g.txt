@@ -1,0 +1,6 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[20Vp]
+path = "Titan_CG1g_FV20Vp.txt"
+

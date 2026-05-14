@@ -1,0 +1,6 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[56160]
+path = "GS-11D_LF4.5_RC4000_RS56160.txt"
+

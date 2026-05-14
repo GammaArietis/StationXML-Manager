@@ -1,0 +1,6 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[1450]
+path = "GS-ONE-OMNI_LF15_RC1450.txt"
+

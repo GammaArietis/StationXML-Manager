@@ -1,0 +1,27 @@
+[Main]
+question = "What is the final sample rate?"
+
+[50 Hz]
+description = "INGV; GAIA2; Full-Scale_Voltage 1Vpp; Final_Sample_Rate 50 Hz"
+xml = "GAIA2_FV1Vpp_FR50.xml"
+
+
+[250 Hz]
+description = "INGV; GAIA2; Full-Scale_Voltage 1Vpp; Final_Sample_Rate 250 Hz"
+xml = "GAIA2_FV1Vpp_FR250.xml"
+
+
+[200 Hz]
+description = "INGV; GAIA2; Full-Scale_Voltage 1Vpp; Final_Sample_Rate 200 Hz"
+xml = "GAIA2_FV1Vpp_FR200.xml"
+
+
+[125 Hz]
+description = "INGV; GAIA2; Full-Scale_Voltage 1Vpp; Final_Sample_Rate 125 Hz"
+xml = "GAIA2_FV1Vpp_FR125.xml"
+
+
+[100 Hz]
+description = "INGV; GAIA2; Full-Scale_Voltage 1Vpp; Final_Sample_Rate 100 Hz"
+xml = "GAIA2_FV1Vpp_FR100.xml"
+

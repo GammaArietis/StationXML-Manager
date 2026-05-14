@@ -1,0 +1,6 @@
+[Main]
+question = "Select the Sprengnether sensor model"
+
+[S6000]
+path="S6000.txt"
+

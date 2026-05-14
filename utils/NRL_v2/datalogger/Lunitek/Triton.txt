@@ -1,0 +1,19 @@
+[Main]
+question = "What is the final sample rate?"
+
+[500 Hz]
+description = "Lunitek; Triton; Final_Sample_Rate 500 Hz"
+xml = "Triton_FR500.xml"
+
+[250 Hz]
+description = "Lunitek; Triton; Final_Sample_Rate 250 Hz"
+xml = "Triton_FR250.xml"
+
+[200 Hz]
+description = "Lunitek; Triton; Final_Sample_Rate 200 Hz"
+xml = "Triton_FR200.xml"
+
+[100 Hz]
+description = "Lunitek; Triton; Final_Sample_Rate 100 Hz"
+xml = "Triton_FR100.xml"
+

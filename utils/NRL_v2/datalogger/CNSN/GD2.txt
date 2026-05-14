@@ -1,0 +1,12 @@
+[Main]
+question = "What is the transmission gain?"
+
+[0.03125]
+path = "GD2_TG0.03125.txt"
+
+[0.00391]
+path = "GD2_TG0.00391.txt"
+
+[0.00098]
+path = "GD2_TG0.00098.txt"
+

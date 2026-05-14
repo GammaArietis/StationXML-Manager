@@ -1,0 +1,9 @@
+[Main]
+question = "What is the sensor feedback type?"
+
+[passive]
+path = "SL0624_FTpassive.txt"
+
+[active]
+path = "SL0624_FTactive.txt"
+

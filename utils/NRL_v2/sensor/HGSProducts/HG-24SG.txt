@@ -1,0 +1,6 @@
+[Main]
+question = "What is the low-frequency corner?"
+
+[10 Hz]
+path = "HG-24SG_LF10.txt"
+

@@ -1,0 +1,47 @@
+[Main]
+question = "What is the final sample rate?"
+
+[62.5 Hz]
+description = "SolGeo; EDAX24; Preamp_Gain 10; Final_Sample_Rate 62.5 Hz"
+xml = "EDAX24_PG10_FR62.5.xml"
+
+
+[500 Hz]
+description = "SolGeo; EDAX24; Preamp_Gain 10; Final_Sample_Rate 500 Hz"
+xml = "EDAX24_PG10_FR500.xml"
+
+
+[50 Hz]
+description = "SolGeo; EDAX24; Preamp_Gain 10; Final_Sample_Rate 50 Hz"
+xml = "EDAX24_PG10_FR50.xml"
+
+
+[400 Hz]
+description = "SolGeo; EDAX24; Preamp_Gain 10; Final_Sample_Rate 400 Hz"
+xml = "EDAX24_PG10_FR400.xml"
+
+
+[31.25 Hz]
+description = "SolGeo; EDAX24; Preamp_Gain 10; Final_Sample_Rate 31.25 Hz"
+xml = "EDAX24_PG10_FR31.25.xml"
+
+
+[250 Hz]
+description = "SolGeo; EDAX24; Preamp_Gain 10; Final_Sample_Rate 250 Hz"
+xml = "EDAX24_PG10_FR250.xml"
+
+
+[200 Hz]
+description = "SolGeo; EDAX24; Preamp_Gain 10; Final_Sample_Rate 200 Hz"
+xml = "EDAX24_PG10_FR200.xml"
+
+
+[125 Hz]
+description = "SolGeo; EDAX24; Preamp_Gain 10; Final_Sample_Rate 125 Hz"
+xml = "EDAX24_PG10_FR125.xml"
+
+
+[100 Hz]
+description = "SolGeo; EDAX24; Preamp_Gain 10; Final_Sample_Rate 100 Hz"
+xml = "EDAX24_PG10_FR100.xml"
+

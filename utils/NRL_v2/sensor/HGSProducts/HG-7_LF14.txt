@@ -1,0 +1,6 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[375]
+path = "HG-7_LF14_RC375.txt"
+

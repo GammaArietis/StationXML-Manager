@@ -1,0 +1,15 @@
+[Main]
+question = "Select the GeoSIG sensor model"
+
+[VE-53]
+path="VE-53.txt"
+
+[VE-53-BB]
+path="VE-53-BB.txt"
+
+[Arolla]
+path="Arolla.txt"
+
+[AC-73]
+path="AC-73.txt"
+

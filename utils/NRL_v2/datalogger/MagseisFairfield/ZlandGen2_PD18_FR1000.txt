@@ -1,0 +1,10 @@
+[Main]
+question = "What is the final filter phase?"
+
+[MP]
+path = "ZlandGen2_PD18_FR1000_FPMP.txt"
+
+
+[LP]
+path = "ZlandGen2_PD18_FR1000_FPLP.txt"
+

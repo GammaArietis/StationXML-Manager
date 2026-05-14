@@ -1,0 +1,6 @@
+[Main]
+question = "What is the final sample rate?"
+
+[100 Hz]
+path = "GemInfrasoundV1.0_AR0_LP26_FR100.txt"
+

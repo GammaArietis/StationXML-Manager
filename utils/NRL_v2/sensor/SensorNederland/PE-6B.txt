@@ -1,0 +1,6 @@
+[Main]
+question = "What is the long-period corner?"
+
+[4.5 s]
+path = "PE-6B_LP4.5.txt"
+

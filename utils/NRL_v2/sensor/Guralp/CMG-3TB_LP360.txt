@@ -1,0 +1,14 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[50 Hz]
+path = "CMG-3TB_LP360_HF50.txt"
+
+
+[200 Hz]
+path = "CMG-3TB_LP360_HF200.txt"
+
+
+[100 Hz]
+path = "CMG-3TB_LP360_HF100.txt"
+

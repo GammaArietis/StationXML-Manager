@@ -1,0 +1,18 @@
+[Main]
+question = "What is the final sample rate?"
+
+[50 Hz]
+path = "SMART24_PG4_FV20Vpp_PR250_FR50.txt"
+
+
+[25 Hz]
+path = "SMART24_PG4_FV20Vpp_PR250_FR25.txt"
+
+
+[250 Hz]
+path = "SMART24_PG4_FV20Vpp_PR250_FR250.txt"
+
+
+[125 Hz]
+path = "SMART24_PG4_FV20Vpp_PR250_FR125.txt"
+

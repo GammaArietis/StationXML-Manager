@@ -1,0 +1,6 @@
+[Main]
+question = "What is the long-period corner?"
+
+[10 s]
+path = "MTSS-1043A_CG0.8g_FV7.5Vp_OWSingle-ended_LP10.txt"
+

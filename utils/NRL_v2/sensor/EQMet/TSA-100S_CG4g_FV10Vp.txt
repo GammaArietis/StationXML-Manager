@@ -1,0 +1,6 @@
+[Main]
+question = "Is the output wiring single-ended or differential?"
+
+[Single-ended]
+path = "TSA-100S_CG4g_FV10Vp_OWSingle-ended.txt"
+

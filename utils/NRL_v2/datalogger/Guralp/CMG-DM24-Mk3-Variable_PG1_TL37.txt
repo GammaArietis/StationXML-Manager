@@ -1,0 +1,6 @@
+[Main]
+question = "What are the taps (sample rate options in Hz) for this channel?"
+
+[1000-200-40-10-2-1]
+path = "CMG-DM24-Mk3-Variable_PG1_TL37_TP1000-200-40-10-2-1.txt"
+

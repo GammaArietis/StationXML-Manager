@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[112.8]
+description = "GeoSpace; GS-1LF; Low-Frequency_Corner 1 Hz; Coil_Resistance 450; Shunt_Resistance 9530; Sensitivity 112.8 V/m/s; Sensor_Type groundVel"
+xml = "GS-1LF_LF1_RC450_RS9530_SG112.8_STgroundVel.xml"
+

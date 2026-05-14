@@ -1,0 +1,38 @@
+[Main]
+question = "What is the final sample rate?"
+
+[50 Hz]
+path = "Q330SR_PG30_FR50.txt"
+
+
+[40 Hz]
+path = "Q330SR_PG30_FR40.txt"
+
+
+[20 Hz]
+path = "Q330SR_PG30_FR20.txt"
+
+
+[200 Hz]
+path = "Q330SR_PG30_FR200.txt"
+
+
+[1 Hz]
+path = "Q330SR_PG30_FR1.txt"
+
+
+[10 Hz]
+path = "Q330SR_PG30_FR10.txt"
+
+
+[100 Hz]
+path = "Q330SR_PG30_FR100.txt"
+
+
+[0.1 Hz]
+path = "Q330SR_PG30_FR0.1.txt"
+
+
+[0.01 Hz]
+path = "Q330SR_PG30_FR0.01.txt"
+

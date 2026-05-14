@@ -1,0 +1,6 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[150 Hz]
+path = "THETA_LP30_HF150.txt"
+

@@ -1,0 +1,6 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[2.7Vp]
+path = "LTME90_HF1150_CG2g_FV2.7Vp.txt"
+

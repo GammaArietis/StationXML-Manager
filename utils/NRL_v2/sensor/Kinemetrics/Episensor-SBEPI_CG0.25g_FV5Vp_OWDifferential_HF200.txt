@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[2.0394]
+description = "Kinemetrics; Episensor-SBEPI; Clip_Level 0.25g; Full-Scale_Voltage 5Vp; Output_Wiring Differential; High-Frequency_Corner 200 Hz; Sensitivity 2.0394 V/m/s**2; Sensor_Type groundAccel"
+xml = "Episensor-SBEPI_CG0.25g_FV5Vp_OWDifferential_HF200_SG2.0394_STgroundAccel.xml"
+

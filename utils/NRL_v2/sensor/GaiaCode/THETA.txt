@@ -1,0 +1,12 @@
+[Main]
+question = "What is the long-period corner?"
+
+[60 s]
+path = "THETA_LP60.txt"
+
+[30 s]
+path = "THETA_LP30.txt"
+
+[120 s]
+path = "THETA_LP120.txt"
+

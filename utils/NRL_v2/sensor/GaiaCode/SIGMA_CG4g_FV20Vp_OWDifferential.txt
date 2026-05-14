@@ -1,0 +1,6 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[418 Hz]
+path = "SIGMA_CG4g_FV20Vp_OWDifferential_HF418.txt"
+

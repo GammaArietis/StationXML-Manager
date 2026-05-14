@@ -1,0 +1,12 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[40Vpp]
+path = "LPR-200_FV40Vpp.txt"
+
+[20Vpp]
+path = "LPR-200_FV20Vpp.txt"
+
+[10Vpp]
+path = "LPR-200_FV10Vpp.txt"
+

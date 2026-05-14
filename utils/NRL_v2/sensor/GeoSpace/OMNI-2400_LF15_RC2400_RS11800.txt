@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[43.2]
+description = "GeoSpace; OMNI-2400; Low-Frequency_Corner 15 Hz; Coil_Resistance 2400; Shunt_Resistance 11800; Sensitivity 43.2 V/m/s; Sensor_Type groundVel"
+xml = "OMNI-2400_LF15_RC2400_RS11800_SG43.2_STgroundVel.xml"
+

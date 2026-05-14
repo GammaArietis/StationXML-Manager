@@ -1,0 +1,6 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[3810]
+path = "HS-1LT_LF2_RC3810.txt"
+

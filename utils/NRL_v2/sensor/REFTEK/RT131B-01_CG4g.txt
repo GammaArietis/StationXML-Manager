@@ -1,0 +1,6 @@
+[Main]
+question = "What is the analog filter type?"
+
+[SF1500S]
+path = "RT131B-01_CG4g_AFSF1500S.txt"
+

@@ -1,0 +1,30 @@
+[Main]
+question = "What is the long-period corner?"
+
+[60 s]
+path = "CMG-40T_LP60.txt"
+
+[5 s]
+path = "CMG-40T_LP5.txt"
+
+[40 s]
+path = "CMG-40T_LP40.txt"
+
+[30 s]
+path = "CMG-40T_LP30.txt"
+
+[2 s]
+path = "CMG-40T_LP2.txt"
+
+[20 s]
+path = "CMG-40T_LP20.txt"
+
+[1 s]
+path = "CMG-40T_LP1.txt"
+
+[10 s]
+path = "CMG-40T_LP10.txt"
+
+[100 s]
+path = "CMG-40T_LP100.txt"
+

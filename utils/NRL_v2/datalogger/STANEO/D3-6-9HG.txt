@@ -1,0 +1,24 @@
+[Main]
+question = "What is the preamp gain ratio?"
+
+[8]
+path = "D3-6-9HG_PG8.txt"
+
+[64]
+path = "D3-6-9HG_PG64.txt"
+
+[4]
+path = "D3-6-9HG_PG4.txt"
+
+[32]
+path = "D3-6-9HG_PG32.txt"
+
+[2]
+path = "D3-6-9HG_PG2.txt"
+
+[1]
+path = "D3-6-9HG_PG1.txt"
+
+[16]
+path = "D3-6-9HG_PG16.txt"
+

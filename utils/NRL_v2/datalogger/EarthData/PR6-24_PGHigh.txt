@@ -1,0 +1,112 @@
+[Main]
+question = "What is the final sample rate?"
+
+[750 Hz]
+description = "EarthData; PR6-24; Preamp_Gain High; Final_Sample_Rate 750 Hz"
+xml = "PR6-24_PGHigh_FR750.xml"
+
+
+[75 Hz]
+description = "EarthData; PR6-24; Preamp_Gain High; Final_Sample_Rate 75 Hz"
+xml = "PR6-24_PGHigh_FR75.xml"
+
+
+[600 Hz]
+description = "EarthData; PR6-24; Preamp_Gain High; Final_Sample_Rate 600 Hz"
+xml = "PR6-24_PGHigh_FR600.xml"
+
+
+[500 Hz]
+description = "EarthData; PR6-24; Preamp_Gain High; Final_Sample_Rate 500 Hz"
+xml = "PR6-24_PGHigh_FR500.xml"
+
+
+[50 Hz]
+description = "EarthData; PR6-24; Preamp_Gain High; Final_Sample_Rate 50 Hz"
+xml = "PR6-24_PGHigh_FR50.xml"
+
+
+[5 Hz]
+description = "EarthData; PR6-24; Preamp_Gain High; Final_Sample_Rate 5 Hz"
+xml = "PR6-24_PGHigh_FR5.xml"
+
+
+[40 Hz]
+description = "EarthData; PR6-24; Preamp_Gain High; Final_Sample_Rate 40 Hz"
+xml = "PR6-24_PGHigh_FR40.xml"
+
+
+[4 Hz]
+description = "EarthData; PR6-24; Preamp_Gain High; Final_Sample_Rate 4 Hz"
+xml = "PR6-24_PGHigh_FR4.xml"
+
+
+[375 Hz]
+description = "EarthData; PR6-24; Preamp_Gain High; Final_Sample_Rate 375 Hz"
+xml = "PR6-24_PGHigh_FR375.xml"
+
+
+[300 Hz]
+description = "EarthData; PR6-24; Preamp_Gain High; Final_Sample_Rate 300 Hz"
+xml = "PR6-24_PGHigh_FR300.xml"
+
+
+[250 Hz]
+description = "EarthData; PR6-24; Preamp_Gain High; Final_Sample_Rate 250 Hz"
+xml = "PR6-24_PGHigh_FR250.xml"
+
+
+[25 Hz]
+description = "EarthData; PR6-24; Preamp_Gain High; Final_Sample_Rate 25 Hz"
+xml = "PR6-24_PGHigh_FR25.xml"
+
+
+[200 Hz]
+description = "EarthData; PR6-24; Preamp_Gain High; Final_Sample_Rate 200 Hz"
+xml = "PR6-24_PGHigh_FR200.xml"
+
+
+[20 Hz]
+description = "EarthData; PR6-24; Preamp_Gain High; Final_Sample_Rate 20 Hz"
+xml = "PR6-24_PGHigh_FR20.xml"
+
+
+[2 Hz]
+description = "EarthData; PR6-24; Preamp_Gain High; Final_Sample_Rate 2 Hz"
+xml = "PR6-24_PGHigh_FR2.xml"
+
+
+[150 Hz]
+description = "EarthData; PR6-24; Preamp_Gain High; Final_Sample_Rate 150 Hz"
+xml = "PR6-24_PGHigh_FR150.xml"
+
+
+[125 Hz]
+description = "EarthData; PR6-24; Preamp_Gain High; Final_Sample_Rate 125 Hz"
+xml = "PR6-24_PGHigh_FR125.xml"
+
+
+[120 Hz]
+description = "EarthData; PR6-24; Preamp_Gain High; Final_Sample_Rate 120 Hz"
+xml = "PR6-24_PGHigh_FR120.xml"
+
+
+[1000 Hz]
+description = "EarthData; PR6-24; Preamp_Gain High; Final_Sample_Rate 1000 Hz"
+xml = "PR6-24_PGHigh_FR1000.xml"
+
+
+[100 Hz]
+description = "EarthData; PR6-24; Preamp_Gain High; Final_Sample_Rate 100 Hz"
+xml = "PR6-24_PGHigh_FR100.xml"
+
+
+[10 Hz]
+description = "EarthData; PR6-24; Preamp_Gain High; Final_Sample_Rate 10 Hz"
+xml = "PR6-24_PGHigh_FR10.xml"
+
+
+[1 Hz]
+description = "EarthData; PR6-24; Preamp_Gain High; Final_Sample_Rate 1 Hz"
+xml = "PR6-24_PGHigh_FR1.xml"
+

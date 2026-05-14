@@ -1,0 +1,27 @@
+[Main]
+question = "What is the final sample rate?"
+
+[50 Hz]
+description = "ANURSES; TerraSAWR; Full-Scale_Voltage 10Vpp; Final_Sample_Rate 50 Hz"
+xml = "TerraSAWR_FV10Vpp_FR50.xml"
+
+
+[250 Hz]
+description = "ANURSES; TerraSAWR; Full-Scale_Voltage 10Vpp; Final_Sample_Rate 250 Hz"
+xml = "TerraSAWR_FV10Vpp_FR250.xml"
+
+
+[1000 Hz]
+description = "ANURSES; TerraSAWR; Full-Scale_Voltage 10Vpp; Final_Sample_Rate 1000 Hz"
+xml = "TerraSAWR_FV10Vpp_FR1000.xml"
+
+
+[100 Hz]
+description = "ANURSES; TerraSAWR; Full-Scale_Voltage 10Vpp; Final_Sample_Rate 100 Hz"
+xml = "TerraSAWR_FV10Vpp_FR100.xml"
+
+
+[10 Hz]
+description = "ANURSES; TerraSAWR; Full-Scale_Voltage 10Vpp; Final_Sample_Rate 10 Hz"
+xml = "TerraSAWR_FV10Vpp_FR10.xml"
+

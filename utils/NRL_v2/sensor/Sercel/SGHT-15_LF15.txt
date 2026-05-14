@@ -1,0 +1,6 @@
+[Main]
+question = "What is the coil resistance in ohms?"
+
+[2350]
+path = "SGHT-15_LF15_RC2350.txt"
+

@@ -1,0 +1,7 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[500 Hz]
+description = "GEObit; SM1500; Clip_Level 2g; Full-Scale_Voltage 10Vp; High-Frequency_Corner 500 Hz; Sensitivity 0.2753 V/m/s**2; Sensor_Type groundAccel"
+xml = "SM1500_CG2g_FV10Vp_HF500_SG0.2753_STgroundAccel.xml"
+

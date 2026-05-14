@@ -1,0 +1,7 @@
+[Main]
+question = "What is the shunt resistance in ohms?"
+
+[9090]
+description = "HGSProducts; HG-6-Bcoil; Low-Frequency_Corner 4.5 Hz; Coil_Resistance 375; Shunt_Resistance 9090; Sensitivity 27.7 V/m/s; Sensor_Type groundVel"
+xml = "HG-6-Bcoil_LF4.5_RC375_RS9090_SG27.7_STgroundVel.xml"
+

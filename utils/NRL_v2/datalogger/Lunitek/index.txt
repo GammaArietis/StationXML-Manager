@@ -1,0 +1,15 @@
+[Main]
+question = "Select the Lunitek datalogger model"
+
+[Triton]
+path="Triton.txt"
+
+[Sentinel-rev1]
+path="Sentinel-rev1.txt"
+
+[ATLAS]
+path="ATLAS.txt"
+
+[ATLAS-F-plus]
+path="ATLAS-F-plus.txt"
+

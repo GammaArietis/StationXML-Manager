@@ -1,0 +1,7 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[500 Hz]
+description = "REFTEK; RT131B-01; Clip_Level 4g; Analog_Filter_Type SF1500S; Full-Scale_Voltage 10Vp; High-Frequency_Corner 500 Hz; Sensitivity 0.25493 V/m/s**2; Sensor_Type groundAccel"
+xml = "RT131B-01_CG4g_AFSF1500S_FV10Vp_HF500_SG0.25493_STgroundAccel.xml"
+

@@ -1,0 +1,7 @@
+[Main]
+question = "What is the sensitivity?"
+
+[344]
+description = "Geotech; S-13J; Long-Period_Corner 1 s; Sensitivity 344 V/m/s; Coil_Resistance 6400; Sensor_Type groundVel"
+xml = "S-13J_LP1_SG344_RC6400_STgroundVel.xml"
+

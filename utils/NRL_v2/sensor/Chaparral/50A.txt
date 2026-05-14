@@ -1,0 +1,11 @@
+[Main]
+question = "What is the sensitivity?"
+
+[2.0]
+description = "Chaparral; 50A; Sensitivity 2.0 V/Pa; Long-Period_Corner 50 s; High-Frequency_Corner 50 Hz; Sensor_Type airPressure"
+xml = "50A_SG2.0_LP50_HF50_STairPressure.xml"
+
+[0.4]
+description = "Chaparral; 50A; Sensitivity 0.4 V/Pa; Long-Period_Corner 50 s; High-Frequency_Corner 50 Hz; Sensor_Type airPressure"
+xml = "50A_SG0.4_LP50_HF50_STairPressure.xml"
+

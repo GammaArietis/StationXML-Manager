@@ -1,0 +1,12 @@
+[Main]
+question = "What is the final filter phase?"
+
+[Minimum]
+description = "Nanometrics; MeridianCompact; Full-Scale_Voltage 4Vpp; Final_Sample_Rate 200 Hz; DC_Filter Off; Final_Filter_Phase Minimum"
+xml = "MeridianCompact_FV4Vpp_FR200_DFOff_FPMinimum.xml"
+
+
+[Linear]
+description = "Nanometrics; MeridianCompact; Full-Scale_Voltage 4Vpp; Final_Sample_Rate 200 Hz; DC_Filter Off; Final_Filter_Phase Linear"
+xml = "MeridianCompact_FV4Vpp_FR200_DFOff_FPLinear.xml"
+

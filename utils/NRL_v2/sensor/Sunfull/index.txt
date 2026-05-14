@@ -1,0 +1,6 @@
+[Main]
+question = "Select the Sunfull sensor model"
+
+[PS-4.5C1]
+path="PS-4.5C1.txt"
+

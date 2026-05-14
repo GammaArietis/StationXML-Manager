@@ -1,0 +1,6 @@
+[Main]
+question = "What is the full scale voltage?"
+
+[10Vp]
+path = "SA10_CG0.25g_FV10Vp.txt"
+

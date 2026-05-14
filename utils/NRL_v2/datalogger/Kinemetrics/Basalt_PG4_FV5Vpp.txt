@@ -1,0 +1,38 @@
+[Main]
+question = "What is the final sample rate?"
+
+[50 Hz]
+path = "Basalt_PG4_FV5Vpp_FR50.txt"
+
+
+[500 Hz]
+path = "Basalt_PG4_FV5Vpp_FR500.txt"
+
+
+[250 Hz]
+path = "Basalt_PG4_FV5Vpp_FR250.txt"
+
+
+[200 Hz]
+path = "Basalt_PG4_FV5Vpp_FR200.txt"
+
+
+[2000 Hz]
+path = "Basalt_PG4_FV5Vpp_FR2000.txt"
+
+
+[1 Hz]
+path = "Basalt_PG4_FV5Vpp_FR1.txt"
+
+
+[10 Hz]
+path = "Basalt_PG4_FV5Vpp_FR10.txt"
+
+
+[100 Hz]
+path = "Basalt_PG4_FV5Vpp_FR100.txt"
+
+
+[1000 Hz]
+path = "Basalt_PG4_FV5Vpp_FR1000.txt"
+

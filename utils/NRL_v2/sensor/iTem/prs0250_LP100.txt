@@ -1,0 +1,7 @@
+[Main]
+question = "What is the high-frequency corner?"
+
+[100 Hz]
+description = "iTem; prs0250; Long-Period_Corner 100 s; High-Frequency_Corner 100 Hz; Sensitivity 0.01 V/Pa; Sensor_Type airPressure"
+xml = "prs0250_LP100_HF100_SG0.01_STairPressure.xml"
+

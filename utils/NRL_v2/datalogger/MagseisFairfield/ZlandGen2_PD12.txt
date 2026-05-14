@@ -1,0 +1,18 @@
+[Main]
+question = "What is the final sample rate?"
+
+[500 Hz]
+path = "ZlandGen2_PD12_FR500.txt"
+
+
+[250 Hz]
+path = "ZlandGen2_PD12_FR250.txt"
+
+
+[2000 Hz]
+path = "ZlandGen2_PD12_FR2000.txt"
+
+
+[1000 Hz]
+path = "ZlandGen2_PD12_FR1000.txt"
+
