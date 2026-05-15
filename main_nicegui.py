@@ -2,8 +2,13 @@ import os
 import queue
 
 from utils.open_files_limit import maximize_open_files_limit
+from utils.logging_config import configure_application_logging
+from core.database import init_database
 
 maximize_open_files_limit()
+configure_application_logging()
+init_database()
+
 import tempfile
 import traceback
 import time

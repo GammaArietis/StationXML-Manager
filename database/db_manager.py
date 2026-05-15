@@ -47,7 +47,9 @@ class DatabaseManager:
 
     def initialize_database(self, schema_path: str | Path) -> None:
         """
-        Reads the schema.sql file and creates the tables if they don't exist.
+        Reads schema.sql and applies it (CREATE TABLE IF NOT EXISTS, migrations).
+
+        Prefer :func:`core.database.init_database` at application startup.
         """
         schema_path = Path(schema_path)
         

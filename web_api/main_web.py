@@ -16,7 +16,7 @@ from core.services.equipment_service import EquipmentService
 from core.services.network_service import NetworkService
 from core.services.station_service import StationService
 from core.validators.geo_validators import ValidationError
-from database.db_manager import DatabaseManager
+from core.database import init_database
 from database.daos.network_dao import NetworkDAO
 from database.daos.station_dao import StationDAO
 from database.daos.channel_dao import ChannelDAO
@@ -47,7 +47,7 @@ app.add_middleware(
     path_prefix="/api/",
 )
 
-db_manager = DatabaseManager(_settings.database_path)
+db_manager = init_database(settings=_settings)
 
 net_dao = NetworkDAO(db_manager)
 sta_dao = StationDAO(db_manager)

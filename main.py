@@ -3,7 +3,7 @@ import logging
 from PyQt6.QtWidgets import QApplication
 
 # 1. Import DAOs
-from database.db_manager import DatabaseManager
+from core.database import init_database
 from database.daos.network_dao import NetworkDAO
 from database.daos.station_dao import StationDAO
 from database.daos.channel_dao import ChannelDAO
@@ -16,7 +16,6 @@ from controllers.channel_controller import ChannelController
 from controllers.equipment_controller import EquipmentController
 
 # 3. Import Core & UI
-from core.config import get_settings
 from core.state import AppState
 from ui.main_window import MainWindow
 from utils.logging_config import configure_application_logging
@@ -32,13 +31,10 @@ def main():
     app = QApplication(sys.argv)
     install_qt_exception_hook()
 
-    settings = get_settings()
-    db_manager = DatabaseManager(settings.database_path)
-    
     try:
-        db_manager.initialize_database(settings.schema_path)
+        db_manager = init_database()
     except FileNotFoundError:
-        logger.critical(f"SQL Schema not found!")
+        logger.critical("SQL schema not found — check database/schema.sql")
         sys.exit(1)
         
     # Initialize Global State
