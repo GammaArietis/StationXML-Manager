@@ -53,6 +53,9 @@ class EquipmentController:
     def clone_preamplifier_model(self, pa: Preamplifier) -> Preamplifier:
         return self._catalog.equipment.clone_preamplifier(pa)
 
+    def clone_operator_model(self, operator: Operator) -> Operator:
+        return self._catalog.equipment.clone_operator(operator)
+
     def delete_sensor(self, sensor_id: int) -> bool:
         return self._catalog.delete_sensor(sensor_id)
 

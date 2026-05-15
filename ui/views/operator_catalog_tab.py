@@ -13,6 +13,7 @@ class OperatorCatalogTab(QWidget):
         super().__init__()
         self.eq_ctrl = equip_ctrl
         self.current_op = None
+        self._selected_op_id = None
         self._setup_ui()
         self.refresh_list()
 
@@ -83,24 +84,62 @@ class OperatorCatalogTab(QWidget):
 
     def _prepare_new_operator(self):
         self.current_op = Operator(agency="")
+        self._selected_op_id = None
         self.agency_input.clear(); self.name_input.clear(); self.email_input.clear()
         self.web_input.clear(); self.phone_input.clear(); self.op_list.clearSelection()
         self.clone_btn.setEnabled(False); self.delete_btn.setEnabled(False)
 
     def _load_selected_operator(self, item):
-        self.current_op = item.data(Qt.ItemDataRole.UserRole)
+        op_brief = item.data(Qt.ItemDataRole.UserRole)
+        oid = getattr(op_brief, "id", None)
+        self._selected_op_id = oid
+        self.current_op = self.eq_ctrl.get_operator_by_id(oid) if oid else op_brief
+        if not self.current_op:
+            self.current_op = op_brief
         self.agency_input.setText(self.current_op.agency)
         self.name_input.setText(self.current_op.contact_name or "")
         self.email_input.setText(self.current_op.contact_email or "")
         self.web_input.setText(self.current_op.website or "")
         self.phone_input.setText(self.current_op.phone_number or "")
-        self.clone_btn.setEnabled(True); self.delete_btn.setEnabled(True)
+        self.clone_btn.setEnabled(bool(oid))
+        self.delete_btn.setEnabled(bool(oid))
+
+    def _select_op_row_by_id(self, operator_id: int) -> None:
+        for i in range(self.op_list.count()):
+            it = self.op_list.item(i)
+            op = it.data(Qt.ItemDataRole.UserRole)
+            if op is not None and getattr(op, "id", None) == operator_id:
+                self.op_list.setCurrentItem(it)
+                self.op_list.scrollToItem(it)
+                self._load_selected_operator(it)
+                return
 
     def _on_clone_clicked(self):
-        if not self.current_op: return
-        self.current_op.id = None
-        self.agency_input.setText(f"{self.current_op.agency} (Copy)")
-        self.clone_btn.setEnabled(False); self.delete_btn.setEnabled(False)
+        oid = self._selected_op_id
+        if oid is None and self.current_op and self.current_op.id:
+            oid = self.current_op.id
+        if oid is None:
+            QMessageBox.warning(self, "Clone", "Select a saved catalog operator first.")
+            return
+        src = self.eq_ctrl.get_operator_by_id(oid)
+        if not src:
+            QMessageBox.warning(self, "Clone", "Operator not found in catalog.")
+            return
+        dup = self.eq_ctrl.clone_operator_model(src)
+        saved = self.eq_ctrl.save_operator(dup)
+        if not saved:
+            QMessageBox.warning(
+                self, "Clone", "Could not save the duplicate (unique constraint?)."
+            )
+            return
+        self.refresh_list()
+        self._select_op_row_by_id(saved.id)
+        self.current_op = saved
+        self._selected_op_id = saved.id
+        self.clone_btn.setEnabled(True)
+        self.delete_btn.setEnabled(True)
+        QMessageBox.information(self, "Cloned", f"Created in catalog: {saved.agency}")
+        app_signals.equipment_updated.emit()
 
     def _on_save_clicked(self):
         agency = self.agency_input.text().strip()

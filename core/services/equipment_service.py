@@ -189,6 +189,15 @@ class EquipmentService:
                         pz["id"] = None
         return Preamplifier.model_validate(data)
 
+    def clone_operator(self, operator: Operator) -> Operator:
+        data = operator.model_dump()
+        data["id"] = None
+        if data.get("agency"):
+            data["agency"] = f"{data['agency']} (Copy)"
+        elif data.get("contact_name"):
+            data["contact_name"] = f"{data['contact_name']} (Copy)"
+        return Operator.model_validate(data)
+
     def merge_sensor_from_pyqt_editor(
         self,
         base: Optional[Sensor],

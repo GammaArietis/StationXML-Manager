@@ -82,7 +82,8 @@ class PreamplifierCatalogTab(QWidget):
         pz_btns = QHBoxLayout()
         az = QPushButton("+ Zero"); az.clicked.connect(lambda: self._add_row(self.zt))
         ap = QPushButton("+ Pole"); ap.clicked.connect(lambda: self._add_row(self.pt))
-        pz_btns.addWidget(az); pz_btns.addWidget(ap)
+        dp = QPushButton("- Remove Row"); dp.clicked.connect(self._remove_selected_row)
+        pz_btns.addWidget(az); pz_btns.addWidget(ap); pz_btns.addWidget(dp)
         stage_layout.addLayout(pz_btns)
         editor_layout.addWidget(stage_group)
 
@@ -119,6 +120,11 @@ class PreamplifierCatalogTab(QWidget):
 
     def _add_row(self, t, r=0.0, i=0.0):
         row = t.rowCount(); t.insertRow(row); t.setItem(row,0,QTableWidgetItem(str(r))); t.setItem(row,1,QTableWidgetItem(str(i)))
+
+    def _remove_selected_row(self):
+        for t in [self.zt, self.pt]:
+            if t.hasFocus() and t.currentRow() >= 0:
+                t.removeRow(t.currentRow())
 
     def refresh_list(self):
         self.model_list.clear()

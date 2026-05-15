@@ -4,7 +4,8 @@ import csv
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QFormLayout, QLineEdit,
                              QPushButton, QTableWidget, QTableWidgetItem, QHeaderView,
                              QSplitter, QMessageBox, QLabel, QDoubleSpinBox, QListWidget,
-                             QListWidgetItem, QGroupBox, QFileDialog, QInputDialog, QTextEdit)
+                             QListWidgetItem, QGroupBox, QFileDialog, QInputDialog, QTextEdit,
+                             QAbstractItemView)
 from PyQt6.QtCore import Qt
 
 from core.models.base_models import Datalogger, ResponseFilter
@@ -89,12 +90,29 @@ class DataloggerCatalogTab(QWidget):
         stage_group = QGroupBox("Acquisition Chain (Stages and Filters)")
         stage_layout = QVBoxLayout(stage_group)
         
-        self.stages_table = QTableWidget(0, 6)
-        self.stages_table.setHorizontalHeaderLabels(["Stage", "Type", "Gain", "Rate In (Hz)", "Rate Out (Hz)", "Decim."])
+        self.stages_table = QTableWidget(0, 8)
+        self.stages_table.setHorizontalHeaderLabels([
+            "Stage", "Type", "Gain", "Rate In (Hz)", "Rate Out (Hz)", "Decim.",
+            "Delay (s)", "Correction (s)",
+        ])
         self.stages_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
-        self.stages_table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+        self.stages_table.setEditTriggers(
+            QAbstractItemView.EditTrigger.DoubleClicked
+            | QAbstractItemView.EditTrigger.SelectedClicked
+            | QAbstractItemView.EditTrigger.AnyKeyPressed
+        )
         self.stages_table.itemSelectionChanged.connect(self._on_stage_selected)
+        self.stages_table.itemChanged.connect(self._on_stage_cell_changed)
         stage_layout.addWidget(self.stages_table)
+
+        stage_row_btns = QHBoxLayout()
+        add_stage_btn = QPushButton("+ Add Row")
+        add_stage_btn.clicked.connect(self._add_stage_row)
+        rem_stage_btn = QPushButton("- Remove Row")
+        rem_stage_btn.clicked.connect(self._remove_stage_row)
+        stage_row_btns.addWidget(add_stage_btn)
+        stage_row_btns.addWidget(rem_stage_btn)
+        stage_layout.addLayout(stage_row_btns)
 
         stage_layout.addWidget(QLabel("<b>Selected Stage Coefficients (JSON):</b>"))
         self.coeffs_edit = QTextEdit()
@@ -161,6 +179,64 @@ class DataloggerCatalogTab(QWidget):
             self.replace_btn.setEnabled(False)
             self.delete_btn.setEnabled(False)
             return
+        self._fill_ui_from_datalogger(self.current_dl)
+
+    def _editable_delay_correction_item(self, value: float) -> QTableWidgetItem:
+        item = QTableWidgetItem(f"{value:.6g}")
+        item.setFlags(item.flags() | Qt.ItemFlag.ItemIsEditable)
+        return item
+
+    def _on_stage_cell_changed(self, item: QTableWidgetItem):
+        col = item.column()
+        if col not in (6, 7):
+            return
+        row = item.row()
+        stage_item = self.stages_table.item(row, 0)
+        if not stage_item:
+            return
+        filt = stage_item.data(Qt.ItemDataRole.UserRole)
+        if not filt:
+            return
+        try:
+            if col == 6:
+                filt.estimated_delay = float(item.text().strip() or 0)
+            else:
+                filt.correction_applied = float(item.text().strip() or 0)
+        except ValueError:
+            pass
+
+    def _add_stage_row(self):
+        if not self.current_dl:
+            self.current_dl = Datalogger(manufacturer="", model="")
+        if self.current_dl.filters is None:
+            self.current_dl.filters = []
+        next_num = len(self.current_dl.filters) + 1
+        self.current_dl.filters.append(
+            ResponseFilter(
+                stage_number=next_num,
+                filter_type="FIR",
+                coefficients="[]",
+            )
+        )
+        self._fill_ui_from_datalogger(self.current_dl)
+
+    def _remove_stage_row(self):
+        if not self.current_dl or not self.current_dl.filters:
+            return
+        row = self.stages_table.currentRow()
+        if row < 0:
+            QMessageBox.warning(self, "Remove Row", "Select a stage row to remove.")
+            return
+        stage_item = self.stages_table.item(row, 0)
+        if not stage_item:
+            return
+        filt = stage_item.data(Qt.ItemDataRole.UserRole)
+        if filt in self.current_dl.filters:
+            self.current_dl.filters.remove(filt)
+        for i, f in enumerate(
+            sorted(self.current_dl.filters, key=lambda x: x.stage_number), start=1
+        ):
+            f.stage_number = i
         self._fill_ui_from_datalogger(self.current_dl)
 
     def _on_stage_selected(self):
@@ -279,8 +355,17 @@ class DataloggerCatalogTab(QWidget):
                 with open(path, 'w', newline='') as f:
                     w = csv.writer(f)
                     w.writerow(["Datalogger", self.current_dl.manufacturer, self.current_dl.model])
-                    w.writerow(["Stage", "Type", "Gain", "Rate In (Hz)", "Rate Out (Hz)", "Decimation"])
-                    for r in range(self.stages_table.rowCount()): w.writerow([self.stages_table.item(r,c).text() for c in range(6)])
+                    w.writerow([
+                        "Stage", "Type", "Gain", "Rate In (Hz)", "Rate Out (Hz)",
+                        "Decimation", "Delay (s)", "Correction (s)",
+                    ])
+                    for r in range(self.stages_table.rowCount()):
+                        w.writerow([
+                            self.stages_table.item(r, c).text()
+                            if self.stages_table.item(r, c)
+                            else ""
+                            for c in range(8)
+                        ])
                 QMessageBox.information(self, "OK", "CSV Report generated!")
             except Exception as e: QMessageBox.critical(self, "Error", str(e))
 
@@ -350,7 +435,7 @@ class DataloggerCatalogTab(QWidget):
         
         self.stages_table.blockSignals(True)
         self.stages_table.setRowCount(0)
-        
+
         for f in sorted(dl.filters, key=lambda x: x.stage_number):
             r = self.stages_table.rowCount()
             self.stages_table.insertRow(r)
@@ -390,6 +475,10 @@ class DataloggerCatalogTab(QWidget):
             self.stages_table.setItem(r, 3, QTableWidgetItem(in_str))
             self.stages_table.setItem(r, 4, QTableWidgetItem(out_str))
             self.stages_table.setItem(r, 5, QTableWidgetItem(dec_str))
+            delay_val = float(getattr(f, "estimated_delay", 0.0) or 0.0)
+            corr_val = float(getattr(f, "correction_applied", 0.0) or 0.0)
+            self.stages_table.setItem(r, 6, self._editable_delay_correction_item(delay_val))
+            self.stages_table.setItem(r, 7, self._editable_delay_correction_item(corr_val))
 
         self.stages_table.blockSignals(False)
         self.coeffs_edit.clear()
