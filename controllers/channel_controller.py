@@ -43,6 +43,9 @@ class ChannelController:
             if preamp and hasattr(preamp, "analog_stages"):
                 for stage in preamp.analog_stages:
                     total_sens *= float(stage.stage_gain)
+        preamp_gain = getattr(channel, "pre_amplifier_gain", None)
+        if preamp_gain is not None and float(preamp_gain) > 0:
+            total_sens *= float(preamp_gain)
         if channel.datalogger_id:
             dl = self.eq_ctrl.get_datalogger(channel.datalogger_id)
             if dl and getattr(dl, "gain", None):

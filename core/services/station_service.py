@@ -220,3 +220,45 @@ class StationService:
             red_lights_count,
         )
         return red_lights_count
+
+    def run_nrl_refresh_for_station(
+        self,
+        station_id: int,
+        *,
+        equipment_service: EquipmentService,
+        channel_dao: ChannelDAO,
+        nrl_mgr: Optional[_NrlManagerLike] = None,
+    ) -> bool:
+        """
+        Re-apply NRL metadata for sensors/dataloggers used by channels on one station.
+        Marks the station out-of-sync when any catalog item changes.
+        """
+        if nrl_mgr is None:
+            from utils.nrl_client import NRLManager
+
+            nrl_mgr = NRLManager()
+
+        channels = channel_dao.get_by_station_id(station_id)
+        sensor_ids = {c.sensor_id for c in channels if c.sensor_id}
+        datalogger_ids = {c.datalogger_id for c in channels if c.datalogger_id}
+
+        changed = False
+        for sid in sensor_ids:
+            sn = equipment_service.get_sensor(sid)
+            if sn and getattr(sn, "nrl_path", None):
+                if self.apply_nrl_to_catalog_item(
+                    sn, nrl_mgr, equipment_service=equipment_service, is_sensor=True
+                ):
+                    changed = True
+
+        for did in datalogger_ids:
+            dl = equipment_service.get_datalogger(did)
+            if dl and getattr(dl, "nrl_path", None):
+                if self.apply_nrl_to_catalog_item(
+                    dl, nrl_mgr, equipment_service=equipment_service, is_sensor=False
+                ):
+                    changed = True
+
+        if changed:
+            self._dao.update_sync_hash(station_id, "NRL_CATALOG_MODIFIED")
+        return changed

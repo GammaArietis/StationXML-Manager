@@ -22,7 +22,7 @@ from importer.stationxml_parser import StationXMLParser
 from controllers.stationxml_export_controller import StationXMLWebExportController
 from ui.views.math_deduplicator_dialog import MathDeduplicatorDialog
 from ui.job_system import Job, JobRunner
-from utils.yasmine_client import YasmineClient
+from utils.yasmine_client import YasmineClient, YASMINE_INTER_REQUEST_DELAY_SEC
 
 logger = logging.getLogger(__name__)
 
@@ -137,7 +137,7 @@ class MainWindow(QMainWindow):
         self.workspace.addWidget(self.station_tab)
         
         # Workspace index 3: channel form.
-        self.channel_tab = ChannelTab(self.cha_ctrl, self.equ_ctrl)
+        self.channel_tab = ChannelTab(self.cha_ctrl, self.equ_ctrl, self.sta_ctrl)
         self.workspace.addWidget(self.channel_tab)
         
         splitter.addWidget(left_panel)
@@ -145,12 +145,16 @@ class MainWindow(QMainWindow):
         splitter.setSizes([300, 900])
         
 
+    def _on_equipment_updated(self):
+        self.channel_tab.refresh_catalog_combos()
+        self.tree_nav.update()
+
     def _connect_signals(self):
         # Tree refresh
         app_signals.network_updated.connect(self.tree_nav.refresh_tree)
-        app_signals.station_updated.connect(self.tree_nav.refresh_tree)
+        app_signals.station_updated.connect(self._refresh_tree_and_channel_nrl)
         app_signals.channel_updated.connect(self.tree_nav.refresh_tree)
-        app_signals.equipment_updated.connect(self.channel_tab.refresh_catalog_combos)
+        app_signals.equipment_updated.connect(self._on_equipment_updated)
         
         # Yasmine
         app_signals.sync_yasmine_requested.connect(self._sync_station_to_yasmine)
@@ -684,31 +688,53 @@ class MainWindow(QMainWindow):
             on_error=self._on_sync_station_to_yasmine_failed,
         )
 
-    def _job_sync_station_to_yasmine(self, station_id, report_progress=None, is_cancelled=None):
+    def _perform_yasmine_sync_for_station(self, station_id: int) -> dict:
+        """
+        Shared Yasmine upload path used by single Send and bulk Sync Red Stations.
+        Updates yasmine_sync_state (hash + sync_timestamp) via mark_as_synced.
+        """
         station = self.sta_ctrl.get_station_by_id(station_id)
         if not station:
-            return None
+            raise RuntimeError(f"Station id={station_id} not found in local DB.")
         network = self.net_ctrl.get_network_by_id(station.network_id)
         if not network:
-            return None
+            raise RuntimeError(f"Network for station {station.code} not found.")
 
         client = YasmineClient()
-        exporter = StationXMLExporter(self.net_ctrl, self.sta_ctrl, self.cha_ctrl, self.equ_ctrl)
+        exporter = StationXMLExporter(
+            self.net_ctrl, self.sta_ctrl, self.cha_ctrl, self.equ_ctrl
+        )
         inv = exporter.build_inventory(target_station_id=station_id)
 
         out_stream = io.BytesIO()
         inv.write(out_stream, format="STATIONXML", validate=True)
         xml_bytes = out_stream.getvalue()
 
-        filename = f"{network.code}_{station.code}_sync.xml"
-        existing_id = client.find_existing_xml(network.code, station.code)
-        if existing_id:
-            client.delete_xml(existing_id)
-            logger.info(f"Old XML file {existing_id} removed from Yasmine.")
+        remote_list = client.get_all_imported_xmls()
+        if not client.delete_remote_for_station(
+            station.code, remote_list, network_code=network.code
+        ):
+            raise RuntimeError(
+                f"Unable to remove existing XML for {station.code} on Yasmine."
+            )
 
-        new_yasmine_id = client.upload_xml(xml_bytes, filename)
-        self.sta_ctrl.mark_as_synced(station, new_yasmine_id)
-        return {"station_code": station.code, "new_yasmine_id": new_yasmine_id}
+        new_yasmine_id = client.upload_xml(xml_bytes, station.code)
+        if new_yasmine_id is None:
+            raise RuntimeError(f"Yasmine upload failed for {station.code}.")
+
+        if not self.sta_ctrl.mark_as_synced(station, str(new_yasmine_id)):
+            raise RuntimeError(
+                f"Unable to save Yasmine sync state for {station.code} in local DB."
+            )
+
+        return {
+            "station_id": station_id,
+            "station_code": station.code,
+            "new_yasmine_id": new_yasmine_id,
+        }
+
+    def _job_sync_station_to_yasmine(self, station_id, report_progress=None, is_cancelled=None):
+        return self._perform_yasmine_sync_for_station(station_id)
 
     def _on_sync_station_to_yasmine_finished(self, payload):
         if not payload:
@@ -734,10 +760,10 @@ class MainWindow(QMainWindow):
             QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
             try:
                 count = self.sta_ctrl.update_all_nrl_sensors()
-                
-                if count > 0:
-                    app_signals.station_updated.emit()
-                
+                app_signals.equipment_updated.emit()
+                app_signals.station_updated.emit()
+                self.tree_nav.update()
+
                 QApplication.restoreOverrideCursor()
                 QMessageBox.information(self, "Completed", f"Update finished.\nStations to resend to Yasmine: {count}")
             except Exception as e:
@@ -772,93 +798,94 @@ class MainWindow(QMainWindow):
             self._bulk_yasmine_progress.setValue(0)
             self._bulk_yasmine_progress.show()
             self._bulk_yasmine_progress.canceled.connect(lambda: self._job_runner.cancel_job("bulk_yasmine_sync"))
+            red_station_ids = [s.id for s in red_stations if s.id is not None]
             self._job_runner.run_job(
                 Job(
                     name="bulk_yasmine_sync",
                     function=self._job_bulk_yasmine_sync,
-                    args=(red_stations,),
+                    args=(red_station_ids,),
                 ),
                 on_progress=self._on_bulk_yasmine_sync_progress,
                 on_finished=self._on_bulk_yasmine_sync_finished,
                 on_error=self._on_bulk_yasmine_sync_failed,
             )
 
-    def _job_bulk_yasmine_sync(self, red_stations, report_progress=None, is_cancelled=None):
-        from core.services.station_service import calculate_station_hash
+    def _refresh_tree_and_channel_nrl(self):
+        self.tree_nav.refresh_tree()
+        self.tree_nav.update()
 
-        client = YasmineClient()
-        exporter = StationXMLExporter(self.net_ctrl, self.sta_ctrl, self.cha_ctrl, self.equ_ctrl)
-        remote_list = client.get_all_imported_xmls()
-
-        success_count = 0
+    def _job_bulk_yasmine_sync(self, red_station_ids, report_progress=None, is_cancelled=None):
+        updated_count = 0
         consecutive_errors = 0
         interrupted_by_server = False
+        total = len(red_station_ids)
 
-        for i, station in enumerate(red_stations):
+        for i, station_id in enumerate(red_station_ids):
             if is_cancelled and is_cancelled():
                 break
 
-            network = self.net_ctrl.get_network_by_id(station.network_id)
+            station = self.sta_ctrl.get_station_by_id(station_id)
+            station_code = station.code if station else f"id={station_id}"
+
             if report_progress:
-                report_progress({"current": i, "total": len(red_stations), "station_code": station.code})
+                report_progress(
+                    {
+                        "current": i,
+                        "total": total,
+                        "station_code": station_code,
+                    }
+                )
 
             try:
-                inv = exporter.build_inventory(target_station_id=station.id)
-                out_stream = io.BytesIO()
-                inv.write(out_stream, format="STATIONXML", validate=True)
-                xml_bytes = out_stream.getvalue()
-
-                old_name_format = f"{network.code}_{station.code}_sync"
-                existing_item = next((item for item in remote_list if isinstance(item, dict) and
-                                     (item.get('name') == station.code or item.get('name') == old_name_format)), None)
-
-                if existing_item:
-                    existing_item = next((item for item in remote_list if isinstance(item, dict) and item.get('name') == station.code), None)
-                    if existing_item:
-                        old_id = existing_item.get('id')
-                        client.delete_xml(old_id)
-
-                new_id = client.upload_xml(xml_bytes, station.code)
-
-                if new_id is not None:
-                    current_hash = calculate_station_hash(station)
-                    station.sync_hash = current_hash
-
-                    self.sta_ctrl.dao.upsert_sync_state(station.id, new_id, current_hash)
-                    self.sta_ctrl.mark_as_synced(station, new_id)
-
-                    success_count += 1
-                    consecutive_errors = 0
-                else:
-                    logger.error(f"No ID returned by Yasmine for {station.code}")
-                    consecutive_errors += 1
-
+                self._perform_yasmine_sync_for_station(station_id)
+                updated_count += 1
+                consecutive_errors = 0
+                app_signals.station_updated.emit()
             except Exception as e:
-                logger.error(f"Failure on {station.code}: {e}")
+                logger.error("Failure on %s: %s", station_code, e)
                 consecutive_errors += 1
+
+            if i < total - 1:
+                time.sleep(YASMINE_INTER_REQUEST_DELAY_SEC)
 
             if consecutive_errors >= 3:
                 interrupted_by_server = True
                 break
 
-        return {"success_count": success_count, "interrupted_by_server": interrupted_by_server}
+        return {
+            "updated_count": updated_count,
+            "success_count": updated_count,
+            "interrupted_by_server": interrupted_by_server,
+        }
 
     def _on_bulk_yasmine_sync_progress(self, payload):
+        QApplication.processEvents()
         if self._bulk_yasmine_progress:
             self._bulk_yasmine_progress.setMaximum(payload["total"])
             self._bulk_yasmine_progress.setValue(payload["current"])
             self._bulk_yasmine_progress.setLabelText(f"Sending {payload['station_code']}...")
 
     def _on_bulk_yasmine_sync_finished(self, payload):
-        success_count = payload["success_count"]
-        interrupted_by_server = payload["interrupted_by_server"]
+        if not payload:
+            payload = {}
+        updated_count = payload.get("updated_count", payload.get("success_count", 0))
+        interrupted_by_server = payload.get("interrupted_by_server", False)
         app_signals.station_updated.emit()
+        self._refresh_tree_and_channel_nrl()
         if self._bulk_yasmine_progress:
             self._bulk_yasmine_progress.setValue(self._bulk_yasmine_progress.maximum())
             self._bulk_yasmine_progress.close()
         if interrupted_by_server:
-            QMessageBox.critical(self, "Critical Error", "Sync interrupted: Yasmine is not responding correctly.")
-        QMessageBox.information(self, "Finished", f"Completed. Successes: {success_count}")
+            QMessageBox.critical(
+                self,
+                "Critical Error",
+                "Sync interrupted: Yasmine is not responding correctly.",
+            )
+        QMessageBox.information(
+            self,
+            "Finished",
+            f"Stazioni aggiornate su Yasmine e nel DB locale: {updated_count}",
+        )
         self._bulk_yasmine_progress = None
 
     def _on_bulk_yasmine_sync_failed(self, error_message):

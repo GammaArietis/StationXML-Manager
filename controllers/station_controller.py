@@ -73,6 +73,16 @@ class StationController:
             progress_queue=progress_queue,
         )
 
+    def update_nrl_for_station(self, station_id: int) -> bool:
+        if not self.cha_ctrl or not self.equ_ctrl:
+            logger.error("Missing controllers in StationController!")
+            return False
+        return self._service.run_nrl_refresh_for_station(
+            station_id,
+            equipment_service=self.equ_ctrl.equipment_service,
+            channel_dao=self.cha_ctrl.dao,
+        )
+
     def _apply_nrl_to_catalog_item(self, equipment: object, nrl_mgr: object, is_sensor: bool = True) -> bool:
         """Delega al service (test e tooling legacy)."""
         if not self.equ_ctrl:

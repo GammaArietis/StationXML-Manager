@@ -204,14 +204,15 @@ class StationView:
                 inv.write(buf, format="STATIONXML", validate=True)
                 xml_bytes = buf.getvalue()
                 remote = client.get_all_files(force_refresh=True)
-                existing_id = client.find_existing_xml_in_list(net.code, db_sta.code, remote)
-                if existing_id:
-                    client.delete_xml(existing_id)
+                if not client.delete_remote_for_station(
+                    db_sta.code, remote, network_code=net.code
+                ):
+                    raise RuntimeError("Impossibile rimuovere il file esistente su Yasmine.")
                 new_id = client.upload_xml(xml_bytes, db_sta.code)
                 if not new_id:
                     raise RuntimeError("Upload Yasmine fallito (nessun ID restituito).")
                 self.sta_ctrl.mark_as_synced(db_sta, str(new_id))
-                return str(new_id), f"{net.code}_{db_sta.code}_sync.xml"
+                return str(new_id), f"{db_sta.code}.xml"
 
             try:
                 yid, fname = await run.io_bound(_sync_job)

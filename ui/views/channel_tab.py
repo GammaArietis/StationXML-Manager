@@ -10,11 +10,20 @@ from utils.signals import app_signals
 
 logger = logging.getLogger(__name__)
 
+
+def _nrl_status_icon(has_nrl_path: bool | None) -> str:
+    """🟢 linked to NRL, 🔴 manual/no path, ⚪ no instrument selected."""
+    if has_nrl_path is None:
+        return "⚪"
+    return "🟢" if has_nrl_path else "🔴"
+
+
 class ChannelTab(QWidget):
-    def __init__(self, channel_ctrl, equip_ctrl):
+    def __init__(self, channel_ctrl, equip_ctrl, station_ctrl=None):
         super().__init__()
         self.cha_ctrl = channel_ctrl
         self.eq_ctrl = equip_ctrl
+        self.sta_ctrl = station_ctrl
         self.current_channel_id = None
         self.parent_station_id = None
         self._setup_ui()
@@ -106,15 +115,18 @@ class ChannelTab(QWidget):
         self.dip = QDoubleSpinBox()
         self.dip.setRange(-90, 90)
 
-        # Sensitivity Input + Calc Button
-        sens_layout = QHBoxLayout()
+        # Total sensitivity + recalculate (same row as web: field + action button)
         self.overall_sens_input = QLineEdit()
         self.overall_sens_input.setPlaceholderText("Leave empty for automatic calculation")
-        self.calc_sens_btn = QPushButton("🧮 Calculate")
+        self.calc_sens_btn = QPushButton("Recalculate Total Sensitivity")
         self.calc_sens_btn.setStyleSheet("background-color: #0277BD; color: white; font-weight: bold;")
         self.calc_sens_btn.clicked.connect(self._on_calc_sensitivity_clicked)
-        sens_layout.addWidget(self.overall_sens_input)
+        sens_layout = QHBoxLayout()
+        sens_layout.setContentsMargins(0, 0, 0, 0)
+        sens_layout.addWidget(self.overall_sens_input, 1)
         sens_layout.addWidget(self.calc_sens_btn)
+        sens_row = QWidget()
+        sens_row.setLayout(sens_layout)
 
         # Dates
         start_layout = QHBoxLayout()
@@ -146,6 +158,12 @@ class ChannelTab(QWidget):
         self.datalogger_serial_input = QLineEdit()
         self.datalogger_serial_input.setPlaceholderText("E.g. 5678")
 
+        self.update_nrl_btn = QPushButton("Update NRL (this station)")
+        self.update_nrl_btn.setToolTip(
+            "Re-apply local NRL metadata for sensors/dataloggers used by this station."
+        )
+        self.update_nrl_btn.clicked.connect(self._on_update_nrl_station_clicked)
+
         # Pre-Amplifier Section
         self.preamp_combo = QComboBox()
         self.preamp_sn_input = QLineEdit()
@@ -176,12 +194,13 @@ class ChannelTab(QWidget):
         form.addRow("Sensor S/N:", self.sensor_serial_input)
         form.addRow("Datalogger:", self.datalogger_combo)
         form.addRow("Datalogger S/N:", self.datalogger_serial_input)
-        
+        form.addRow("", self.update_nrl_btn)
+
         form.addRow("Pre-Amp Model:", self.preamp_combo)
         form.addRow("Pre-Amp S/N:", self.preamp_sn_input)
         form.addRow("Pre-Amp Gain:", self.preamp_gain_input)
-        
-        form.addRow("Forced Total Sensitivity:", self.overall_sens_input)
+
+        form.addRow("Total Sensitivity:", sens_row)
         form.addRow("Calibration Units:", self.cal_units_combo)
         
         form.addRow("Start Date (Epoch):", start_layout)
@@ -214,6 +233,39 @@ class ChannelTab(QWidget):
         btn_layout.addWidget(self.save_btn)
         
         layout.addLayout(btn_layout)
+
+    def _on_update_nrl_station_clicked(self):
+        if not self.parent_station_id:
+            QMessageBox.warning(self, "Warning", "Open a channel belonging to a station first.")
+            return
+        if not self.sta_ctrl:
+            QMessageBox.warning(self, "Warning", "Station controller not available.")
+            return
+
+        from PyQt6.QtWidgets import QApplication
+
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+        try:
+            changed = self.sta_ctrl.update_nrl_for_station(self.parent_station_id)
+            app_signals.equipment_updated.emit()
+            app_signals.station_updated.emit()
+            self.refresh_catalog_combos()
+            if changed:
+                QMessageBox.information(
+                    self,
+                    "NRL Updated",
+                    "Instruments for this station were refreshed from NRL.\n"
+                    "The station sync indicator is now red until you send to Yasmine.",
+                )
+            else:
+                QMessageBox.information(
+                    self, "NRL", "No catalog changes were required for this station."
+                )
+        except Exception as e:
+            logger.error("Station NRL refresh failed: %s", e)
+            QMessageBox.critical(self, "Error", f"NRL update failed:\n{e}")
+        finally:
+            QApplication.restoreOverrideCursor()
 
     def _create_geo_layout(self):
         h_layout = QHBoxLayout()
@@ -258,16 +310,55 @@ class ChannelTab(QWidget):
             self.comm_table.insertRow(row)
             self.comm_table.setItem(row, 0, QTableWidgetItem(str(comments_json)))
 
-    def refresh_catalog_combos(self):
-        self.sensor_combo.clear()
-        self.sensor_combo.addItem("--- No Sensor ---", None)
-        for s in self.eq_ctrl.get_all_sensors():
-            self.sensor_combo.addItem(f"{s.manufacturer} {s.model}", s.id)
+    @staticmethod
+    def _sensor_combo_label(sensor) -> str:
+        icon = _nrl_status_icon(bool(getattr(sensor, "nrl_path", None)))
+        return f"{icon} {sensor.manufacturer} {sensor.model}"
 
+    @staticmethod
+    def _datalogger_combo_label(datalogger) -> str:
+        icon = _nrl_status_icon(bool(getattr(datalogger, "nrl_path", None)))
+        return f"{icon} {datalogger.manufacturer} {datalogger.model}"
+
+    def populate_sensor_combo(self, selected_id=None) -> None:
+        if selected_id is None:
+            selected_id = self.sensor_combo.currentData()
+        self.sensor_combo.clear()
+        self.sensor_combo.addItem(f"{_nrl_status_icon(None)} --- No Sensor ---", None)
+        for sensor in self.eq_ctrl.get_all_sensors():
+            self.sensor_combo.addItem(self._sensor_combo_label(sensor), sensor.id)
+        if selected_id is not None:
+            idx = self.sensor_combo.findData(selected_id)
+            if idx >= 0:
+                self.sensor_combo.setCurrentIndex(idx)
+
+    def populate_datalogger_combo(self, selected_id=None) -> None:
+        if selected_id is None:
+            selected_id = self.datalogger_combo.currentData()
         self.datalogger_combo.clear()
-        self.datalogger_combo.addItem("--- No Datalogger ---", None)
-        for d in self.eq_ctrl.get_all_dataloggers():
-            self.datalogger_combo.addItem(f"{d.manufacturer} {d.model}", d.id)
+        self.datalogger_combo.addItem(
+            f"{_nrl_status_icon(None)} --- No Datalogger ---", None
+        )
+        for datalogger in self.eq_ctrl.get_all_dataloggers():
+            self.datalogger_combo.addItem(
+                self._datalogger_combo_label(datalogger), datalogger.id
+            )
+        if selected_id is not None:
+            idx = self.datalogger_combo.findData(selected_id)
+            if idx >= 0:
+                self.datalogger_combo.setCurrentIndex(idx)
+
+    def refresh_catalog_combos(self):
+        sensor_id = self.sensor_combo.currentData()
+        datalogger_id = self.datalogger_combo.currentData()
+        preamp_id = self.preamp_combo.currentData()
+
+        self.sensor_combo.blockSignals(True)
+        self.datalogger_combo.blockSignals(True)
+        self.preamp_combo.blockSignals(True)
+
+        self.populate_sensor_combo(sensor_id)
+        self.populate_datalogger_combo(datalogger_id)
 
         self.preamp_combo.clear()
         self.preamp_combo.addItem("--- No Pre-Amp ---", None)
@@ -276,6 +367,23 @@ class ChannelTab(QWidget):
             p_mfg = p.manufacturer if hasattr(p, 'manufacturer') else p.get('manufacturer')
             p_mod = p.model if hasattr(p, 'model') else p.get('model')
             self.preamp_combo.addItem(f"{p_mfg} {p_mod}", p_id)
+
+        if sensor_id is not None:
+            idx = self.sensor_combo.findData(sensor_id)
+            if idx >= 0:
+                self.sensor_combo.setCurrentIndex(idx)
+        if datalogger_id is not None:
+            idx = self.datalogger_combo.findData(datalogger_id)
+            if idx >= 0:
+                self.datalogger_combo.setCurrentIndex(idx)
+        if preamp_id is not None:
+            idx = self.preamp_combo.findData(preamp_id)
+            if idx >= 0:
+                self.preamp_combo.setCurrentIndex(idx)
+
+        self.sensor_combo.blockSignals(False)
+        self.datalogger_combo.blockSignals(False)
+        self.preamp_combo.blockSignals(False)
 
     def prepare_new_channel(self, station_id: int):
         self.current_channel_id = None
@@ -369,7 +477,7 @@ class ChannelTab(QWidget):
         
         self.delete_btn.show()
         self.clone_btn.show()
-        
+
     def _on_clone_clicked(self):
         self.current_channel_id = None
         self.end_check.setChecked(False)
@@ -493,17 +601,22 @@ class ChannelTab(QWidget):
         temp_cha = Channel(
             sensor_id=s_id,
             pre_amplifier_id=p_id,
-            datalogger_id=d_id
+            datalogger_id=d_id,
+            pre_amplifier_gain=self.preamp_gain_input.value(),
         )
-        
+
         try:
             calc_val = self.cha_ctrl.calculate_total_sensitivity(temp_cha)
-            
-            if calc_val is not None:
+
+            if calc_val is not None and calc_val > 0:
                 self.overall_sens_input.setText(f"{calc_val:.6e}")
-                QMessageBox.information(self, "Calculation Successful",
-                    f"Sensitivity successfully calculated: {calc_val:.6e}\n\n"
-                    "The value accounts for all intermediate analog stages.")
+                QMessageBox.information(
+                    self,
+                    "Calculation Successful",
+                    f"Total sensitivity: {calc_val:.6e}\n\n"
+                    "Product of sensor sensitivity and all stage gains "
+                    "(pre-amp stages, channel pre-amp gain, datalogger).",
+                )
             else:
                 QMessageBox.warning(self, "Calculation Error",
                     "Unable to calculate. Verify that the selected instruments "

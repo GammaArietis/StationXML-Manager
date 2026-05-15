@@ -1,10 +1,16 @@
-import requests
 import logging
-from typing import Optional, List
+import re
+import time
+from typing import List, Optional, Union
+
+import requests
 
 from utils.logging_config import log_network_error
 
 logger = logging.getLogger(__name__)
+
+YASMINE_INTER_REQUEST_DELAY_SEC = 0.85
+
 
 class YasmineClient:
     """
@@ -17,147 +23,167 @@ class YasmineClient:
             from core.config import get_settings
 
             base_url = get_settings().yasmine_base_url
-        self.base_url = base_url.rstrip('/')
+        self.base_url = base_url.rstrip("/")
         self.api_url = f"{self.base_url}/api/xml/"
         self.import_url = f"{self.base_url}/api/xml/ie/"
-        
-        # Cache to avoid repeatedly querying Yasmine
-        # during operations that do not modify the server state.
+        self._session = requests.Session()
+        self._cached_list: Optional[List[dict]] = None
+
+    def invalidate_cache(self) -> None:
         self._cached_list = None
 
+    def _parse_file_list(self, res_json) -> List[dict]:
+        if isinstance(res_json, dict) and "data" in res_json:
+            data = res_json["data"]
+            return data if isinstance(data, list) else []
+        if isinstance(res_json, list):
+            return res_json
+        return []
+
     def get_all_files(self, force_refresh: bool = False) -> List[dict]:
-        """
-        Retrieves the list of all XML files present on Yasmine,
-        using an internal cache to optimize performance.
-
-        Args:
-            force_refresh (bool): If True, ignores the cache and forces a download from the server.
-
-        Returns:
-            List[dict]: List of dictionaries containing file metadata.
-        """
         if self._cached_list is None or force_refresh:
             try:
-                response = requests.get(self.api_url, timeout=30)
+                response = self._session.get(self.api_url, timeout=30)
                 response.raise_for_status()
-                self._cached_list = response.json()
+                self._cached_list = self._parse_file_list(response.json())
             except Exception as e:
                 log_network_error(logger, "Yasmine", e, detail="get_all_files")
                 return []
-        return self._cached_list
+        return self._cached_list or []
 
-    def find_existing_xml_in_list(self, network_code: str, station_code: str, file_list: List[dict]) -> Optional[str]:
+    @staticmethod
+    def _normalize_remote_name(name: object) -> str:
+        raw = str(name or "").strip().upper()
+        if raw.endswith(".XML"):
+            raw = raw[:-4]
+        return raw
+
+    def find_existing_xml_in_list(
+        self,
+        station_code: str,
+        file_list: List[dict],
+        *,
+        network_code: Optional[str] = None,
+    ) -> Optional[str]:
         """
-        Searches for a specific station within a pre-downloaded file list.
-        Looks for patterns in the format 'NETWORK_STATION' (e.g., 'IV_ROME').
-
-        Args:
-            network_code (str): FDSN network code.
-            station_code (str): FDSN station code.
-            file_list (List[dict]): List of files to search in.
-
-        Returns:
-            Optional[str]: The file ID if found, otherwise None.
+        Find a remote XML entry for a station (by code, legacy NETWORK_CODE_sync, or NETWORK_STATION).
         """
-        search_pattern = f"{network_code}_{station_code}".upper()
+        code = self._normalize_remote_name(station_code)
+        net = (network_code or "").strip().upper()
+        legacy_sync = f"{net}_{code}_SYNC" if net else None
+        legacy_pair = f"{net}_{code}" if net else None
+
         for item in file_list:
-            if isinstance(item, dict):
-                filename = (item.get("name") or "").upper()
-                if search_pattern in filename:
-                    # Return the ID preferably, or the name as a fallback
-                    return str(item.get("id") or item.get("name"))
+            if not isinstance(item, dict):
+                continue
+            remote = self._normalize_remote_name(item.get("name"))
+            if remote == code:
+                return str(item.get("id") or item.get("name"))
+            if legacy_sync and remote == legacy_sync:
+                return str(item.get("id") or item.get("name"))
+            if legacy_pair and remote == legacy_pair:
+                return str(item.get("id") or item.get("name"))
+            if net and legacy_pair and legacy_pair in remote:
+                return str(item.get("id") or item.get("name"))
         return None
-    
-    def find_existing_xml(self, network_code: str, station_code: str) -> Optional[str]:
-        """
-        Queries the cache to check if a station is already present on Yasmine.
-        Useful for checking before overwriting.
-        """
-        lista_file = self.get_all_files()
-        return self.find_existing_xml_in_list(network_code, station_code, lista_file)
-        
-    def get_all_imported_xmls(self) -> List[dict]:
-        """
-        Executes a LIVE call (without cache) to get the current state
-        of the Yasmine archive. Includes robust logic to parse 
-        both dictionary and list responses.
 
-        Returns:
-            List[dict]: Updated list of XML files.
-        """
+    def find_existing_xml(
+        self, network_code: str, station_code: str, *, force_refresh: bool = False
+    ) -> Optional[str]:
+        lista_file = self.get_all_files(force_refresh=force_refresh)
+        return self.find_existing_xml_in_list(
+            station_code, lista_file, network_code=network_code
+        )
+
+    def get_all_imported_xmls(self, *, force_refresh: bool = True) -> List[dict]:
         try:
-            response = requests.get(self.api_url, timeout=10)
+            response = self._session.get(self.api_url, timeout=10)
             if response.status_code == 200:
-                res_json = response.json()
-                # Depending on the Yasmine API version, the response
-                # might be wrapped in a 'data' key or be a pure list.
-                if isinstance(res_json, dict) and 'data' in res_json:
-                    return res_json['data']
-                elif isinstance(res_json, list):
-                    return res_json
+                files = self._parse_file_list(response.json())
+                if force_refresh:
+                    self._cached_list = files
+                return files
             return []
         except Exception as e:
             log_network_error(logger, "Yasmine", e, detail="get_all_imported_xmls")
             return []
 
+    def delete_remote_for_station(
+        self, station_code: str, file_list: List[dict], *, network_code: Optional[str] = None
+    ) -> bool:
+        item_id = self.find_existing_xml_in_list(
+            station_code, file_list, network_code=network_code
+        )
+        if not item_id:
+            return True
+        return self.delete_xml(item_id)
+
     def delete_xml(self, item_id) -> bool:
-        """
-        Deletes an XML file from the Yasmine server via a DELETE request.
-
-        Args:
-            item_id (int or str): The unique ID or name of the file to remove.
-
-        Returns:
-            bool: True if deletion was successful, False otherwise.
-        """
-        base_url = self.api_url.rstrip('/')
+        base_url = self.api_url.rstrip("/")
         url = f"{base_url}/{item_id}"
         try:
-            # Yasmine's API often requires the ID both in the URL and the body
-            response = requests.delete(url, json={"id": int(item_id)}, timeout=10)
-            return response.status_code in [200, 204]
+            numeric_id = item_id
+            if isinstance(item_id, str) and item_id.isdigit():
+                numeric_id = int(item_id)
+            response = self._session.delete(
+                url, json={"id": numeric_id}, timeout=10
+            )
+            ok = response.status_code in [200, 204]
+            if ok:
+                self.invalidate_cache()
+            return ok
         except Exception as e:
             log_network_error(logger, "Yasmine", e, detail=f"delete_xml id={item_id}")
             return False
 
-    def upload_xml(self, xml_bytes: bytes, station_code: str) -> Optional[int]:
-        """
-        Sends a StationXML file to the Yasmine server via a multipart/form-data request.
-        Immediately after the upload, queries the server to extract the newly generated ID.
+    def lookup_remote_id(
+        self,
+        station_code: str,
+        *,
+        retries: int = 6,
+        delay_sec: float = 0.45,
+    ) -> Optional[Union[int, str]]:
+        """Poll Yasmine file list until the station entry appears (bulk uploads need this)."""
+        norm = self._normalize_remote_name(station_code)
+        for attempt in range(retries):
+            for item in self.get_all_imported_xmls(force_refresh=True):
+                if not isinstance(item, dict):
+                    continue
+                if self._normalize_remote_name(item.get("name")) == norm:
+                    remote_id = item.get("id")
+                    if remote_id is not None:
+                        return remote_id
+            if attempt < retries - 1:
+                time.sleep(delay_sec)
+        return None
 
-        Args:
-            xml_bytes (bytes): Raw content of the XML file.
-            station_code (str): Used to assign the name to the uploaded file.
-
-        Returns:
-            Optional[int]: The new file ID on Yasmine, or None in case of error.
-        """
-        base_url = self.api_url.rstrip('/')
+    def upload_xml(self, xml_bytes: bytes, station_code: str) -> Optional[Union[int, str]]:
+        base_url = self.api_url.rstrip("/")
         url = f"{base_url}/ie/"
-        
-        # Prepare multipart payload to simulate an HTML form upload
-        files = {'xml-path': (f"{station_code}.xml", xml_bytes, 'text/xml')}
-        data = {'name': station_code}
-        
+        code = re.sub(r"[^\w\-.]", "", str(station_code).strip()) or station_code
+
+        files = {"xml-path": (f"{code}.xml", xml_bytes, "text/xml")}
+        data = {"name": code}
+
         try:
-            response = requests.post(url, files=files, data=data, timeout=30)
-            if response.status_code in [200, 201]:
-                logger.info(f"Upload of {station_code} completed. Retrieving ID...")
-                
-                # Live call to find the newly generated ID from Yasmine's database
-                updated_list = self.get_all_imported_xmls()
-                if updated_list:
-                    for item in updated_list:
-                        if isinstance(item, dict) and item.get('name') == station_code:
-                            new_id = item.get('id')
-                            logger.info(f"ID {new_id} successfully retrieved for {station_code}.")
-                            return new_id
-                            
-                logger.error(f"File uploaded, but not found in Yasmine's list for {station_code}.")
+            response = self._session.post(url, files=files, data=data, timeout=30)
+            if response.status_code not in [200, 201]:
+                logger.error("Yasmine upload error: %s", response.status_code)
                 return None
-            else:
-                logger.error(f"Yasmine upload error: {response.status_code}")
-                return None
+
+            logger.info("Upload of %s completed. Retrieving ID...", code)
+            self.invalidate_cache()
+            new_id = self.lookup_remote_id(code)
+            if new_id is not None:
+                logger.info("ID %s successfully retrieved for %s.", new_id, code)
+                return new_id
+
+            # Upload OK but list lagging — still allow local sync (same as manual single send).
+            logger.warning(
+                "File uploaded for %s but ID not in list yet; using station code as node id.",
+                code,
+            )
+            return code
         except Exception as e:
-            log_network_error(logger, "Yasmine", e, detail=f"upload_xml station={station_code}")
+            log_network_error(logger, "Yasmine", e, detail=f"upload_xml station={code}")
             return None

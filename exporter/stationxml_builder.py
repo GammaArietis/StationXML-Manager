@@ -147,18 +147,34 @@ class StationXMLExporter:
             website=str(db_op.website).strip() if db_op.website else None
         )
         
-        if db_op.contact_name or db_op.contact_email or db_op.phone_number:
+        from utils.fdsn_phone import sanitize_fdsn_phone_string
+
+        fdsn_phone = None
+        if db_op.phone_number:
+            fdsn_phone = sanitize_fdsn_phone_string(
+                db_op.phone_number,
+                default_country_code=db_op.phone_country_code
+                if db_op.phone_country_code is not None
+                else 39,
+            )
+
+        if db_op.contact_name or db_op.contact_email or fdsn_phone:
             person = Person(
                 names=[db_op.contact_name] if db_op.contact_name else [],
-                emails=[db_op.contact_email] if db_op.contact_email else []
+                emails=[db_op.contact_email] if db_op.contact_email else [],
             )
-            if db_op.phone_number:
-                person.phones = [PhoneNumber(
-                    country_code=db_op.phone_country_code if db_op.phone_country_code else 39,
-                    area_code=db_op.phone_area_code if db_op.phone_area_code is not None else 0,
-                    phone_number=str(db_op.phone_number).strip()
-                )]
-                
+            if fdsn_phone:
+                country_code_str, _subscriber = fdsn_phone.split("-", 1)
+                person.phones = [
+                    PhoneNumber(
+                        country_code=int(country_code_str),
+                        area_code=db_op.phone_area_code
+                        if db_op.phone_area_code is not None
+                        else 0,
+                        phone_number=fdsn_phone,
+                    )
+                ]
+
             obspy_op.contacts = [person]
             
         return [obspy_op]
