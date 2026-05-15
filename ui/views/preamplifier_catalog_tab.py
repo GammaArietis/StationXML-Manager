@@ -87,21 +87,28 @@ class PreamplifierCatalogTab(QWidget):
         stage_layout.addLayout(pz_btns)
         editor_layout.addWidget(stage_group)
 
-        # Actions
-        self.save_btn = QPushButton("💾 SAVE"); self.save_btn.clicked.connect(self._on_save_clicked)
-        self.save_btn.setStyleSheet("background-color: #2E7D32; color: white; font-weight: bold;")
+        self.save_btn = QPushButton("💾 SAVE TO CATALOG")
+        self.save_btn.setStyleSheet("background-color: #2E7D32; color: white; height: 35px; font-weight: bold;")
+        self.save_btn.clicked.connect(self._on_save_clicked)
         editor_layout.addWidget(self.save_btn)
 
-        danger_lay = QHBoxLayout()
+        danger_layout = QHBoxLayout()
         self.clone_btn = QPushButton("👯 Clone")
         self.clone_btn.setStyleSheet("background-color: #8E24AA; color: white;")
-        self.clone_btn.clicked.connect(self._on_clone_clicked); self.clone_btn.setEnabled(False)
-        
-        self.replace_btn = QPushButton("🔄 Replace"); self.replace_btn.clicked.connect(self._on_replace_clicked); self.replace_btn.setEnabled(False)
-        self.delete_btn = QPushButton("🗑️ Delete"); self.delete_btn.clicked.connect(self._on_delete_clicked); self.delete_btn.setEnabled(False)
-        
-        danger_lay.addWidget(self.clone_btn); danger_lay.addWidget(self.replace_btn); danger_lay.addWidget(self.delete_btn)
-        editor_layout.addLayout(danger_lay)
+        self.clone_btn.clicked.connect(self._on_clone_clicked)
+        self.clone_btn.setEnabled(False)
+        self.replace_btn = QPushButton("🔄 Replace")
+        self.replace_btn.setStyleSheet("background-color: #F57C00; color: white;")
+        self.replace_btn.clicked.connect(self._on_replace_clicked)
+        self.replace_btn.setEnabled(False)
+        self.delete_btn = QPushButton("🗑️ Delete")
+        self.delete_btn.setStyleSheet("background-color: #C62828; color: white;")
+        self.delete_btn.clicked.connect(self._on_delete_clicked)
+        self.delete_btn.setEnabled(False)
+        danger_layout.addWidget(self.clone_btn)
+        danger_layout.addWidget(self.replace_btn)
+        danger_layout.addWidget(self.delete_btn)
+        editor_layout.addLayout(danger_layout)
         
         self.splitter.addWidget(editor_widget)
 

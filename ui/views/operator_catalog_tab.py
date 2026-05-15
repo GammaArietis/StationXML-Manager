@@ -1,7 +1,7 @@
 import logging
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QFormLayout, QLineEdit,
                              QPushButton, QSplitter, QMessageBox, QLabel, QListWidget,
-                             QListWidgetItem, QGroupBox)
+                             QListWidgetItem, QGroupBox, QInputDialog)
 from PyQt6.QtCore import Qt
 from core.models.base_models import Operator
 from utils.signals import app_signals
@@ -61,8 +61,9 @@ class OperatorCatalogTab(QWidget):
         
         danger_layout = QHBoxLayout()
         self.clone_btn = QPushButton("👯 Clone"); self.clone_btn.setStyleSheet("background-color: #8E24AA; color: white;"); self.clone_btn.clicked.connect(self._on_clone_clicked); self.clone_btn.setEnabled(False)
+        self.replace_btn = QPushButton("🔄 Replace"); self.replace_btn.setStyleSheet("background-color: #F57C00; color: white;"); self.replace_btn.clicked.connect(self._on_replace_clicked); self.replace_btn.setEnabled(False)
         self.delete_btn = QPushButton("🗑️ Delete"); self.delete_btn.setStyleSheet("background-color: #C62828; color: white;"); self.delete_btn.clicked.connect(self._on_delete_clicked); self.delete_btn.setEnabled(False)
-        danger_layout.addWidget(self.clone_btn); danger_layout.addWidget(self.delete_btn)
+        danger_layout.addWidget(self.clone_btn); danger_layout.addWidget(self.replace_btn); danger_layout.addWidget(self.delete_btn)
         editor_layout.addLayout(danger_layout)
         
         editor_layout.addStretch()
@@ -87,7 +88,7 @@ class OperatorCatalogTab(QWidget):
         self._selected_op_id = None
         self.agency_input.clear(); self.name_input.clear(); self.email_input.clear()
         self.web_input.clear(); self.phone_input.clear(); self.op_list.clearSelection()
-        self.clone_btn.setEnabled(False); self.delete_btn.setEnabled(False)
+        self.clone_btn.setEnabled(False); self.replace_btn.setEnabled(False); self.delete_btn.setEnabled(False)
 
     def _load_selected_operator(self, item):
         op_brief = item.data(Qt.ItemDataRole.UserRole)
@@ -102,6 +103,7 @@ class OperatorCatalogTab(QWidget):
         self.web_input.setText(self.current_op.website or "")
         self.phone_input.setText(self.current_op.phone_number or "")
         self.clone_btn.setEnabled(bool(oid))
+        self.replace_btn.setEnabled(bool(oid))
         self.delete_btn.setEnabled(bool(oid))
 
     def _select_op_row_by_id(self, operator_id: int) -> None:
@@ -137,9 +139,35 @@ class OperatorCatalogTab(QWidget):
         self.current_op = saved
         self._selected_op_id = saved.id
         self.clone_btn.setEnabled(True)
+        self.replace_btn.setEnabled(True)
         self.delete_btn.setEnabled(True)
         QMessageBox.information(self, "Cloned", f"Created in catalog: {saved.agency}")
         app_signals.equipment_updated.emit()
+
+    @staticmethod
+    def _operator_display_label(op: Operator) -> str:
+        if op.contact_name:
+            return f"{op.agency} — {op.contact_name}"
+        return op.agency
+
+    def _on_replace_clicked(self):
+        oid = self._selected_op_id or (self.current_op.id if self.current_op else None)
+        if not oid:
+            return
+        others = [o for o in self.eq_ctrl.get_all_operators() if o.id != oid]
+        if not others:
+            QMessageBox.information(self, "Replace", "No other operators in the catalog.")
+            return
+        names = [self._operator_display_label(o) for o in others]
+        target, ok = QInputDialog.getItem(self, "Replace", "Replace with:", names, 0, False)
+        if ok and target:
+            new_id = others[names.index(target)].id
+            if self.eq_ctrl.replace_operator(oid, new_id):
+                self.refresh_list()
+                self._select_op_row_by_id(new_id)
+                app_signals.equipment_updated.emit()
+                app_signals.network_updated.emit()
+                app_signals.station_updated.emit()
 
     def _on_save_clicked(self):
         agency = self.agency_input.text().strip()
