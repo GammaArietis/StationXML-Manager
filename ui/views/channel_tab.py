@@ -6,6 +6,7 @@ from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QFormLayout, QLineEdit,
                              QTableWidget, QTableWidgetItem, QHeaderView, QGroupBox)
 from PyQt6.QtCore import Qt, QDateTime
 from core.models.base_models import Channel
+from utils.qt_numeric_input import apply_c_double_validator, parse_float_text
 from utils.signals import app_signals
 
 logger = logging.getLogger(__name__)
@@ -118,6 +119,7 @@ class ChannelTab(QWidget):
         # Total sensitivity + recalculate (same row as web: field + action button)
         self.overall_sens_input = QLineEdit()
         self.overall_sens_input.setPlaceholderText("Leave empty for automatic calculation")
+        apply_c_double_validator(self.overall_sens_input)
         self.calc_sens_btn = QPushButton("Recalculate Total Sensitivity")
         self.calc_sens_btn.setStyleSheet("background-color: #0277BD; color: white; font-weight: bold;")
         self.calc_sens_btn.clicked.connect(self._on_calc_sensitivity_clicked)
@@ -502,9 +504,11 @@ class ChannelTab(QWidget):
         sens_text = self.overall_sens_input.text().strip()
         final_sens = None
         if sens_text:
-            try: final_sens = float(sens_text)
-            except ValueError:
-                QMessageBox.warning(self, "Error", "Invalid sensitivity!")
+            final_sens, sens_err = parse_float_text(
+                sens_text, "Total Sensitivity", allow_empty=False
+            )
+            if sens_err:
+                QMessageBox.warning(self, "Error", sens_err)
                 return
 
         start_str = self.start_input.dateTime().toString("yyyy-MM-ddTHH:mm:ss") if self.start_check.isChecked() else None

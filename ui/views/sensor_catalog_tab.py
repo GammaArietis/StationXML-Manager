@@ -11,6 +11,7 @@ from matplotlib.figure import Figure
 
 from core.models.base_models import Sensor
 from ui.views.nrl_dialog import NRLBrowserDialog
+from utils.qt_numeric_input import parse_pz_table_pairs
 from utils.signals import app_signals
 
 from utils.arol_client import AROLClient
@@ -217,15 +218,16 @@ class SensorCatalogTab(QWidget):
                     QMessageBox.information(self, "AROL", f"Sensor {sensor.model} imported!")
                     
     def _on_save_clicked(self):
-        if not self.current_sensor: return
-        pole_pairs = [
-            (float(self.pt.item(r, 0).text()), float(self.pt.item(r, 1).text()))
-            for r in range(self.pt.rowCount())
-        ]
-        zero_pairs = [
-            (float(self.zt.item(r, 0).text()), float(self.zt.item(r, 1).text()))
-            for r in range(self.zt.rowCount())
-        ]
+        if not self.current_sensor:
+            return
+        pole_pairs, pole_err = parse_pz_table_pairs(self.pt, "Poles")
+        if pole_err:
+            QMessageBox.warning(self, "Error", pole_err)
+            return
+        zero_pairs, zero_err = parse_pz_table_pairs(self.zt, "Zeros")
+        if zero_err:
+            QMessageBox.warning(self, "Error", zero_err)
+            return
         merged = self.eq_ctrl.equipment_service.merge_sensor_from_pyqt_editor(
             self.current_sensor,
             manufacturer=self.mfg_input.text().strip(),

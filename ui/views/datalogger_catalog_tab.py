@@ -11,6 +11,7 @@ from PyQt6.QtCore import Qt
 from core.models.base_models import Datalogger, ResponseFilter
 from ui.views.fir_plot_dialog import FirPlotDialog
 from ui.views.nrl_dialog import NRLBrowserDialog
+from utils.qt_numeric_input import parse_float_text
 from utils.signals import app_signals
 
 logger = logging.getLogger(__name__)
@@ -197,13 +198,17 @@ class DataloggerCatalogTab(QWidget):
         filt = stage_item.data(Qt.ItemDataRole.UserRole)
         if not filt:
             return
-        try:
-            if col == 6:
-                filt.estimated_delay = float(item.text().strip() or 0)
-            else:
-                filt.correction_applied = float(item.text().strip() or 0)
-        except ValueError:
-            pass
+        label = "Delay (s)" if col == 6 else "Correction (s)"
+        value, err = parse_float_text(
+            item.text(), label, allow_empty=True, default_if_empty=0.0
+        )
+        if err:
+            QMessageBox.warning(self, "Error", err)
+            return
+        if col == 6:
+            filt.estimated_delay = value
+        else:
+            filt.correction_applied = value
 
     def _add_stage_row(self):
         if not self.current_dl:

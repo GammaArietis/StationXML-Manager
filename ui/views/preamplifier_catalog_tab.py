@@ -10,6 +10,7 @@ from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 from core.models.base_models import Preamplifier, AnalogStage, PoleZero
+from utils.qt_numeric_input import parse_pz_table_pairs
 from utils.signals import app_signals
 
 logger = logging.getLogger(__name__)
@@ -220,13 +221,22 @@ class PreamplifierCatalogTab(QWidget):
         app_signals.equipment_updated.emit()
 
     def _on_save_clicked(self):
-        if not self.current_preamp: return
+        if not self.current_preamp:
+            return
         idx = self.stage_combo.currentIndex()
         if idx >= 0:
             s = self.current_preamp.analog_stages[idx]
             s.stage_gain = self.s_gain.value()
-            s.poles = [PoleZero(float(self.pt.item(r,0).text()), float(self.pt.item(r,1).text())) for r in range(self.pt.rowCount())]
-            s.zeros = [PoleZero(float(self.zt.item(r,0).text()), float(self.zt.item(r,1).text())) for r in range(self.zt.rowCount())]
+            pole_pairs, pole_err = parse_pz_table_pairs(self.pt, "Poles")
+            if pole_err:
+                QMessageBox.warning(self, "Error", pole_err)
+                return
+            zero_pairs, zero_err = parse_pz_table_pairs(self.zt, "Zeros")
+            if zero_err:
+                QMessageBox.warning(self, "Error", zero_err)
+                return
+            s.poles = [PoleZero(r, i) for r, i in pole_pairs]
+            s.zeros = [PoleZero(r, i) for r, i in zero_pairs]
         
         self.current_preamp.manufacturer = self.mfg_input.text()
         self.current_preamp.model = self.model_input.text()
