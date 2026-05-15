@@ -20,12 +20,14 @@ from core.config import get_settings
 from core.state import AppState
 from ui.main_window import MainWindow
 from utils.logging_config import configure_application_logging
+from utils.open_files_limit import maximize_open_files_limit
 
 # Setup Logging (console + app.log)
 configure_application_logging()
 logger = logging.getLogger("App")
 
 def main():
+    maximize_open_files_limit()
     app = QApplication(sys.argv)
     
     settings = get_settings()

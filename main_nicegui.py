@@ -1,5 +1,9 @@
 import os
 import queue
+
+from utils.open_files_limit import maximize_open_files_limit
+
+maximize_open_files_limit()
 import tempfile
 import traceback
 import time
