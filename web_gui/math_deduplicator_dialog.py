@@ -86,17 +86,19 @@ class MathDeduplicatorDialog:
                 ui.button(icon='close', on_click=self.dialog.close).props('flat round text-color=grey')
 
             # Info bar
-            ui.label('Questo strumento raggruppa sensori e datalogger basandosi sui parametri matematici.').classes('text-white bg-slate-800 p-3 rounded mb-4 shadow text-sm')
+            info_label = ui.label('Questo strumento raggruppa sensori e datalogger basandosi sui parametri matematici.').classes('text-white bg-slate-800 p-3 rounded mb-4 shadow text-sm')
+            info_label.tooltip('Modulo di analisi matematica per la fusione di record strumentali identici. Identifica i duplicati tramite hash dei coefficienti e normalizza le relazioni nel DB sismico senza perdita di informazioni.')
             
             self.btn_nrl_index = ui.button(
                 '🛠️ Generate Local NRL Index',
                 on_click=self._generate_nrl_index,
             ).classes('bg-purple-700 text-white font-bold mb-4 w-64 shadow')
+            self.btn_nrl_index.tooltip('Calcola un indice locale NRL basato su impronte matematiche di poli, zeri e coefficienti per riconoscere strumenti nominalmente equivalenti.')
 
             self.search_input = ui.input(
                 placeholder='Filtra duplicati per marca/modello...',
                 on_change=lambda _: self._scan_database(),
-            ).props('dense clearable').classes('w-full mb-4 shrink-0')
+            ).props('dense clearable hint="Filtra gruppi duplicati usando manufacturer/model mantenendo l analisi basata su hash matematici della risposta strumentale."').classes('w-full mb-4 shrink-0')
 
             # Tabs
             with ui.tabs().classes('w-full text-slate-700 font-bold') as tabs:
@@ -122,7 +124,9 @@ class MathDeduplicatorDialog:
             with ui.row().classes('w-full items-center gap-4 bg-slate-200 p-4 rounded shadow-inner'):
                 ui.label('Master to keep:').classes('font-bold text-lg')
                 self.combo_master = ui.select(options={}, label='Seleziona il modello da mantenere', with_input=True).classes('flex-grow bg-white')
+                self.combo_master.tooltip('Record strumentale master che conserverà le relazioni canale dopo la fusione dei duplicati matematicamente equivalenti.')
                 self.btn_merge = ui.button('🔗 Merge Group', on_click=self._perform_merge).classes('bg-green-700 text-white font-bold px-6')
+                self.btn_merge.tooltip('Fonde il gruppo duplicato aggiornando le foreign key nel DB sismico e preservando le informazioni strumentali equivalenti.')
                 self.btn_merge.disable()
 
         self._scan_database()

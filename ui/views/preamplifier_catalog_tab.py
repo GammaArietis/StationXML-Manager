@@ -34,10 +34,12 @@ class PreamplifierCatalogTab(QWidget):
         left_layout = QVBoxLayout(left_widget)
         left_layout.addWidget(QLabel("<b>Preamplifiers in Catalog</b>"))
         self.model_list = QListWidget()
+        self.model_list.setToolTip("Doppio clic o selezione di una riga per caricare i metadati dettagliati del preamplificatore nel pannello di editing laterale.")
         self.model_list.itemClicked.connect(self._load_selected_preamp)
         left_layout.addWidget(self.model_list)
         
         self.new_model_btn = QPushButton("➕ New Preamplifier")
+        self.new_model_btn.setToolTip("Prepara un nuovo preamplificatore o condizionatore analogico con stadi, gain e risposta in frequenza.")
         self.new_model_btn.setStyleSheet("background-color: #1976D2; color: white; font-weight: bold;")
         self.new_model_btn.clicked.connect(self._prepare_new_model)
         left_layout.addWidget(self.new_model_btn)
@@ -50,6 +52,12 @@ class PreamplifierCatalogTab(QWidget):
         info_group = QGroupBox("General Data")
         info_form = QFormLayout(info_group)
         self.mfg_input = QLineEdit(); self.model_input = QLineEdit(); self.desc_input = QLineEdit()
+        self.mfg_input.setPlaceholderText("Kinemetrics / Custom Lab")
+        self.mfg_input.setToolTip("Costruttore o laboratorio responsabile del preamplificatore analogico.")
+        self.model_input.setPlaceholderText("EpiSensor Preamp / Analog Gain Stage")
+        self.model_input.setToolTip("Modello del preamplificatore o stadio di condizionamento tra sensore e datalogger.")
+        self.desc_input.setPlaceholderText("Analog conditioning stage with unity gain")
+        self.desc_input.setToolTip("Descrizione tecnica dello stadio analogico, gain, filtri e condizioni di accoppiamento sensore-datalogger.")
         info_form.addRow("Manufacturer:", self.mfg_input)
         info_form.addRow("Model:", self.model_input)
         info_form.addRow("Description:", self.desc_input)
@@ -61,16 +69,20 @@ class PreamplifierCatalogTab(QWidget):
         
         sel_lay = QHBoxLayout()
         self.stage_combo = QComboBox()
+        self.stage_combo.setToolTip("Seleziona lo stadio analogico della catena di risposta del preamplificatore.")
         self.stage_combo.currentIndexChanged.connect(self._on_stage_selection_changed)
         sel_lay.addWidget(QLabel("Stage:")); sel_lay.addWidget(self.stage_combo, 1)
         
         add_st = QPushButton("+"); add_st.clicked.connect(self._add_new_stage)
+        add_st.setToolTip("Aggiunge uno stadio analogico con gain, unità e poli/zeri alla risposta del preamplificatore.")
         rem_st = QPushButton("-"); rem_st.clicked.connect(self._remove_current_stage)
+        rem_st.setToolTip("Rimuove lo stadio analogico selezionato dalla risposta del preamplificatore.")
         sel_lay.addWidget(add_st); sel_lay.addWidget(rem_st)
         stage_layout.addLayout(sel_lay)
 
         sf = QFormLayout()
         self.s_gain = QDoubleSpinBox(); self.s_gain.setRange(0, 1e12); self.s_gain.setDecimals(4)
+        self.s_gain.setToolTip("Gain lineare tensione/tensione dello stadio analogico, incluso nella sensibilità totale.")
         sf.addRow("Stage Gain:", self.s_gain)
         stage_layout.addLayout(sf)
 
@@ -83,27 +95,34 @@ class PreamplifierCatalogTab(QWidget):
         
         pz_btns = QHBoxLayout()
         az = QPushButton("+ Zero"); az.clicked.connect(lambda: self._add_row(self.zt))
+        az.setToolTip("Aggiunge uno zero complesso allo stadio analogico selezionato.")
         ap = QPushButton("+ Pole"); ap.clicked.connect(lambda: self._add_row(self.pt))
+        ap.setToolTip("Aggiunge un polo complesso allo stadio analogico selezionato.")
         dp = QPushButton("- Remove Row"); dp.clicked.connect(self._remove_selected_row)
+        dp.setToolTip("Rimuove il polo/zero selezionato dalla risposta dello stadio analogico.")
         pz_btns.addWidget(az); pz_btns.addWidget(ap); pz_btns.addWidget(dp)
         stage_layout.addLayout(pz_btns)
         editor_layout.addWidget(stage_group)
 
         self.save_btn = QPushButton("💾 SAVE TO CATALOG")
+        self.save_btn.setToolTip("Persiste il preamplificatore nel database SQLite con stadi analogici, gain e risposta complessa.")
         self.save_btn.setStyleSheet("background-color: #2E7D32; color: white; height: 35px; font-weight: bold;")
         self.save_btn.clicked.connect(self._on_save_clicked)
         editor_layout.addWidget(self.save_btn)
 
         danger_layout = QHBoxLayout()
         self.clone_btn = QPushButton("👯 Clone")
+        self.clone_btn.setToolTip("Clona il preamplificatore creando una nuova riga catalogo senza riusare l'ID originale.")
         self.clone_btn.setStyleSheet("background-color: #8E24AA; color: white;")
         self.clone_btn.clicked.connect(self._on_clone_clicked)
         self.clone_btn.setEnabled(False)
         self.replace_btn = QPushButton("🔄 Replace")
+        self.replace_btn.setToolTip("Sposta i riferimenti dei canali verso un preamplificatore master normalizzando il catalogo.")
         self.replace_btn.setStyleSheet("background-color: #F57C00; color: white;")
         self.replace_btn.clicked.connect(self._on_replace_clicked)
         self.replace_btn.setEnabled(False)
         self.delete_btn = QPushButton("🗑️ Delete")
+        self.delete_btn.setToolTip("Elimina il preamplificatore solo se non referenziato da canali o vincoli applicativi.")
         self.delete_btn.setStyleSheet("background-color: #C62828; color: white;")
         self.delete_btn.clicked.connect(self._on_delete_clicked)
         self.delete_btn.setEnabled(False)
@@ -125,6 +144,7 @@ class PreamplifierCatalogTab(QWidget):
 
     def _create_pz_table(self):
         t = QTableWidget(0, 2); t.setHorizontalHeaderLabels(["Real", "Imaginary"])
+        t.setToolTip("Doppio clic per modificare parte reale e immaginaria dei poli/zeri dello stadio analogico.")
         t.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch); return t
 
     def _add_row(self, t, r=0.0, i=0.0):

@@ -14,7 +14,8 @@ class NRLBrowser:
     async def open(self, callback, search_query=""):
         self.path = []
         with ui.dialog() as dialog, ui.card().classes("w-[600px] h-[700px] flex flex-col no-wrap"):
-            ui.label(f"NRL Library - {self.equip_type.upper()}").classes("text-xl font-bold shrink-0")
+            title = ui.label(f"NRL Library - {self.equip_type.upper()}").classes("text-xl font-bold shrink-0")
+            title.tooltip("Navigazione del catalogo ufficiale delle risposte strumentali Nominal Response Library. Consente l importazione diretta di poli, zeri e stadi di decimazione standard.")
 
             suggestion_container = ui.column().classes("w-full shrink-0")
 
@@ -76,9 +77,10 @@ class NRLBrowser:
                     with container:
                         if not opts:
                             ui.icon("check_circle", color="green").classes("text-6xl m-auto mt-10")
-                            ui.button("⬇ IMPORTA MODELLO", on_click=download).classes(
+                            import_btn = ui.button("⬇ IMPORTA MODELLO", on_click=download).classes(
                                 "w-3/4 m-auto mt-4 h-12 shadow-lg"
                             )
+                            import_btn.tooltip("Importa il modello NRL selezionato convertendo risposta, poli/zeri, gain e stadi digitali nel catalogo locale.")
                         else:
                             for opt in opts:
 
@@ -141,8 +143,11 @@ class NRLBrowser:
 
             with ui.row().classes("w-full justify-between mt-4 pt-4 border-t"):
                 btn_back = ui.button("⬅ Indietro", on_click=go_parent).props("flat")
+                btn_back.tooltip("Torna al livello superiore della gerarchia NRL mantenendo il percorso di risposta strumentale.")
                 btn_forward = ui.button("➡ Avanti", on_click=go_forward_sibling).props("flat")
-                ui.button("Chiudi", on_click=dialog.close).props("flat text-red")
+                btn_forward.tooltip("Avanza al modello fratello nello stesso livello NRL per confrontare risposte nominali simili.")
+                close_btn = ui.button("Chiudi", on_click=dialog.close).props("flat text-red")
+                close_btn.tooltip("Chiude il browser NRL senza importare nuovi coefficienti o risposte strumentali.")
 
             if search_query and len(search_query) >= 3:
 
@@ -180,7 +185,8 @@ class NRLBrowser:
                 with container:
                     with ui.button(on_click=on_suggest).classes(
                         "w-full bg-yellow-50 border-2 border-yellow-200 rounded-lg p-3 text-left no-caps shadow-md mb-4"
-                    ):
+                    ) as suggest_btn:
+                        suggest_btn.tooltip("Suggerimento basato sull indice matematico locale NRL: prova ad aprire/importare la risposta nominale più compatibile.")
                         hint = " ".join(parts[:2]) if len(parts) >= 2 else (parts[0] if parts else "")
                         ui.label(f"💡 Suggerimento: {hint}").classes("font-bold text-black")
         except Exception:

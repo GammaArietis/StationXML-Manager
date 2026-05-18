@@ -10,6 +10,7 @@ class AROLBrowserDialog(QDialog):
         self.selected_object = None
         
         self.setWindowTitle(f"Browse AROL Library - {category.capitalize()}")
+        self.setToolTip("Navigazione del catalogo AROL delle risposte strumentali. Consente l'importazione diretta di definizioni YAML, poli, zeri e stadi standard geometrici.")
         self.setMinimumSize(600, 400)
         
         self._setup_ui()
@@ -25,6 +26,7 @@ class AROLBrowserDialog(QDialog):
         mfg_lay = QVBoxLayout()
         mfg_lay.addWidget(QLabel("Manufacturer:"))
         self.mfg_list = QListWidget()
+        self.mfg_list.setToolTip("Seleziona il costruttore AROL per restringere i modelli strumentali disponibili.")
         self.mfg_list.currentRowChanged.connect(self._on_mfg_selected)
         mfg_lay.addWidget(self.mfg_list)
         lists_layout.addLayout(mfg_lay)
@@ -32,6 +34,7 @@ class AROLBrowserDialog(QDialog):
         model_lay = QVBoxLayout()
         model_lay.addWidget(QLabel("Model (YAML):"))
         self.model_list = QListWidget()
+        self.model_list.setToolTip("Seleziona il modello YAML AROL da visualizzare e importare nel catalogo locale.")
         self.model_list.currentRowChanged.connect(self._on_model_selected)
         model_lay.addWidget(self.model_list)
         lists_layout.addLayout(model_lay)
@@ -41,10 +44,12 @@ class AROLBrowserDialog(QDialog):
         layout.addWidget(QLabel("Metadata Preview:"))
         self.preview_label = QLabel("<i>Select a model to see the description...</i>")
         self.preview_label.setWordWrap(True)
+        self.preview_label.setToolTip("Anteprima tecnica del modello AROL selezionato prima dell'import nel catalogo locale.")
         self.preview_label.setStyleSheet("background-color: #2c2c2c; padding: 10px; border-radius: 5px;")
         layout.addWidget(self.preview_label)
         
         self.buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+        self.buttons.setToolTip("OK importa il modello AROL selezionato; Cancel chiude senza modificare il catalogo strumentale.")
         self.buttons.accepted.connect(self._on_accept)
         self.buttons.rejected.connect(self.reject)
         layout.addWidget(self.buttons)

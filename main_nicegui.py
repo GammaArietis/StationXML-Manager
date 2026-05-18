@@ -38,12 +38,9 @@ from web_gui.math_deduplicator_dialog import MathDeduplicatorDialog
 from web_gui.progress_utils import job_progress_fraction, job_progress_percent, yield_ui
 
 # Import del Parser e dell'Exporter
-from importer.stationxml_parser import StationXMLParser
+from importer.stationxml_parser import StationXMLImportError, StationXMLParser
 from exporter.stationxml_builder import StationXMLExporter
-from controllers.stationxml_export_controller import (
-    StationXMLExportLayout,
-    StationXMLWebExportController,
-)
+from controllers.stationxml_export_controller import StationXMLWebExportController
 
 
 # --- 2. STATO WEB PER SESSIONE ---
@@ -200,6 +197,10 @@ def index():
             else:
                 ui.notify('Importazione non completata (vedi log).', type='warning')
 
+        except StationXMLImportError as ex:
+            traceback.print_exc()
+            ui.notify(f'Errore import StationXML: {ex}', type='negative', multi_line=True)
+            prog_col.set_visibility(False)
         except Exception as ex:
             traceback.print_exc()
             ui.notify(f'Errore: {str(ex)}', type='negative')
@@ -225,8 +226,11 @@ def index():
     def show_export_panel():
         workspace.clear()
         with workspace:
-            ui.label('Esportazione Selettiva (Enrico Net)').classes('text-2xl font-bold mb-4')
-            ui.label('Seleziona le stazioni, scegli il formato e scarica.').classes('text-slate-600 mb-2')
+            ui.label('Esportazione Stazioni').classes('text-2xl font-bold mb-4')
+            ui.label(
+                'Seleziona una o più stazioni. Una stazione genera un XML diretto; '
+                'più stazioni generano uno ZIP con un XML per stazione.'
+            ).classes('text-slate-600 mb-2')
 
             rows = []
             for net in net_ctrl.get_all_networks():
@@ -243,15 +247,6 @@ def index():
                 row_key='id',
             ).classes('w-full mb-4')
 
-            export_layout = ui.select(
-                label='Modalità export',
-                options={
-                    StationXMLExportLayout.SINGLE_INVENTORY.value: 'Un unico file inventory.xml (comportamento classico)',
-                    StationXMLExportLayout.ZIP_PER_STATION.value: 'ZIP: un file XML per stazione ({codice}.xml)',
-                },
-                value=StationXMLExportLayout.SINGLE_INVENTORY.value,
-            ).classes('w-full max-w-2xl mb-4')
-
             export_prog_col = ui.column().classes('w-full gap-2 mb-4')
             with export_prog_col:
                 export_prog_bar = ui.linear_progress(value=0.0).classes('w-full')
@@ -264,7 +259,6 @@ def index():
                     ui.notify('Seleziona almeno una stazione!', type='warning')
                     return
                 try:
-                    layout = StationXMLExportLayout(export_layout.value)
                     export_prog_col.set_visibility(True)
                     export_prog_bar.value = 0.0
                     export_prog_lbl.text = '0% — Avvio export…'
@@ -303,66 +297,32 @@ def index():
                             if not drained:
                                 await asyncio.sleep(0.04)
 
-                    if layout == StationXMLExportLayout.SINGLE_INVENTORY:
-                        tmp = tempfile.NamedTemporaryFile(delete=False, suffix='.xml')
-                        temp_path = tmp.name
-                        tmp.close()
+                    def run_export_sync():
+                        def progress_cb(current: int, total: int, message: str) -> None:
+                            progress_q.put((current, total, message))
 
-                        def run_single_to_disk():
-                            def progress_cb(current: int, total: int, message: str) -> None:
-                                progress_q.put((current, total, message))
+                        return export_web_ctrl.build_download(
+                            selected,
+                            progress_callback=progress_cb,
+                            cancel_callback=None,
+                        )
 
-                            return export_web_ctrl.write_single_inventory_xml_to_path(
-                                selected,
-                                temp_path,
-                                progress_callback=progress_cb,
-                                cancel_callback=None,
-                            )
+                    fut = loop.run_in_executor(None, run_export_sync)
+                    await pump_until_done(fut)
 
-                        fut = loop.run_in_executor(None, run_single_to_disk)
-                        await pump_until_done(fut)
+                    exc = fut.exception()
+                    if exc is not None:
+                        raise exc
+                    bundle = fut.result()
 
-                        exc = fut.exception()
-                        if exc is not None:
-                            raise exc
-                        disk_result = fut.result()
+                    export_prog_col.set_visibility(False)
 
-                        export_prog_col.set_visibility(False)
-
-                        if disk_result is None:
-                            ui.notify('Export non completato.', type='warning')
-                            return
-                        ui.download(disk_result, 'inventory_export.xml')
-                        ui.notify('Download pronto!', type='positive')
-                    else:
-
-                        def run_export_sync():
-                            def progress_cb(current: int, total: int, message: str) -> None:
-                                progress_q.put((current, total, message))
-
-                            return export_web_ctrl.build_download(
-                                selected,
-                                layout=layout,
-                                progress_callback=progress_cb,
-                                cancel_callback=None,
-                            )
-
-                        fut = loop.run_in_executor(None, run_export_sync)
-                        await pump_until_done(fut)
-
-                        exc = fut.exception()
-                        if exc is not None:
-                            raise exc
-                        bundle = fut.result()
-
-                        export_prog_col.set_visibility(False)
-
-                        if bundle is None:
-                            ui.notify('Export non completato.', type='warning')
-                            return
-                        data, fname = bundle
-                        ui.download(data, filename=fname)
-                        ui.notify('Download pronto!', type='positive')
+                    if bundle is None:
+                        ui.notify('Export non completato.', type='warning')
+                        return
+                    data, fname = bundle
+                    ui.download(data, filename=fname)
+                    ui.notify('Download pronto!', type='positive')
                 except Exception as ex:
                     traceback.print_exc()
                     ui.notify(f'Errore Export: {str(ex)}', type='negative')

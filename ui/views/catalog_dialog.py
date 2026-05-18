@@ -12,12 +12,14 @@ class CatalogDialog(QDialog):
         super().__init__(parent)
         self.eq_ctrl = eq_ctrl
         self.setWindowTitle("Equipment and Operators Catalog")
+        self.setToolTip("Catalogo centralizzato di sensori, datalogger, preamplificatori e operatori usato per costruire risposte StationXML coerenti.")
         self.resize(1200, 850)
         self._setup_ui()
 
     def _setup_ui(self):
         layout = QVBoxLayout(self)
         self.tabs = QTabWidget()
+        self.tabs.setToolTip("Seleziona il dominio di catalogo da curare: sensori, datalogger, preamplificatori o operatori FDSN.")
         
         # Load the 4 definitive external modules
         self.sensor_tab = SensorCatalogTab(self.eq_ctrl)

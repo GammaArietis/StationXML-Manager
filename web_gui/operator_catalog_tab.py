@@ -25,41 +25,46 @@ class OperatorCatalogTab:
                 ).style("flex: 1 1 0;")
 
                 with ui.row().classes("w-full gap-1 mt-4 shrink-0"):
-                    ui.button("➕ New", on_click=self._prepare_new_operator).props("outline size=sm").classes(
+                    new_btn = ui.button("➕ New", on_click=self._prepare_new_operator).props("outline size=sm").classes(
                         "flex-grow bg-white"
                     )
+                    new_btn.tooltip("Prepara una nuova agenzia/operatore responsabile della gestione e manutenzione di reti o stazioni sismiche.")
 
             # --- COLONNA 2: EDITOR ---
             with ui.column().classes("h-full p-8 bg-white flex flex-col no-wrap overflow-y-auto"):
                 ui.label("Operator Editor").classes("text-2xl font-bold text-indigo-800 mb-6 shrink-0")
 
                 with ui.card().classes("w-full p-6 mb-6 shadow-sm border-l-8 border-indigo-600 shrink-0"):
-                    self.op_agency = ui.input("Agency / Entity").classes("w-full mb-2")
-                    self.op_name = ui.input("Contact Name").classes("w-full mb-2")
-                    self.op_email = ui.input("Email").classes("w-full mb-2")
-                    self.op_web = ui.input("Website").classes("w-full mb-2")
-                    self.op_phone = ui.input("Phone").classes("w-full")
+                    self.op_agency = ui.input("Agency / Entity").classes("w-full mb-2").props('placeholder="INGV" hint="Nome dell agenzia responsabile della rete sismica, stazione o distribuzione dei metadati FDSN."')
+                    self.op_name = ui.input("Contact Name").classes("w-full mb-2").props('placeholder="Metadata Office" hint="Referente tecnico o ufficio responsabile della qualità dei metadati StationXML."')
+                    self.op_email = ui.input("Email").classes("w-full mb-2").props('placeholder="metadata@example.org" hint="Contatto operativo per correzioni di inventario, response metadata o richieste FDSN."')
+                    self.op_web = ui.input("Website").classes("w-full mb-2").props('placeholder="https://www.example.org" hint="URL istituzionale dell operatore o del data center responsabile della rete."')
+                    self.op_phone = ui.input("Phone").classes("w-full").props('placeholder="39-3331234567" hint="Numero telefonico in formato FDSN country-subscriber, ad esempio 39-3331234567."')
 
                 with ui.row().classes("w-full justify-between items-center pt-6 mt-6 border-t shrink-0"):
                     with ui.row().classes("gap-2"):
                         self.btn_op_clone = ui.button("👯 Clone", on_click=self._on_clone_clicked).props(
                             "outline color=purple"
                         )
+                        self.btn_op_clone.tooltip("Clona l operatore creando una nuova riga database con ID distinto e suffisso (Copy).")
                         self.btn_op_clone.disable()
 
                         self.btn_op_replace = ui.button("🔄 Replace", on_click=self._on_replace_clicked).props(
                             "outline color=orange"
                         )
+                        self.btn_op_replace.tooltip("Sposta riferimenti di reti e stazioni verso un operatore master preservando integrità e tracciabilità.")
                         self.btn_op_replace.disable()
 
                         self.btn_op_delete = ui.button("🗑️ Delete", on_click=self._on_delete_clicked).props(
                             "outline color=red"
                         )
+                        self.btn_op_delete.tooltip("Elimina l operatore solo se nessuna rete o stazione lo referenzia ancora.")
                         self.btn_op_delete.disable()
 
-                    ui.button("💾 SAVE OPERATOR", on_click=self._save_operator, color="green").classes(
+                    save_btn = ui.button("💾 SAVE OPERATOR", on_click=self._save_operator, color="green").classes(
                         "px-10 h-12 font-bold shadow-md"
                     )
+                    save_btn.tooltip("Persiste l operatore nel database SQLite per associare ownership e manutenzione a reti e stazioni.")
 
             # --- COLONNA 3: INFO ---
             with ui.column().classes("h-full p-6 bg-slate-50 border-l overflow-y-auto"):
@@ -199,13 +204,16 @@ class OperatorCatalogTab:
                 "questa riga verrà eliminata dal catalogo."
             ).classes("text-sm text-slate-600 mb-4")
             sel = ui.select(others, label="Operatore da mantenere", with_input=True).classes("w-full")
+            sel.tooltip("Operatore master che erediterà i riferimenti di reti e stazioni prima della rimozione del duplicato.")
             with ui.row().classes("w-full justify-end mt-4 gap-2"):
-                ui.button("Annulla", on_click=d.close).props("flat")
-                ui.button(
+                cancel_btn = ui.button("Annulla", on_click=d.close).props("flat")
+                cancel_btn.tooltip("Annulla la sostituzione senza modificare riferimenti nel database.")
+                confirm_btn = ui.button(
                     "Conferma",
                     color="orange",
                     on_click=lambda: self._run_replace(d, sel.value),
                 ).classes("font-bold")
+                confirm_btn.tooltip("Normalizza le relazioni spostando reti e stazioni dall operatore duplicato a quello master.")
 
         d.open()
 

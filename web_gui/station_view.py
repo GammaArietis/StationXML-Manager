@@ -34,19 +34,27 @@ class StationView:
         with ui.card().classes("w-full p-6 mb-4 shadow-sm border-t-4 border-blue-600"):
             ui.label("General Metadata").classes("text-lg font-bold mb-4 text-blue-800")
             with ui.row().classes("w-full gap-4"):
-                self.code_in = ui.input("Station Code (*)", value=station.code).classes("w-1/4").props("uppercase maxlength=10")
-                self.site_in = ui.input("Site Name", value=station.site_name or "").classes("flex-grow")
+                self.code_in = ui.input("Station Code (*)", value=station.code).classes("w-1/4").props(
+                    'uppercase maxlength=10 placeholder="ZOE o MDN" '
+                    'hint="Codice identificativo internazionale della stazione sismica (da 3 a 5 caratteri maiuscoli)."'
+                )
+                self.site_in = ui.input("Site Name", value=station.site_name or "").classes("flex-grow").props(
+                    'placeholder="Palermo, Sicily, Italy" '
+                    'hint="Descrizione geografica o toponimo del sito di installazione del sensore sismico."'
+                )
                 self.restr_in = ui.select(
                     ["open", "closed", "partial"],
                     label="Restricted",
                     value=station.restricted_status or "open",
                 ).classes("w-32")
+                self.restr_in.tooltip("Stato FDSN restrictedStatus applicato alla stazione e alle sue epoche operative.")
 
             with ui.row().classes("w-full gap-4 mt-4 items-center"):
                 operators = {None: "--- No Operator ---"}
                 for op in self.eq_ctrl.get_all_operators():
                     operators[op.id] = f"{op.agency} ({op.contact_name})" if op.contact_name else op.agency
                 self.op_in = ui.select(operators, label="Operator", value=station.operator_id).classes("w-1/3")
+                self.op_in.tooltip("Agenzia responsabile della gestione, manutenzione e qualità dei metadati della stazione.")
 
                 self.vault_in = ui.select(
                     ["Vault", "Borehole", "Surface", "Cave", "Underwater", "Tunnel", "Building", "Bunker"],
@@ -54,28 +62,43 @@ class StationView:
                     value=station.vault or "Vault",
                     with_input=True,
                 ).classes("w-1/3")
+                self.vault_in.tooltip("Tipologia di installazione fisica del sensore: vault, borehole, superficie o altra infrastruttura sismologica.")
 
         # --- BLOCCO 2: COORDINATE E GEOLOGIA ---
         with ui.card().classes("w-full p-6 mb-4 shadow-sm"):
             ui.label("Coordinates & Geology").classes("text-lg font-bold mb-4 text-slate-700")
             with ui.row().classes("w-full gap-4 items-center"):
-                self.lat_in = ui.number("Latitude", value=station.latitude or 0.0, format="%.5f", step=0.00001).classes("w-1/6")
-                self.lon_in = ui.number("Longitude", value=station.longitude or 0.0, format="%.5f", step=0.00001).classes("w-1/6")
-                self.elev_in = ui.number("Elevation (m)", value=station.elevation or 0.0).classes("w-1/6")
-                self.water_in = ui.number("Water Level", value=getattr(station, "water_level", 0.0) or 0.0).classes("w-1/6")
+                self.lat_in = ui.number("Latitude", value=station.latitude or 0.0, format="%.5f", step=0.00001).classes("w-1/6").props(
+                    'placeholder="41.8902" hint="Coordinata geografica espressa in gradi decimali secondo lo standard geodetico WGS84."'
+                )
+                self.lon_in = ui.number("Longitude", value=station.longitude or 0.0, format="%.5f", step=0.00001).classes("w-1/6").props(
+                    'placeholder="12.4922" hint="Coordinata geografica espressa in gradi decimali secondo lo standard geodetico WGS84."'
+                )
+                self.elev_in = ui.number("Elevation (m)", value=station.elevation or 0.0).classes("w-1/6").props(
+                    'placeholder="250.0" hint="Elevazione altimetrica del caposaldo della stazione espressa in metri sul livello medio del mare (m s.l.m.)."'
+                )
+                self.water_in = ui.number("Water Level", value=getattr(station, "water_level", 0.0) or 0.0).classes("w-1/6").props(
+                    'placeholder="0.0" hint="Quota del livello idrico rispetto al riferimento della stazione, in metri, quando rilevante per installazioni in pozzo o ambienti sommersi."'
+                )
 
             with ui.row().classes("w-full gap-4 mt-4 items-center"):
-                self.geol_in = ui.input("Geology", value=station.geology or "").classes("flex-grow")
+                self.geol_in = ui.input("Geology", value=station.geology or "").classes("flex-grow").props(
+                    'placeholder="Basalt / Limestone / Alluvium" '
+                    'hint="Litologia locale del sito sismico, utile per interpretare risposta di sito, rumore e accoppiamento sensore-suolo."'
+                )
 
         # --- BLOCCO 3: INDIRIZZO E LUOGO ---
         with ui.card().classes("w-full p-6 mb-4 shadow-sm"):
             ui.label("Address & Location").classes("text-lg font-bold mb-4 text-slate-700")
-            self.desc_in = ui.input("Extended Site Description", value=getattr(station, "description", "") or "").classes("w-full mb-4")
+            self.desc_in = ui.input("Extended Site Description", value=getattr(station, "description", "") or "").classes("w-full mb-4").props(
+                'placeholder="Palermo, Sicily, Italy" '
+                'hint="Descrizione geografica o toponimo del sito di installazione del sensore sismico."'
+            )
             with ui.row().classes("w-full gap-4"):
-                self.town_in = ui.input("Town", value=getattr(station, "town", "") or "").classes("w-1/5")
-                self.county_in = ui.input("County", value=getattr(station, "county", "") or "").classes("w-1/5")
-                self.region_in = ui.input("Region", value=getattr(station, "region", "") or "").classes("w-1/5")
-                self.country_in = ui.input("Country", value=getattr(station, "country", "") or "").classes("w-1/5")
+                self.town_in = ui.input("Town", value=getattr(station, "town", "") or "").classes("w-1/5").props('placeholder="Palermo" hint="Comune o località amministrativa associata alle coordinate WGS84 della stazione."')
+                self.county_in = ui.input("County", value=getattr(station, "county", "") or "").classes("w-1/5").props('placeholder="Palermo" hint="Provincia o contea usata per contestualizzare il sito di installazione sismica."')
+                self.region_in = ui.input("Region", value=getattr(station, "region", "") or "").classes("w-1/5").props('placeholder="Sicily" hint="Regione geografica o amministrativa del sito sismico."')
+                self.country_in = ui.input("Country", value=getattr(station, "country", "") or "").classes("w-1/5").props('placeholder="Italy" hint="Paese associato alla localizzazione WGS84 della stazione."')
 
         # --- BLOCCO 4: DATE ---
         with ui.card().classes("w-full p-6 mb-4 shadow-sm"):
@@ -86,20 +109,28 @@ class StationView:
                         "Set start date",
                         value=bool(station.start_date and str(station.start_date).strip()),
                     ).classes("shrink-0")
+                    self.start_set.tooltip("Abilita la serializzazione della data di inizio validità dell epoca stazione in tempo UTC.")
                     self.start_in = ui.input(
                         "Start Date",
                         value=iso_to_datetime_local_field(station.start_date),
-                    ).props("type=datetime-local").classes("w-1/3")
+                    ).props(
+                        'type=datetime-local placeholder="YYYY-MM-DD HH:MM:SS" '
+                        'hint="Data e ora di inizio validità dell epoca strumentale espresse in tempo coordinato universale (UTC)."'
+                    ).classes("w-1/3")
                     self.start_in.bind_enabled_from(self.start_set, "value")
                 with ui.row().classes("w-full gap-4 items-end"):
                     self.end_set = ui.checkbox(
                         "Set end date",
                         value=bool(station.end_date and str(station.end_date).strip()),
                     ).classes("shrink-0")
+                    self.end_set.tooltip("Spuntando questo campo viene chiusa l epoca della stazione con una data UTC esplicita per preservare la storia operativa FDSN.")
                     self.end_in = ui.input(
                         "End Date",
                         value=iso_to_datetime_local_field(station.end_date),
-                    ).props("type=datetime-local").classes("w-1/3")
+                    ).props(
+                        'type=datetime-local placeholder="YYYY-MM-DD HH:MM:SS" '
+                        'hint="Data e ora di fine validità dell epoca strumentale espresse in tempo coordinato universale (UTC)."'
+                    ).classes("w-1/3")
                     self.end_in.bind_enabled_from(self.end_set, "value")
 
         # --- BLOCCO 5: COMMENTI FDSN ---
@@ -116,12 +147,13 @@ class StationView:
             def add_comment_row(c_val="", c_start="", c_end="", c_sub="", c_auth=""):
                 with self.comments_container:
                     with ui.row().classes("w-full gap-2 items-center bg-slate-50 p-2 rounded border") as row:
-                        v = ui.input("Text", value=c_val).classes("flex-grow")
-                        st = ui.input("Start", value=c_start).classes("w-32").props("placeholder=YYYY-MM-DD")
-                        en = ui.input("End", value=c_end).classes("w-32").props("placeholder=YYYY-MM-DD")
-                        sub = ui.input("Subject", value=c_sub).classes("w-32")
-                        auth = ui.input("Author", value=c_auth).classes("w-48")
+                        v = ui.input("Text", value=c_val).classes("flex-grow").props('hint="Annotazione FDSN sulla stazione: manutenzione, relocation, cambio sensore o evidenze operative del sito."')
+                        st = ui.input("Start", value=c_start).classes("w-32").props('placeholder=YYYY-MM-DD hint="Data UTC di inizio validità del commento StationXML."')
+                        en = ui.input("End", value=c_end).classes("w-32").props('placeholder=YYYY-MM-DD hint="Data UTC di fine validità del commento StationXML."')
+                        sub = ui.input("Subject", value=c_sub).classes("w-32").props('placeholder="site-noise" hint="Categoria del commento: site-noise, maintenance, relocation o quality-control."')
+                        auth = ui.input("Author", value=c_auth).classes("w-48").props('placeholder="INGV Metadata Office" hint="Autore o agenzia responsabile della nota FDSN."')
                         btn_remove = ui.button(icon="delete", color="red").props("flat dense")
+                        btn_remove.tooltip("Rimuove questa annotazione dalla serializzazione StationXML della stazione.")
                         item_tuple = (v, st, en, sub, auth)
                         self.comments_ui_elements.append(item_tuple)
                         btn_remove.on("click", lambda r=row, it=item_tuple: remove_comment_row(r, it))
@@ -143,7 +175,8 @@ class StationView:
                     auth_str,
                 )
 
-            ui.button("+ Add Comment", on_click=lambda: add_comment_row(), color="blue").classes("mt-4").props("outline")
+            add_comment_btn = ui.button("+ Add Comment", on_click=lambda: add_comment_row(), color="blue").classes("mt-4").props("outline")
+            add_comment_btn.tooltip("Aggiunge una nota FDSN con intervallo UTC per documentare eventi di sito o manutenzione.")
 
         # --- Lookup da coordinate (definiti dopo tutti i campi usati in UI) ---
         async def _run_geology():
@@ -205,7 +238,7 @@ class StationView:
                     raise RuntimeError("Stazione non trovata nel DB.")
                 client = YasmineClient()
                 exporter = StationXMLExporter(self.net_ctrl, self.sta_ctrl, self.cha_ctrl, self.eq_ctrl)
-                inv = exporter.build_inventory(target_station_id=db_sta.id)
+                inv = exporter.build_station_inventory(db_sta.id)
                 buf = io.BytesIO()
                 inv.write(buf, format="STATIONXML", validate=True)
                 xml_bytes = buf.getvalue()
@@ -249,7 +282,9 @@ class StationView:
 
             with ui.dialog() as dialog, ui.card().classes("p-6 w-[min(520px,92vw)]"):
                 ui.label("⚡ Auto-Generate 3 Channels").classes("text-xl font-bold mb-4")
-                sample_rate_display = ui.input("Detected Sample Rate", value="N/A").props("readonly").classes("w-full mt-2")
+                sample_rate_display = ui.input("Detected Sample Rate", value="N/A").props(
+                    'readonly hint="Frequenza finale di campionamento estratta dalla catena di decimazione del datalogger, espressa in Hertz (Hz)."'
+                ).classes("w-full mt-2")
 
                 def _update_sample_rate_preview(_=None):
                     if not dl_sel.value:
@@ -273,6 +308,7 @@ class StationView:
                     with_input=True,
                     on_change=_update_sample_rate_preview,
                 ).classes("w-full")
+                dl_sel.tooltip("Seleziona un datalogger validato dall inventario centralizzato; il sample rate determina il Band Code SEED proposto.")
 
                 sensor_sel = ui.select(
                     sensor_options,
@@ -280,27 +316,37 @@ class StationView:
                     with_input=True,
                     on_change=lambda e: _sync_sensor_fdsn_defaults(e),
                 ).classes("w-full mt-2")
-                depth_in = ui.number("Depth", value=0.0).classes("w-full mt-2")
+                sensor_sel.tooltip("Seleziona un modello validato dall inventario centralizzato. La classificazione fisica del sensore guida Instrument Code e Sensor Type FDSN.")
+                depth_in = ui.number("Depth", value=0.0).classes("w-full mt-2").props(
+                    'placeholder="0.0" hint="Profondità del sensore rispetto al riferimento della stazione, espressa in metri."'
+                )
                 start_time_in = ui.input(
                     "Start Time",
                     value=datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
-                ).props("type=datetime-local").classes("w-full mt-2")
+                ).props(
+                    'type=datetime-local placeholder="YYYY-MM-DD HH:MM:SS" '
+                    'hint="Data e ora di inizio validità dei tre canali generati, in tempo coordinato universale (UTC)."'
+                ).classes("w-full mt-2")
                 band_sel = ui.select(
                     ["F", "C", "H", "B", "M", "L", "V", "U", "R", "E", "S", "G"],
                     label="Band Code (1st Letter)",
                     value="H",
                 ).classes("w-full mt-2")
+                band_sel.tooltip("Prima lettera SEED: codifica la banda di frequenza del canale in funzione del sample rate e della risposta fisica dello strumento.")
                 inst_in = ui.input(
                     "Instrument Code",
                     value="H",
                     on_change=_update_sample_rate_preview,
-                ).props("maxlength=1").classes("w-full mt-2")
+                ).props(
+                    'maxlength=1 placeholder="H" hint="Seconda lettera SEED: H per velocimetri, N per accelerometri, secondo input units e standard FDSN."'
+                ).classes("w-full mt-2")
                 sensor_type = ui.select(
                     {"bb": "Broad Band (BB)", "sp": "Short Period (SP)"},
                     label="Sensor Type",
                     value="bb",
                     on_change=_update_sample_rate_preview,
                 ).classes("w-full mt-2")
+                sensor_type.tooltip("Classificazione broadband o short-period usata per proporre il Band Code SEED; resta modificabile manualmente prima della generazione.")
 
                 def _sync_sensor_fdsn_defaults(_=None):
                     if not sensor_sel.value:
@@ -347,8 +393,10 @@ class StationView:
                         ui.notify(f"Errore generazione canali: {e}", type="negative")
 
                 with ui.row().classes("w-full justify-end gap-2 mt-4"):
-                    ui.button("Annulla", on_click=dialog.close).props("flat")
-                    ui.button("Genera", color="teal", on_click=_generate).classes("font-bold")
+                    cancel_btn = ui.button("Annulla", on_click=dialog.close).props("flat")
+                    cancel_btn.tooltip("Chiude il wizard senza creare epoche canale nel database.")
+                    gen_btn = ui.button("Genera", color="teal", on_click=_generate).classes("font-bold")
+                    gen_btn.tooltip("Crea i tre canali Z, N, E con codice SEED completo, start time UTC e strumentazione collegata.")
 
             dialog.open()
 
@@ -357,16 +405,22 @@ class StationView:
 
         with ui.row().classes("w-full gap-2 items-center mt-2 mb-2"):
             ui.label("Geologia / geografia da coordinate:").classes("text-sm text-slate-600")
-            ui.button("🌍 Get Geology", on_click=_run_geology).props("outline color=info")
-            ui.button("📍 Auto-fill Geog.", on_click=_run_geography).props("outline color=warning")
+            geo_btn = ui.button("🌍 Get Geology", on_click=_run_geology).props("outline color=info")
+            geo_btn.tooltip("Interroga servizi geologici esterni usando coordinate WGS84 per stimare la litologia del sito sismico.")
+            geog_btn = ui.button("📍 Auto-fill Geog.", on_click=_run_geography).props("outline color=warning")
+            geog_btn.tooltip("Ricava toponimi e campi geografici dalle coordinate WGS84 per migliorare la descrizione StationXML del sito.")
 
         # --- BLOCCO 6: AZIONI ---
         with ui.row().classes("w-full justify-between mt-8"):
             with ui.row().classes("gap-4"):
-                ui.button("🗑️ Delete Station", color="red", on_click=_confirm_delete).props("outline")
-                ui.button("☁️ Send to Yasmine", color="deep-purple", on_click=_run_yasmine_sync).props("outline")
-                ui.button("⚡ Auto-Generate 3 Channels", color="teal", on_click=_open_auto_channels_dialog).props("outline")
-            ui.button("💾 Save Station", on_click=lambda: self.save(station), color="green").classes("px-10 font-bold h-12")
+                del_btn = ui.button("🗑️ Delete Station", color="red", on_click=_confirm_delete).props("outline")
+                del_btn.tooltip("Elimina la stazione e i canali associati rispettando i vincoli gerarchici del database SQLite.")
+                yasmine_btn = ui.button("☁️ Send to Yasmine", color="deep-purple", on_click=_run_yasmine_sync).props("outline")
+                yasmine_btn.tooltip("Esporta la singola stazione in StationXML e la sincronizza con l archivio Yasmine mantenendo lo stato di allineamento.")
+                auto_btn = ui.button("⚡ Auto-Generate 3 Channels", color="teal", on_click=_open_auto_channels_dialog).props("outline")
+                auto_btn.tooltip("Genera una terna SEED Z/N/E coerente con sample rate, risposta del sensore e convenzioni FDSN.")
+            save_btn = ui.button("💾 Save Station", on_click=lambda: self.save(station), color="green").classes("px-10 font-bold h-12")
+            save_btn.tooltip("Persiste le modifiche correnti sul database SQLite attivando i relativi vincoli di integrità.")
 
     def save(self, station):
         code = self.code_in.value.strip().upper() if self.code_in.value else ""

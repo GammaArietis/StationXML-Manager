@@ -29,14 +29,20 @@ class SensorCatalogTab:
             with ui.column().classes('bg-slate-50 p-4 border-r overflow-hidden flex flex-col no-wrap'):
                 ui.label('Sensors').classes('font-bold text-xs uppercase mb-2 shrink-0')
                 self.search_input = ui.input(
-                    placeholder='Cerca per marca/modello...',
+                    placeholder='Cerca sensori per marca, modello o risposta NRL...',
                     on_change=lambda _: self.refresh_list(),
-                ).props('dense clearable').classes('w-full mb-2 shrink-0')
+                ).props(
+                    'dense clearable '
+                    'hint="Filtra il catalogo sensori usando manufacturer/model o identificativi NRL per individuare rapidamente risposte strumentali equivalenti."'
+                ).classes('w-full mb-2 shrink-0')
                 self.model_list = ui.list().classes('w-full border rounded bg-white overflow-y-auto flex-grow shadow-inner')
                 with ui.row().classes('w-full mt-4 shrink-0 gap-1'):
-                    ui.button('➕ New', on_click=self._prepare_new).props('outline size=sm').classes('flex-grow bg-white')
-                    ui.button('🌐 NRL', on_click=self._on_nrl_clicked).props('outline size=sm').classes('flex-grow bg-white')
-                    ui.button('🌐 AROL', on_click=self._on_arol_clicked).props('outline size=sm').classes('flex-grow bg-white')
+                    new_btn = ui.button('➕ New', on_click=self._prepare_new).props('outline size=sm').classes('flex-grow bg-white')
+                    new_btn.tooltip('Prepara un nuovo modello sensore con risposta strumentale, unità fisiche e poli/zeri da salvare nel catalogo centralizzato.')
+                    nrl_btn = ui.button('🌐 NRL', on_click=self._on_nrl_clicked).props('outline size=sm').classes('flex-grow bg-white')
+                    nrl_btn.tooltip('Navigazione del catalogo ufficiale Nominal Response Library per importare poli, zeri, gain e unità fisiche del sensore.')
+                    arol_btn = ui.button('🌐 AROL', on_click=self._on_arol_clicked).props('outline size=sm').classes('flex-grow bg-white')
+                    arol_btn.tooltip('Navigazione della libreria AROL per importare definizioni strumentali e risposte nominali in formato catalogo locale.')
 
             # --- COLONNA 2: EDITOR ---
             with ui.column().classes('p-8 overflow-y-auto'):
@@ -44,40 +50,51 @@ class SensorCatalogTab:
                 
                 with ui.card().classes('w-full p-6 border-l-8 border-green-600 shadow-sm mb-6'):
                     with ui.row().classes('w-full gap-4'):
-                        self.mfg_input = ui.input('Manufacturer').classes('w-1/3')
-                        self.model_input = ui.input('Model').classes('w-1/3')
+                        self.mfg_input = ui.input('Manufacturer').classes('w-1/3').props('placeholder="Nanometrics" hint="Costruttore del sensore sismico come riportato in NRL, AROL o documentazione metrologica."')
+                        self.model_input = ui.input('Model').classes('w-1/3').props('placeholder="Trillium 120PA" hint="Modello commerciale o nominale del sensore, usato per deduplicazione e associazione ai canali."')
                         self.type_input = ui.select(["SENSOR", "VBB", "BB", "SP", "SM"], label='Type').classes('flex-grow')
+                        self.type_input.tooltip('Classificazione sismologica del sensore: VBB/BB/SP/SM influenza band code e interpretazione della risposta.')
                     
                     with ui.row().classes('w-full gap-4 mt-4'):
-                        self.sens_input = ui.number('Sensitivity', format='%.2e', on_change=self._update_plot).classes('w-1/2')
-                        self.freq_input = ui.number('Norm. Frequency (Hz)', value=1.0, on_change=self._update_plot).classes('flex-grow')
+                        self.sens_input = ui.number('Sensitivity', format='%.2e', on_change=self._update_plot).classes('w-1/2').props('placeholder="1.500000e+03" hint="Sensibilità nominale del sensore alla frequenza di normalizzazione, espressa nelle unità fisiche dichiarate."')
+                        self.freq_input = ui.number('Norm. Frequency (Hz)', value=1.0, on_change=self._update_plot).classes('flex-grow').props('placeholder="1.0" hint="Frequenza di normalizzazione della risposta strumentale in Hertz (Hz)."')
                     
                     with ui.row().classes('w-full gap-4 mt-4 items-center'):
-                        self.in_units = ui.input('Input Units', value='m/s').classes('w-1/4')
+                        self.in_units = ui.input('Input Units', value='m/s').classes('w-1/4').props('placeholder="m/s o m/s**2" hint="Unità fisica in ingresso: m/s identifica velocimetri, m/s**2 identifica accelerometri secondo logica FDSN."')
                         ui.label('→').classes('text-lg font-bold text-slate-400')
-                        self.out_units = ui.input('Output Units', value='V').classes('w-1/4')
+                        self.out_units = ui.input('Output Units', value='V').classes('w-1/4').props('placeholder="V" hint="Unità elettrica in uscita dal sensore prima della catena di acquisizione."')
                         self.pz_type = ui.select(["LAPLACE (RADIANS/SECOND)", "LAPLACE (HERTZ)"], label='PZ Type', on_change=self._update_plot).classes('flex-grow')
+                        self.pz_type.tooltip('Dominio matematico dei poli/zeri: rad/s o Hz, fondamentale per calcolare correttamente corner frequency e risposta Bode.')
                     
-                    self.desc_input = ui.textarea('Description').classes('w-full mt-4').props('rows=2 outlined')
+                    self.desc_input = ui.textarea('Description').classes('w-full mt-4').props(
+                        'rows=2 outlined placeholder="Broadband velocity sensor, 120 s corner period" '
+                        'hint="Descrizione tecnica del sensore: banda, principio fisico, periodo proprio o note di risposta."'
+                    )
                 
                 ui.label('Poles and Zeros').classes('text-lg font-bold mt-4 shrink-0')
                 with ui.row().classes('w-full gap-4 mt-2'):
                     with ui.column().classes('flex-grow p-4 bg-slate-50 border rounded'):
                         ui.label('Zeros').classes('text-xs font-bold text-slate-500 uppercase text-center w-full')
                         self.zt_cont = ui.column().classes('w-full gap-1')
-                        ui.button('+ Add Zero', on_click=lambda: self._add_row(self.zt_cont, self.zeros_inputs)).props('flat dense size=sm color=blue')
+                        z_btn = ui.button('+ Add Zero', on_click=lambda: self._add_row(self.zt_cont, self.zeros_inputs)).props('flat dense size=sm color=blue')
+                        z_btn.tooltip('Aggiunge uno zero complesso della risposta del sensore nel dominio Laplace.')
                     
                     with ui.column().classes('flex-grow p-4 bg-slate-50 border rounded'):
                         ui.label('Poles').classes('text-xs font-bold text-slate-500 uppercase text-center w-full')
                         self.pt_cont = ui.column().classes('w-full gap-1')
-                        ui.button('+ Add Pole', on_click=lambda: self._add_row(self.pt_cont, self.poles_inputs)).props('flat dense size=sm color=blue')
+                        p_btn = ui.button('+ Add Pole', on_click=lambda: self._add_row(self.pt_cont, self.poles_inputs)).props('flat dense size=sm color=blue')
+                        p_btn.tooltip('Aggiunge un polo complesso della risposta del sensore, usato per corner frequency e Bode plot.')
                 
                 with ui.row().classes('w-full justify-between items-center pt-6 mt-6 border-t shrink-0'):
                     with ui.row().classes('gap-2'):
                         self.btn_sens_clone = ui.button('👯 Clone', on_click=self._on_clone_clicked).props('outline color=purple')
+                        self.btn_sens_clone.tooltip('Clona il record sensore creando una nuova riga database senza riusare l ID originale.')
                         self.btn_sens_replace = ui.button('🔄 Replace', on_click=self._on_replace_clicked).props('outline color=orange')
+                        self.btn_sens_replace.tooltip('Sostituisce riferimenti canale verso un modello sensore master preservando l integrità del DB sismico.')
                         self.btn_sens_delete = ui.button('🗑️ Delete', on_click=self._on_delete_clicked).props('outline color=red')
-                    ui.button('💾 SAVE SENSOR', on_click=self._on_save_clicked, color='green').classes('px-10 h-12 font-bold shadow-md')
+                        self.btn_sens_delete.tooltip('Elimina il sensore solo se non referenziato da canali o vincoli applicativi.')
+                    save_btn = ui.button('💾 SAVE SENSOR', on_click=self._on_save_clicked, color='green').classes('px-10 h-12 font-bold shadow-md')
+                    save_btn.tooltip('Persiste il modello sensore nel database SQLite con poli, zeri, unità fisiche e sensibilità nominale.')
                 self._set_sensor_action_buttons(False)
 
             # --- COLONNA 3: PLOT ---
@@ -158,9 +175,10 @@ class SensorCatalogTab:
     def _add_row(self, container, registry, r=0.0, i=0.0):
         with container:
             with ui.row().classes('w-full no-wrap items-center gap-1 border-b pb-1') as row:
-                rv = ui.number(value=r, on_change=self._update_plot).props('dense size=xs step=any').classes('w-20')
-                iv = ui.number(value=i, on_change=self._update_plot).props('dense size=xs step=any').classes('w-20')
-                ui.button(icon='delete', on_click=lambda: (row.delete(), registry.remove((rv, iv)), self._update_plot())).props('flat dense size=xs color=red')
+                rv = ui.number(value=r, on_change=self._update_plot).props('dense size=xs step=any hint="Parte reale del polo/zero complesso della risposta strumentale."').classes('w-20')
+                iv = ui.number(value=i, on_change=self._update_plot).props('dense size=xs step=any hint="Parte immaginaria del polo/zero complesso della risposta strumentale."').classes('w-20')
+                del_btn = ui.button(icon='delete', on_click=lambda: (row.delete(), registry.remove((rv, iv)), self._update_plot())).props('flat dense size=xs color=red')
+                del_btn.tooltip('Rimuove questo polo/zero dalla risposta del sensore e aggiorna il Bode plot.')
                 registry.append((rv, iv))
 
     def _on_save_clicked(self):
@@ -226,12 +244,14 @@ class SensorCatalogTab:
         with ui.dialog() as d, ui.card().classes('w-96 p-6'):
             ui.label('Replace Sensor').classes('text-lg font-bold mb-4')
             sel = ui.select(others, label="Select replacement", with_input=True).classes('w-full')
-            ui.button('Confirm Replace', color='orange', on_click=lambda: (
+            sel.tooltip('Seleziona il sensore master a cui migrare i riferimenti dei canali prima di rimuovere il duplicato.')
+            replace_btn = ui.button('Confirm Replace', color='orange', on_click=lambda: (
                 self.eq_ctrl.replace_equipment('sensor', sid, sel.value),
                 d.close(),
                 self.refresh_list(),
                 self._prepare_new()
             )).classes('w-full mt-4')
+            replace_btn.tooltip('Normalizza le relazioni nel database spostando i canali dal sensore duplicato al modello master.')
         d.open()
 
     async def _on_delete_clicked(self):

@@ -221,10 +221,12 @@ class MathDeduplicatorDialog(QDialog):
                      "If you generate the Local NRL Index, the software will automatically recognize your instruments!")
         lbl_info = QLabel(info_text)
         lbl_info.setWordWrap(True)
+        lbl_info.setToolTip("Modulo di analisi matematica per la fusione di record strumentali identici. Identifica i duplicati tramite hash dei coefficienti e normalizza le relazioni nel DB sismico senza perdita di informazioni.")
         lbl_info.setStyleSheet("background-color: #212121; color: #FFFFFF; padding: 10px; border-radius: 5px; border: 1px solid #1976D2;")
         header_layout.addWidget(lbl_info, 1)
         
         self.btn_index = QPushButton("🛠️ Generate Local NRL Index")
+        self.btn_index.setToolTip("Calcola un indice locale NRL basato su impronte matematiche di poli, zeri e coefficienti per riconoscere strumenti nominalmente equivalenti.")
         self.btn_index.setStyleSheet("background-color: #673AB7; color: white; font-weight: bold; padding: 10px; border-radius: 5px;")
         self.btn_index.clicked.connect(self._generate_nrl_index)
         header_layout.addWidget(self.btn_index)
@@ -232,6 +234,7 @@ class MathDeduplicatorDialog(QDialog):
 
         self.search_input = QLineEdit()
         self.search_input.setPlaceholderText("Filtra duplicati per marca/modello...")
+        self.search_input.setToolTip("Filtra gruppi duplicati usando manufacturer/model mantenendo l'analisi basata su hash matematici della risposta strumentale.")
         self.search_input.textChanged.connect(self._filter_duplicate_trees)
         layout.addWidget(self.search_input)
         
@@ -241,6 +244,7 @@ class MathDeduplicatorDialog(QDialog):
         lay_s = QVBoxLayout(self.tab_sensors)
         self.tree_sensors = QTreeWidget()
         self.tree_sensors.setHeaderLabels(["Model", "ID", "Poles/Zeros"])
+        self.tree_sensors.setToolTip("Doppio clic o selezione di una riga per analizzare gruppi di sensori equivalenti tramite hash di poli, zeri e sensibilità.")
         self.tree_sensors.itemSelectionChanged.connect(lambda: self._on_group_selected('sensor'))
         lay_s.addWidget(self.tree_sensors)
         
@@ -248,6 +252,7 @@ class MathDeduplicatorDialog(QDialog):
         lay_d = QVBoxLayout(self.tab_dataloggers)
         self.tree_dataloggers = QTreeWidget()
         self.tree_dataloggers.setHeaderLabels(["Model", "ID", "Gain / Filters"])
+        self.tree_dataloggers.setToolTip("Doppio clic o selezione di una riga per analizzare datalogger equivalenti tramite gain, coefficienti e stadi di decimazione.")
         self.tree_dataloggers.itemSelectionChanged.connect(lambda: self._on_group_selected('datalogger'))
         lay_d.addWidget(self.tree_dataloggers)
 
@@ -255,6 +260,7 @@ class MathDeduplicatorDialog(QDialog):
         lay_p = QVBoxLayout(self.tab_preamps)
         self.tree_preamps = QTreeWidget()
         self.tree_preamps.setHeaderLabels(["Model", "ID", "Poles/Zeros"])
+        self.tree_preamps.setToolTip("Doppio clic o selezione di una riga per analizzare preamplificatori equivalenti tramite stadi analogici, gain e poli/zeri.")
         self.tree_preamps.itemSelectionChanged.connect(lambda: self._on_group_selected('preamplifier'))
         lay_p.addWidget(self.tree_preamps)
         
@@ -266,9 +272,11 @@ class MathDeduplicatorDialog(QDialog):
         action_layout = QHBoxLayout()
         self.lbl_action = QLabel("<b>Master to keep:</b>")
         self.combo_master = QComboBox()
+        self.combo_master.setToolTip("Record strumentale master che conserverà le relazioni canale dopo la fusione dei duplicati matematicamente equivalenti.")
         self.combo_master.setEnabled(False)
         
         self.btn_merge = QPushButton("🔗 Merge Group")
+        self.btn_merge.setToolTip("Fonde il gruppo duplicato aggiornando le foreign key nel DB sismico e preservando le informazioni strumentali equivalenti.")
         self.btn_merge.setStyleSheet("background-color: #2E7D32; color: white; font-weight: bold; padding: 5px 15px;")
         self.btn_merge.setEnabled(False)
         self.btn_merge.clicked.connect(self._perform_merge)

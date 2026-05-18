@@ -16,16 +16,18 @@ def coerce_fdsn_restricted_status(value: object) -> str:
 
 
 class ResponseFilter(BaseModel):
-    """Model for individual filtering stages (FIR/Coefficients) of the Datalogger."""
-    stage_number: int
-    filter_type: str              # 'FIR' or 'COEFFICIENTS'
-    coefficients: str             # JSON string with the array of numerators
-    decimation_factor: int = 1
-    input_sample_rate: float = 0.0
-    output_sample_rate: float = 0.0
-    estimated_delay: float = 0.0      # <--- ENSURE THIS IS PRESENT
-    correction_applied: float = 0.0   # <--- ENSURE THIS IS PRESENT
+    """Model for individual Datalogger filtering stages (FIR/Coefficients/IIR)."""
     id: Optional[int] = None
+    stage_number: int = 1
+    filter_type: str = "FIR"
+    input_sample_rate: Optional[float] = None
+    output_sample_rate: Optional[float] = None
+    decimation_factor: Optional[int] = 1
+    gain: Optional[float] = 1.0
+    estimated_delay: Optional[float] = 0.0
+    correction_applied: Optional[float] = 0.0
+    description: Optional[str] = None
+    coefficients: str = "[]"
 
 
 class Operator(BaseModel):
@@ -178,22 +180,6 @@ class Datalogger(BaseModel):
             # Se l'elemento è un oggetto Pydantic, estraiamo i dati
             return [f.model_dump() if hasattr(f, 'model_dump') else f for f in v]
         return v
-
-
-class ResponseFilter(BaseModel):
-    """Stadio di filtraggio datalogger."""
-    id: Optional[int] = None
-    stage_number: int = 1
-    filter_type: str = "FIR"
-    input_sample_rate: Optional[float] = None
-    output_sample_rate: Optional[float] = None
-    decimation_factor: Optional[int] = 1
-    gain: Optional[float] = 1.0
-    estimated_delay: Optional[float] = 0.0
-    correction_applied: Optional[float] = 0.0
-    description: Optional[str] = None
-    coefficients: str = "[]"
-
 
 class Channel(BaseModel):
     """Model for the Channel (Specific installation)."""

@@ -76,11 +76,13 @@ class ChannelView:
     def _build_datetime_input(self, label: str, attr_name: str, enabled_checkbox):
         date_part, time_part = self._split_datetime_parts(getattr(self, attr_name, ""))
         with ui.input(label).props(
-            'mask="####-##-## ##:##:##" placeholder="YYYY-MM-DD HH:MM:SS"'
+            'mask="####-##-## ##:##:##" placeholder="YYYY-MM-DD HH:MM:SS" '
+            'hint="Data e ora di inizio o fine validità dell epoca strumentale espresse in tempo coordinato universale (UTC)."'
         ).classes('w-1/3') as input_field:
             input_field.bind_value(self, attr_name)
             with input_field.add_slot('append'):
-                with ui.button(icon='calendar_month').props('flat round dense'):
+                with ui.button(icon='calendar_month').props('flat round dense') as calendar_btn:
+                    calendar_btn.tooltip('Apri selettori calendario e orologio per compilare il timestamp UTC dell epoca canale.')
                     with ui.menu():
                         ui.date(
                             value=date_part,
@@ -112,37 +114,54 @@ class ChannelView:
         with ui.card().classes('w-full p-6 mb-4 shadow-sm border-t-4 border-orange-500'):
             ui.label('Identifiers & Types').classes('text-lg font-bold mb-4 text-orange-700')
             with ui.row().classes('w-full gap-4'):
-                self.code_in = ui.input('Channel Code (*)', value=channel.code).classes('w-1/4').props('uppercase')
-                self.loc_in = ui.input('Location Code', value=channel.location_code or "").classes('w-1/4').props('placeholder="--"')
-                self.depth_in = ui.number('Depth (m)', value=channel.depth or 0.0).classes('w-1/4')
+                self.code_in = ui.input('Channel Code (*)', value=channel.code).classes('w-1/4').props(
+                    'uppercase placeholder="HHZ, BHN, LHE" '
+                    'hint="Codice di tre caratteri del canale sismico secondo lo standard SEED (Banda, Strumento, Orientamento)."'
+                )
+                self.loc_in = ui.input('Location Code', value=channel.location_code or "").classes('w-1/4').props(
+                    'placeholder="--" hint="Codice location FDSN a due caratteri; usare vuoto o -- per installazione principale."'
+                )
+                self.depth_in = ui.number('Depth (m)', value=channel.depth or 0.0).classes('w-1/4').props(
+                    'placeholder="0.0" hint="Profondità del sensore rispetto al riferimento stazione, espressa in metri."'
+                )
                 
             with ui.row().classes('w-full gap-4 mt-4'):
                 types_options = ["CONTINUOUS,GEOPHYSICAL", "TRIGGERED,GEOPHYSICAL", "SYNTHETIC,GEOPHYSICAL",
                                  "CONTINUOUS,HEALTH", "CONTINUOUS,WEATHER", "CONTINUOUS,FLAG"]
                 # with_input=True permette di scrivere tipi custom se non in lista
                 self.types_in = ui.select(types_options, label='Channel Types (FDSN)', value=channel.types or "CONTINUOUS,GEOPHYSICAL", with_input=True).classes('flex-grow')
+                self.types_in.tooltip('Classificazione FDSN del canale: continuità del flusso e dominio fisico del dato, ad esempio GEOPHYSICAL o HEALTH.')
             with ui.row().classes('w-full gap-4 mt-4'):
                 self.restr_in = ui.select(
                     ['open', 'closed', 'partial'],
                     label='Restricted Status',
                     value=getattr(channel, 'restricted_status', None) or 'open',
                 ).classes('w-1/3')
+                self.restr_in.tooltip('Stato FDSN restrictedStatus applicato all epoca canale e ai dati sismici associati.')
 
         # --- BLOCCO 2: PARAMETRI TECNICI ---
         with ui.card().classes('w-full p-6 mb-4 shadow-sm'):
             ui.label('Technical Parameters').classes('text-lg font-bold mb-4 text-slate-700')
             with ui.row().classes('w-full gap-4'):
-                self.sr_in = ui.number('Sample Rate (Hz)', value=channel.sample_rate or 100.0).classes('w-1/5')
-                self.drift_in = ui.number('Clock Drift (s/s)', value=getattr(channel, 'clock_drift', 0.0) or 0.0, format='%.6f').classes('w-1/5')
+                self.sr_in = ui.number('Sample Rate (Hz)', value=channel.sample_rate or 100.0).classes('w-1/5').props(
+                    'placeholder="100.0" hint="Frequenza di campionamento digitalizzata espressa in Hertz (Hz)."'
+                )
+                self.drift_in = ui.number('Clock Drift (s/s)', value=getattr(channel, 'clock_drift', 0.0) or 0.0, format='%.6f').classes('w-1/5').props(
+                    'placeholder="0.000000" hint="Deriva nominale dell orologio del datalogger espressa in secondi per secondo o campione secondo il metadato disponibile."'
+                )
                 self.azi_in = ui.number('Azimuth (°)', value=channel.azimuth or 0.0).classes('w-1/5')
-                self.azi_in.tooltip('Degrees clockwise from North (0-360)')
+                self.azi_in.tooltip('Azimuth sismologico: gradi in senso orario dal Nord geografico WGS84 (0-360).')
                 self.dip_in = ui.number('Dip (°)', value=channel.dip or -90.0).classes('w-1/5')
-                self.dip_in.tooltip('Vertical angle: -90 (Up), 0 (Horizontal), +90 (Down)')
+                self.dip_in.tooltip('Angolo verticale del componente: -90 Up, 0 orizzontale, +90 Down secondo convenzione FDSN/SEED.')
 
             with ui.row().classes('w-full gap-4 mt-4 items-center'):
                 self.cal_units_in = ui.select(["", "V", "A", "COUNTS", "m/s", "m/s**2"], label='Calibration Units', value=getattr(channel, 'calibration_units', ""), with_input=True).classes('w-1/4')
-                self.sens_in = ui.input('Forced Total Sensitivity', value=str(getattr(channel, 'overall_sensitivity', '') or '')).classes('w-1/3').props('placeholder="Leave empty for auto"')
-                ui.button('🧮 Calculate', on_click=self._calc_sensitivity, color='info').classes('mt-2')
+                self.cal_units_in.tooltip('Unità fisiche usate per la calibrazione: m/s per velocimetri, m/s**2 per accelerometri, COUNTS per segnali digitali.')
+                self.sens_in = ui.input('Forced Total Sensitivity', value=str(getattr(channel, 'overall_sensitivity', '') or '')).classes('w-1/3').props(
+                    'placeholder="1.234567e+09" hint="Sensibilità totale canale; se vuota viene calcolata moltiplicando i gain degli stadi strumentali."'
+                )
+                calc_btn = ui.button('🧮 Calculate', on_click=self._calc_sensitivity, color='info').classes('mt-2')
+                calc_btn.tooltip('Ricalcola la sensibilità totale combinando sensor, preamplificatore e datalogger secondo la catena strumentale.')
 
         # --- BLOCCO 3: STRUMENTAZIONE (CATALOGHI E SERIALI) ---
         with ui.card().classes('w-full p-6 mb-4 shadow-sm bg-slate-50'):
@@ -161,16 +180,27 @@ class ChannelView:
 
             with ui.row().classes('w-full gap-4 items-center'):
                 self.sensor_cb = ui.select(sensors, label='Sensor', value=channel.sensor_id, with_input=True).classes('w-1/2')
-                self.sensor_sn = ui.input('Sensor S/N', value=channel.sensor_serial_number or "").classes('w-1/3')
+                self.sensor_cb.tooltip('Seleziona un modello validato dall inventario centralizzato. Qualsiasi modifica a questa strumentazione sul canale corrente verrà automaticamente estesa ai canali fratelli della terna (Z, N, E) tramite Triad Sync per preservare l integrità del set di sensori.')
+                self.sensor_sn = ui.input('Sensor S/N', value=channel.sensor_serial_number or "").classes('w-1/3').props(
+                    'placeholder="1234" hint="Numero seriale fisico del sensore installato, utile per tracciabilità metrologica e manutenzione."'
+                )
 
             with ui.row().classes('w-full gap-4 mt-2 items-center'):
                 self.logger_cb = ui.select(loggers, label='Datalogger', value=channel.datalogger_id, with_input=True).classes('w-1/2')
-                self.logger_sn = ui.input('Datalogger S/N', value=channel.datalogger_serial_number or "").classes('w-1/3')
+                self.logger_cb.tooltip('Seleziona un modello validato dall inventario centralizzato. Il datalogger definisce gain digitale, decimazioni, delay, correction e sample rate del canale.')
+                self.logger_sn = ui.input('Datalogger S/N', value=channel.datalogger_serial_number or "").classes('w-1/3').props(
+                    'placeholder="5678" hint="Numero seriale del digitalizzatore associato alla catena di acquisizione del canale."'
+                )
 
             with ui.row().classes('w-full gap-4 mt-2 items-center'):
                 self.preamp_cb = ui.select(preamps, label='Pre-Amplifier', value=getattr(channel, 'pre_amplifier_id', None), with_input=True).classes('w-2/5')
-                self.preamp_sn = ui.input('Pre-Amp S/N', value=getattr(channel, 'pre_amplifier_serial_number', "")).classes('w-1/5')
-                self.preamp_gain = ui.number('Pre-Amp Gain', value=getattr(channel, 'pre_amplifier_gain', 1.0) or 1.0).classes('w-1/5')
+                self.preamp_cb.tooltip('Seleziona un preamplificatore validato dall inventario centralizzato per rappresentare lo stadio analogico tra sensore e datalogger.')
+                self.preamp_sn = ui.input('Pre-Amp S/N', value=getattr(channel, 'pre_amplifier_serial_number', "")).classes('w-1/5').props(
+                    'placeholder="SN-999" hint="Numero seriale del preamplificatore o condizionatore analogico installato."'
+                )
+                self.preamp_gain = ui.number('Pre-Amp Gain', value=getattr(channel, 'pre_amplifier_gain', 1.0) or 1.0).classes('w-1/5').props(
+                    'placeholder="1.0" hint="Gain lineare dello stadio preamplificatore applicato alla sensibilità totale del canale."'
+                )
 
         # --- BLOCCO 4: DATE ---
         with ui.card().classes('w-full p-6 mb-4 shadow-sm'):
@@ -181,6 +211,7 @@ class ChannelView:
                         'Set start date',
                         value=bool(channel.start_date and str(channel.start_date).strip()),
                     ).classes('shrink-0')
+                    self.start_set.tooltip('Abilita la data UTC di inizio validità dell epoca strumentale del canale.')
                     self.start_in = self._build_datetime_input(
                         'Start Date (YYYY-MM-DD HH:MM:SS)',
                         '_start_date_raw_value',
@@ -192,6 +223,7 @@ class ChannelView:
                         value=bool(channel.end_date and str(channel.end_date).strip()),
                         on_change=lambda _: self._on_end_set_changed(),
                     ).classes('shrink-0')
+                    self.end_set.tooltip('Spuntando questo campo, viene iniettato il timestamp UTC corrente (Smart Default) per chiudere visivamente l epoca e predisporre la terna alla sincronizzazione.')
                     self.end_in = self._build_datetime_input(
                         'End Date (YYYY-MM-DD HH:MM:SS)',
                         '_end_date_raw_value',
@@ -210,12 +242,13 @@ class ChannelView:
             def add_comment_row(c_val="", c_start="", c_end="", c_sub="", c_auth=""):
                 with self.comments_container:
                     with ui.row().classes('w-full gap-2 items-center bg-slate-50 p-2 rounded border') as row:
-                        v = ui.input('Text', value=c_val).classes('flex-grow')
-                        st = ui.input('Start', value=c_start).classes('w-32').props('placeholder=YYYY-MM-DD')
-                        en = ui.input('End', value=c_end).classes('w-32').props('placeholder=YYYY-MM-DD')
-                        sub = ui.input('Subject', value=c_sub).classes('w-32')
-                        auth = ui.input('Author', value=c_auth).classes('w-48')
+                        v = ui.input('Text', value=c_val).classes('flex-grow').props('hint="Annotazione FDSN dell epoca canale: calibrazione, sostituzione strumento, orientamento o qualità del segnale."')
+                        st = ui.input('Start', value=c_start).classes('w-32').props('placeholder=YYYY-MM-DD hint="Data UTC di inizio validità del commento canale."')
+                        en = ui.input('End', value=c_end).classes('w-32').props('placeholder=YYYY-MM-DD hint="Data UTC di fine validità del commento canale."')
+                        sub = ui.input('Subject', value=c_sub).classes('w-32').props('placeholder="calibration" hint="Categoria tecnica della nota: calibration, orientation, maintenance o response."')
+                        auth = ui.input('Author', value=c_auth).classes('w-48').props('placeholder="INGV Metadata Office" hint="Autore o agenzia responsabile della nota StationXML."')
                         btn_remove = ui.button(icon='delete', color='red').props('flat dense')
+                        btn_remove.tooltip('Rimuove questa annotazione dalla serializzazione StationXML del canale.')
                         item_tuple = (v, st, en, sub, auth)
                         self.comments_ui_elements.append(item_tuple)
                         btn_remove.on('click', lambda r=row, it=item_tuple: remove_comment_row(r, it))
@@ -229,14 +262,18 @@ class ChannelView:
                 if c.get('author_agency'): auth_str += f" ({c.get('author_agency')})"
                 add_comment_row(c.get('value',''), c.get('begin_date',''), c.get('end_date',''), c.get('subject',''), auth_str)
 
-            ui.button('+ Add Comment', on_click=lambda: add_comment_row(), color='blue').classes('mt-4').props('outline')
+            add_comment_btn = ui.button('+ Add Comment', on_click=lambda: add_comment_row(), color='blue').classes('mt-4').props('outline')
+            add_comment_btn.tooltip('Aggiunge una nota FDSN con finestra temporale UTC per documentare eventi tecnici dell epoca canale.')
 
         # --- BLOCCO 6: AZIONI ---
         with ui.row().classes('w-full justify-between mt-6'):
             with ui.row().classes('gap-4'):
-                ui.button('🗑️ Delete', color='red', on_click=lambda: self.delete(channel.id)).props('outline')
-                ui.button('👯 Clone Epoch', color='purple', on_click=lambda: self._clone()).props('outline')
-            ui.button('💾 Save Channel', on_click=lambda: self.save(channel), color='green').classes('px-10 font-bold')
+                del_btn = ui.button('🗑️ Delete', color='red', on_click=lambda: self.delete(channel.id)).props('outline')
+                del_btn.tooltip('Elimina l epoca canale corrente dal database rispettando i vincoli di integrità della stazione.')
+                clone_btn = ui.button('👯 Clone Epoch', color='purple', on_click=lambda: self._clone()).props('outline')
+                clone_btn.tooltip('Duplica l epoca del canale per creare una nuova finestra temporale StationXML mantenendo la catena strumentale di partenza.')
+            save_btn = ui.button('💾 Save Channel', on_click=lambda: self.save(channel), color='green').classes('px-10 font-bold')
+            save_btn.tooltip('Persiste le modifiche correnti sul database SQLite attivando i vincoli di integrità e aggiornando in modo atomico i canali fratelli.')
 
     def _calc_sensitivity(self):
         s_id = self.sensor_cb.value

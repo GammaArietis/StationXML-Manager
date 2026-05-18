@@ -37,14 +37,17 @@ class DataloggerCatalogTab:
             with ui.column().classes('bg-slate-50 p-4 border-r overflow-hidden flex flex-col no-wrap'):
                 ui.label('Dataloggers').classes('font-bold text-xs uppercase mb-2 shrink-0')
                 self.search_input = ui.input(
-                    placeholder='Cerca per marca/modello...',
+                    placeholder='Cerca datalogger per marca, modello o catena DSP...',
                     on_change=lambda _: self.refresh_list(),
-                ).props('dense clearable').classes('w-full mb-2 shrink-0')
+                ).props('dense clearable hint="Filtra il catalogo datalogger per individuare digitalizzatori con gain, sample rate o catene di decimazione equivalenti."').classes('w-full mb-2 shrink-0')
                 self.model_list = ui.list().classes('w-full border rounded bg-white overflow-y-auto flex-grow shadow-inner')
                 with ui.row().classes('w-full mt-4 shrink-0 gap-1'):
-                    ui.button('➕ New', on_click=self._prepare_new).props('outline size=sm').classes('flex-grow bg-white')
-                    ui.button('🌐 NRL', on_click=self._on_nrl_clicked).props('outline size=sm').classes('flex-grow bg-white')
-                    ui.button('🌐 AROL', on_click=self._on_arol_clicked).props('outline size=sm').classes('flex-grow bg-white')
+                    new_btn = ui.button('➕ New', on_click=self._prepare_new).props('outline size=sm').classes('flex-grow bg-white')
+                    new_btn.tooltip('Prepara un nuovo datalogger con gain digitale, clock drift e stadi di decimazione.')
+                    nrl_btn = ui.button('🌐 NRL', on_click=self._on_nrl_clicked).props('outline size=sm').classes('flex-grow bg-white')
+                    nrl_btn.tooltip('Navigazione del catalogo ufficiale NRL per importare stadi digitali, FIR, decimazioni e response stages nominali.')
+                    arol_btn = ui.button('🌐 AROL', on_click=self._on_arol_clicked).props('outline size=sm').classes('flex-grow bg-white')
+                    arol_btn.tooltip('Navigazione della libreria AROL per importare definizioni datalogger e catene di acquisizione standardizzate.')
 
             # --- COLONNA 2: EDITOR ---
             with ui.column().classes('p-8 overflow-y-auto'):
@@ -52,26 +55,31 @@ class DataloggerCatalogTab:
                 
                 with ui.card().classes('w-full p-6 border-l-8 border-blue-600 shadow-sm mb-6'):
                     with ui.row().classes('w-full gap-4'):
-                        self.mfg_input = ui.input('Manufacturer').classes('w-1/3')
-                        self.model_input = ui.input('Model').classes('flex-grow')
+                        self.mfg_input = ui.input('Manufacturer').classes('w-1/3').props('placeholder="REF TEK / Nanometrics" hint="Costruttore del digitalizzatore come riportato in NRL, AROL o manuale tecnico."')
+                        self.model_input = ui.input('Model').classes('flex-grow').props('placeholder="Centaur / Taurus / Q330" hint="Modello del datalogger usato per associare sample rate, gain digitale e filtri ai canali."')
                     
-                    self.desc_input = ui.textarea('Description').classes('w-full mt-4').props('rows=2 outlined')
+                    self.desc_input = ui.textarea('Description').classes('w-full mt-4').props('rows=2 outlined placeholder="24-bit digitizer with FIR decimation stages" hint="Descrizione tecnica della catena di acquisizione, risoluzione ADC, filtri e modalità di campionamento."')
                     
                     with ui.row().classes('w-full gap-4 mt-4'):
-                        self.gain_input = ui.number('Gain (Counts/V)', format='%.4e').classes('w-1/3')
-                        self.drift_input = ui.number('Clock Drift (s/s)', format='%.8f').classes('w-1/3')
-                        self.delay_input = ui.number('Base Delay (s)', format='%.4f').classes('w-1/3')
+                        self.gain_input = ui.number('Gain (Counts/V)', format='%.4e').classes('w-1/3').props('placeholder="4.194304e+05" hint="Gain digitale del datalogger espresso in counts per volt, usato nella sensibilità totale del canale."')
+                        self.drift_input = ui.number('Clock Drift (s/s)', format='%.8f').classes('w-1/3').props('placeholder="0.00000000" hint="Deriva massima dell orologio interno, utile per qualità temporale e metadati StationXML."')
+                        self.delay_input = ui.number('Base Delay (s)', format='%.4f').classes('w-1/3').props('placeholder="0.0000" hint="Ritardo hardware base della catena di acquisizione espresso in secondi."')
 
                 ui.label('Acquisition Chain (Stages and Filters)').classes('text-lg font-bold mt-4 shrink-0')
                 self.stages_cont = ui.column().classes('w-full gap-2 border rounded p-4 bg-slate-50 shadow-inner mt-2')
-                ui.button('➕ Add Filter Stage', on_click=self._add_stage).props('outline size=sm color=blue').classes('mt-2')
+                add_stage_btn = ui.button('➕ Add Filter Stage', on_click=self._add_stage).props('outline size=sm color=blue').classes('mt-2')
+                add_stage_btn.tooltip('Aggiunge uno stadio di risposta digitale FIR/coefficients/ADC con sample rate, decimazione, delay e correction.')
 
                 with ui.row().classes('w-full justify-between items-center pt-6 mt-6 border-t shrink-0'):
                     with ui.row().classes('gap-2'):
                         self.btn_dl_clone = ui.button('👯 Clone', on_click=self._on_clone_clicked).props('outline color=purple')
+                        self.btn_dl_clone.tooltip('Clona il datalogger creando una nuova riga catalogo senza riusare l ID originale.')
                         self.btn_dl_replace = ui.button('🔄 Replace', on_click=self._on_replace_clicked).props('outline color=orange')
+                        self.btn_dl_replace.tooltip('Sposta i riferimenti dei canali verso un datalogger master e normalizza il catalogo strumentale.')
                         self.btn_dl_delete = ui.button('🗑️ Delete', on_click=self._on_delete_clicked).props('outline color=red')
-                    ui.button('💾 SAVE DATALOGGER', on_click=self._on_save_clicked, color='green').classes('px-10 h-12 font-bold shadow-md')
+                        self.btn_dl_delete.tooltip('Elimina il datalogger solo se non referenziato da canali o vincoli applicativi.')
+                    save_btn = ui.button('💾 SAVE DATALOGGER', on_click=self._on_save_clicked, color='green').classes('px-10 h-12 font-bold shadow-md')
+                    save_btn.tooltip('Persiste il datalogger nel database SQLite con gain, drift, delay e stadi di risposta digitale.')
                 self._set_dl_action_buttons(False)
 
             # --- COLONNA 3: DSP ---
@@ -83,18 +91,20 @@ class DataloggerCatalogTab:
                     ui.label('Select a stage from the chain...').classes('text-slate-400 italic text-center w-full mt-4').bind_visibility_from(self, 'current_stage', backward=lambda x: x is None)
                     
                     self.f_type = ui.select(['FIR', 'COEFFICIENTS', 'A/D'], label='Type').classes('w-full')
+                    self.f_type.tooltip('Tipo di stadio della risposta datalogger: FIR, coefficienti generici o conversione analogico/digitale.')
                     with ui.row().classes('w-full gap-2'):
-                        self.f_in_rate = ui.number('In Rate (Hz)', on_change=_auto_calc_out).classes('w-[48%]')
-                        self.f_out_rate = ui.number('Out Rate (Hz)').classes('w-[48%]')
+                        self.f_in_rate = ui.number('In Rate (Hz)', on_change=_auto_calc_out).classes('w-[48%]').props('placeholder="100.0" hint="Frequenza di campionamento in ingresso allo stadio, espressa in Hertz (Hz)."')
+                        self.f_out_rate = ui.number('Out Rate (Hz)').classes('w-[48%]').props('placeholder="50.0" hint="Frequenza di campionamento in uscita dopo decimazione, espressa in Hertz (Hz)."')
                     with ui.row().classes('w-full gap-2 mt-2'):
-                        self.f_decimation = ui.number('Decimation', on_change=_auto_calc_out).classes('w-[32%]')
+                        self.f_decimation = ui.number('Decimation', on_change=_auto_calc_out).classes('w-[32%]').props('placeholder="2" hint="Fattore di decimazione applicato dallo stadio DSP alla frequenza di campionamento."')
                         self.f_delay = ui.number('Delay (s)').classes('w-[32%]')
                         self.f_delay.tooltip('Estimated Delay and Applied Correction in seconds')
                         self.f_correction = ui.number('Correction (s)').classes('w-[32%]')
                         self.f_correction.tooltip('Estimated Delay and Applied Correction in seconds')
 
-                    self.f_coeffs = ui.textarea('Coefficients (JSON)').classes('w-full mt-2 font-mono text-xs').props('rows=5 outlined')
-                    ui.button('Apply to Stage & Plot', on_click=self._apply_stage_changes).props('color=blue').classes('w-full')
+                    self.f_coeffs = ui.textarea('Coefficients (JSON)').classes('w-full mt-2 font-mono text-xs').props('rows=5 outlined placeholder="[0.0, 1.0, 0.0]" hint="Coefficienti FIR o numeratori dello stadio digitale in formato JSON, usati per risposta impulsiva e plot in Hz."')
+                    apply_btn = ui.button('Apply to Stage & Plot', on_click=self._apply_stage_changes).props('color=blue').classes('w-full')
+                    apply_btn.tooltip('Applica delay, correction, decimazione e coefficienti allo stadio selezionato aggiornando il grafico della risposta digitale.')
                 
                 self.plot_container = ui.column().classes('w-full items-center mt-6 shrink-0')
                 self.stage_panel.set_visibility(False)
@@ -215,12 +225,14 @@ class DataloggerCatalogTab:
         with ui.dialog() as d, ui.card().classes('w-96 p-6'):
             ui.label('Replace Datalogger').classes('text-lg font-bold mb-4')
             sel = ui.select(others, label="Select replacement", with_input=True).classes('w-full')
-            ui.button('Confirm Replace', color='orange', on_click=lambda: (
+            sel.tooltip('Seleziona il datalogger master verso cui migrare i riferimenti canale prima di eliminare il duplicato.')
+            replace_btn = ui.button('Confirm Replace', color='orange', on_click=lambda: (
                 self.eq_ctrl.replace_equipment('datalogger', did, sel.value),
                 d.close(),
                 self.refresh_list(),
                 self._prepare_new()
             )).classes('w-full mt-4')
+            replace_btn.tooltip('Normalizza le relazioni nel database spostando i canali dal datalogger duplicato al modello master.')
         d.open()
 
     async def _on_delete_clicked(self):
@@ -306,7 +318,8 @@ class DataloggerCatalogTab:
                     ui.label(f"S{f.stage_number}").classes('font-bold w-8 text-blue-700')
                     ui.label(f.filter_type).classes('w-20 text-xs font-mono')
                     ui.label(f"{in_str} → {out_str}").classes('flex-grow text-xs text-slate-500')
-                    ui.button(icon='delete', on_click=lambda e, st=f, r=row: (r.delete(), self.stages_data.remove(st), self._render_stages())).props('flat dense color=red size=sm')
+                    del_stage_btn = ui.button(icon='delete', on_click=lambda e, st=f, r=row: (r.delete(), self.stages_data.remove(st), self._render_stages())).props('flat dense color=red size=sm')
+                    del_stage_btn.tooltip('Rimuove lo stadio DSP dalla catena di risposta del datalogger.')
 
     def _edit_stage(self, stage):
         self._is_loading = True

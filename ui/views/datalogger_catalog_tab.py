@@ -38,23 +38,28 @@ class DataloggerCatalogTab(QWidget):
         
         left_layout.addWidget(QLabel("<b>Dataloggers in Catalog</b>"))
         self.search_input = QLineEdit()
-        self.search_input.setPlaceholderText("Cerca per marca/modello...")
+        self.search_input.setPlaceholderText("Cerca datalogger per marca, modello o catena DSP...")
+        self.search_input.setToolTip("Filtra il catalogo datalogger per individuare digitalizzatori con gain, sample rate o catene di decimazione equivalenti.")
         self.search_input.textChanged.connect(self._filter_model_list)
         left_layout.addWidget(self.search_input)
         self.model_list = QListWidget()
+        self.model_list.setToolTip("Doppio clic o selezione di una riga per caricare i metadati dettagliati del datalogger nel pannello di editing laterale.")
         self.model_list.itemClicked.connect(self._load_selected_dl)
         self.model_list.itemDoubleClicked.connect(self._on_nrl_clicked)
         left_layout.addWidget(self.model_list)
         
         creation_layout = QHBoxLayout()
         self.new_btn = QPushButton("➕ New")
+        self.new_btn.setToolTip("Prepara un nuovo datalogger con gain digitale, clock drift e stadi di decimazione.")
         self.new_btn.setStyleSheet("background-color: #1976D2; color: white; font-weight: bold;")
         self.new_btn.clicked.connect(self._prepare_new_model)
         
         self.nrl_btn = QPushButton("🌐 Import NRL")
+        self.nrl_btn.setToolTip("Navigazione del catalogo ufficiale NRL per importare stadi digitali, FIR, decimazioni e response stages nominali.")
         self.nrl_btn.clicked.connect(self._on_nrl_clicked)
         
         self.arol_btn = QPushButton("🌐 Import AROL")
+        self.arol_btn.setToolTip("Navigazione della libreria AROL per importare definizioni datalogger e catene di acquisizione standardizzate.")
         self.arol_btn.clicked.connect(self._on_import_arol_clicked)
         
         creation_layout.addWidget(self.new_btn)
@@ -74,16 +79,24 @@ class DataloggerCatalogTab(QWidget):
         info_group = QGroupBox("General Datalogger Data")
         info_form = QFormLayout(info_group)
         self.mfg_input = QLineEdit()
+        self.mfg_input.setPlaceholderText("REF TEK / Nanometrics")
+        self.mfg_input.setToolTip("Costruttore del digitalizzatore come riportato in NRL, AROL o manuale tecnico.")
         self.model_input = QLineEdit()
+        self.model_input.setPlaceholderText("Centaur / Taurus / Q330")
+        self.model_input.setToolTip("Modello del datalogger usato per associare sample rate, gain digitale e filtri ai canali.")
         
         self.desc_input = QTextEdit()
+        self.desc_input.setPlaceholderText("24-bit digitizer with FIR decimation stages")
+        self.desc_input.setToolTip("Descrizione tecnica della catena di acquisizione, risoluzione ADC, filtri e modalità di campionamento.")
         self.desc_input.setMaximumHeight(50)
         
         self.gain_input = QDoubleSpinBox()
         self.gain_input.setRange(0, 1e12); self.gain_input.setDecimals(4)
+        self.gain_input.setToolTip("Gain digitale del datalogger espresso in counts per volt, usato nella sensibilità totale del canale.")
         
         self.drift_input = QDoubleSpinBox()
         self.drift_input.setRange(0, 1.0); self.drift_input.setDecimals(8)
+        self.drift_input.setToolTip("Deriva massima dell'orologio interno, utile per qualità temporale e metadati StationXML.")
         
         info_form.addRow("Manufacturer:", self.mfg_input)
         info_form.addRow("Model:", self.model_input)
@@ -97,6 +110,7 @@ class DataloggerCatalogTab(QWidget):
         stage_layout = QVBoxLayout(stage_group)
         
         self.stages_table = QTableWidget(0, 8)
+        self.stages_table.setToolTip("Doppio clic o selezione di una riga per caricare stadi FIR/ADC, sample rate, decimazione, delay e correction nel pannello coefficienti.")
         self.stages_table.setHorizontalHeaderLabels([
             "Stage", "Type", "Gain", "Rate In (Hz)", "Rate Out (Hz)", "Decim.",
             "Delay (s)", "Correction (s)",
@@ -115,8 +129,10 @@ class DataloggerCatalogTab(QWidget):
 
         stage_row_btns = QHBoxLayout()
         add_stage_btn = QPushButton("+ Add Row")
+        add_stage_btn.setToolTip("Aggiunge uno stadio di risposta digitale FIR/coefficients/ADC con sample rate, decimazione, delay e correction.")
         add_stage_btn.clicked.connect(self._add_stage_row)
         rem_stage_btn = QPushButton("- Remove Row")
+        rem_stage_btn.setToolTip("Rimuove lo stadio DSP selezionato dalla catena di risposta del datalogger.")
         rem_stage_btn.clicked.connect(self._remove_stage_row)
         stage_row_btns.addWidget(add_stage_btn)
         stage_row_btns.addWidget(rem_stage_btn)
@@ -125,16 +141,19 @@ class DataloggerCatalogTab(QWidget):
         stage_layout.addWidget(QLabel("<b>Selected Stage Coefficients (JSON):</b>"))
         self.coeffs_edit = QTextEdit()
         self.coeffs_edit.setPlaceholderText("Select a stage from the table to view or edit its FIR/IIR coefficients...")
+        self.coeffs_edit.setToolTip("Coefficienti FIR/IIR o numeratori dello stadio digitale in formato JSON, usati per risposta impulsiva e plot in Hz.")
         self.coeffs_edit.setMaximumHeight(80)
         self.coeffs_edit.textChanged.connect(self._on_coeffs_edited)
         stage_layout.addWidget(self.coeffs_edit)
         
         ana_btns = QHBoxLayout()
         self.plot_btn = QPushButton("📈 FIR/IIR Plots")
+        self.plot_btn.setToolTip("Visualizza risposta impulsiva, ampiezza e frequenza dello stadio digitale selezionato in Hertz (Hz).")
         self.plot_btn.clicked.connect(self._on_plot_clicked)
         self.plot_btn.setEnabled(False)
         
         self.export_btn = QPushButton("📤 Export Report (CSV)")
+        self.export_btn.setToolTip("Esporta un report CSV della catena di acquisizione con stadi, gain, sample rate, delay e correction.")
         self.export_btn.clicked.connect(self._on_export_clicked)
         self.export_btn.setEnabled(False)
         
@@ -146,14 +165,18 @@ class DataloggerCatalogTab(QWidget):
 
         # 3. Catalog Actions
         self.save_btn = QPushButton("💾 SAVE TO CATALOG")
+        self.save_btn.setToolTip("Persiste il datalogger nel database SQLite con gain, drift, delay e stadi di risposta digitale.")
         self.save_btn.setStyleSheet("background-color: #2E7D32; color: white; font-weight: bold; height: 35px;")
         self.save_btn.clicked.connect(self._on_save_clicked)
         editor_layout.addWidget(self.save_btn)
         
         danger_layout = QHBoxLayout()
         self.clone_btn = QPushButton("👯 Clone Model"); self.clone_btn.setStyleSheet("background-color: #8E24AA; color: white;"); self.clone_btn.clicked.connect(self._on_clone_clicked); self.clone_btn.setEnabled(False)
+        self.clone_btn.setToolTip("Clona il datalogger creando una nuova riga catalogo senza riusare l'ID originale.")
         self.replace_btn = QPushButton("🔄 Replace Everywhere"); self.replace_btn.setStyleSheet("background-color: #F57C00; color: white;"); self.replace_btn.clicked.connect(self._on_replace_clicked); self.replace_btn.setEnabled(False)
+        self.replace_btn.setToolTip("Sposta i riferimenti dei canali verso un datalogger master e normalizza il catalogo strumentale.")
         self.delete_btn = QPushButton("🗑️ Delete"); self.delete_btn.setStyleSheet("background-color: #C62828; color: white;"); self.delete_btn.clicked.connect(self._on_delete_clicked); self.delete_btn.setEnabled(False)
+        self.delete_btn.setToolTip("Elimina il datalogger solo se non referenziato da canali o vincoli applicativi.")
         
         danger_layout.addWidget(self.clone_btn); danger_layout.addWidget(self.replace_btn); danger_layout.addWidget(self.delete_btn)
         editor_layout.addLayout(danger_layout)

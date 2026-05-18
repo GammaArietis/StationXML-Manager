@@ -42,6 +42,7 @@ class NRLBrowserDialog(QDialog):
         self.equip_type = equip_type
         self.search_query = search_query
         self.setWindowTitle(f"NRL Library - {equip_type.upper()}")
+        self.setToolTip("Navigazione del catalogo ufficiale delle risposte strumentali Nominal Response Library. Consente l'importazione diretta di poli, zeri e stadi di decimazione standard.")
         self.resize(550, 500)
         
         self.nrl_manager = NRLManager()
@@ -58,10 +59,12 @@ class NRLBrowserDialog(QDialog):
 
         self.lbl_path = QLabel("Path: /")
         self.lbl_path.setWordWrap(True)
+        self.lbl_path.setToolTip("Percorso gerarchico NRL corrente: manufacturer, modello, gain, sample rate o variante di response stage.")
         self.lbl_path.setStyleSheet("font-weight: bold; color: #333;")
         self.main_layout.addWidget(self.lbl_path)
         
         self.list_widget = QListWidget()
+        self.list_widget.setToolTip("Doppio clic su una voce per scendere nella gerarchia NRL fino alla configurazione strumentale importabile.")
         self.list_widget.itemDoubleClicked.connect(self._on_item_double_clicked)
         self.main_layout.addWidget(self.list_widget)
         
@@ -74,9 +77,11 @@ class NRLBrowserDialog(QDialog):
         
         btn_layout = QHBoxLayout()
         self.btn_back = QPushButton("⬅ Back")
+        self.btn_back.setToolTip("Torna al livello superiore della gerarchia NRL mantenendo il percorso di risposta strumentale.")
         self.btn_back.clicked.connect(self._go_back)
         
         self.btn_download = QPushButton("⬇ Download and Import")
+        self.btn_download.setToolTip("Importa il modello NRL selezionato convertendo risposta, poli/zeri, gain e stadi digitali nel catalogo locale.")
         self.btn_download.setStyleSheet("background-color: #2e7d32; color: white; font-weight: bold; padding: 5px 15px;")
         self.btn_download.clicked.connect(self._download_item)
         self.btn_download.hide()
@@ -125,6 +130,7 @@ class NRLBrowserDialog(QDialog):
                 display_name = f"{parts[0]} {parts[1]}" if len(parts) > 1 else parts[0]
                 
                 self.btn_suggestion = QPushButton(f"💡 Suggestion Found: {display_name}\nClick to automatically import this model")
+                self.btn_suggestion.setToolTip("Suggerimento basato sull'indice matematico locale NRL: importa la risposta nominale più compatibile con marca/modello corrente.")
                 self.btn_suggestion.setStyleSheet("""
                     QPushButton {
                         background-color: #FFF9C4; 

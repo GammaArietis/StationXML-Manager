@@ -11,7 +11,8 @@ class AROLBrowser:
         self.selected_obj = None
 
         with ui.dialog() as dialog, ui.card().classes('w-[850px] h-[550px] flex flex-col no-wrap'):
-            ui.label(f'AROL Library - {self.category}').classes('text-xl font-bold mb-4 shrink-0')
+            title = ui.label(f'AROL Library - {self.category}').classes('text-xl font-bold mb-4 shrink-0')
+            title.tooltip('Navigazione del catalogo AROL delle risposte strumentali. Consente l importazione diretta di definizioni YAML, poli, zeri e stadi standard geometrici.')
             
             with ui.row().classes('w-full flex-grow gap-4 no-wrap overflow-hidden'):
                 with ui.column().classes('w-1/3 h-full border rounded bg-slate-50 flex flex-col no-wrap'):
@@ -26,10 +27,13 @@ class AROLBrowser:
                     ui.label('Metadata Preview').classes('text-xs font-bold uppercase text-slate-600 p-2 bg-slate-200 w-full shrink-0')
                     with ui.scroll_area().classes('w-full flex-grow p-4'):
                         preview = ui.markdown('Select a model to view details...').classes('text-sm text-slate-600')
+                        preview.tooltip('Anteprima tecnica del modello AROL selezionato prima dell import nel catalogo locale.')
 
             with ui.row().classes('w-full justify-end mt-4 gap-2 shrink-0 border-t pt-4'):
-                ui.button('Cancel', on_click=dialog.close).props('flat text-red')
+                cancel_btn = ui.button('Cancel', on_click=dialog.close).props('flat text-red')
+                cancel_btn.tooltip('Chiude il browser AROL senza modificare il catalogo strumentale locale.')
                 btn_import = ui.button('IMPORT MODEL', on_click=lambda: (callback(self.selected_obj), dialog.close())).props('color=green')
+                btn_import.tooltip('Importa il modello AROL selezionato convertendo descrizione e risposta strumentale nel catalogo SQLite.')
                 btn_import.disable()
 
             def load_mfgs():

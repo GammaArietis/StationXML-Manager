@@ -1,8 +1,8 @@
-"""Web-oriented StationXML export: single inventory vs ZIP (one XML per station)."""
+"""StationXML export packaging: one XML per station, optionally zipped."""
 
 from __future__ import annotations
 
-from enum import Enum
+from pathlib import Path
 from typing import Any, Callable, List, Optional, Tuple
 
 from exporter.stationxml_builder import StationXMLExporter
@@ -11,23 +11,13 @@ ProgressCallback = Optional[Callable[[int, int, str], None]]
 CancelCallback = Optional[Callable[[], bool]]
 
 
-class StationXMLExportLayout(str, Enum):
-    """Export packaging for NiceGUI / API consumers."""
-
-    SINGLE_INVENTORY = "single"
-    ZIP_PER_STATION = "zip"
-
-
 class StationXMLWebExportController:
     """
     Encapsulates export rules used by the web UI.
 
-    Single inventory (legacy):
-      - exactly one selected station -> inventory limited to that station;
-      - multiple (or ambiguous) selection -> full DB inventory (``target_station_id=None``).
-
-    ZIP per station:
-      - one StationXML per selected row, filenames ``{station_code}.xml`` (disambiguated in ZIP).
+    Export policy:
+      - one selected station -> one XML payload;
+      - multiple selected stations -> ZIP containing one XML per station.
     """
 
     def __init__(self, net_ctrl, sta_ctrl, cha_ctrl, eq_ctrl) -> None:
@@ -37,46 +27,54 @@ class StationXMLWebExportController:
     def exporter(self) -> StationXMLExporter:
         return self._exporter
 
-    def write_single_inventory_xml_to_path(
+    def write_station_xml_files_to_directory(
         self,
         selected_rows: List[Any],
-        output_path: str,
+        output_dir: str,
         *,
         progress_callback: ProgressCallback = None,
         cancel_callback: CancelCallback = None,
-    ) -> Optional[str]:
-        """
-        Scrive un unico inventario StationXML direttamente su disco (senza buffer bytes in RAM).
-        Stessa logica di scope di ``build_download`` per layout single.
-        Restituisce ``output_path`` in caso di successo, ``None`` se annullato.
-        """
+    ) -> Optional[List[str]]:
+        """Write one StationXML file per selected station into output_dir."""
         if not selected_rows:
             raise ValueError("Nessuna stazione selezionata")
-        target_id: Optional[int] = selected_rows[0]["id"] if len(selected_rows) == 1 else None
-        inv = self._exporter.build_inventory(
-            target_id,
-            output_path=output_path,
-            validate=True,
-            progress_callback=progress_callback,
-            cancel_callback=cancel_callback,
-        )
-        if inv is None:
-            return None
-        return output_path
+        target_dir = Path(output_dir)
+        target_dir.mkdir(parents=True, exist_ok=True)
+        used: set[str] = set()
+        written: List[str] = []
+        total = len(selected_rows)
+        for idx, row in enumerate(selected_rows, start=1):
+            if cancel_callback and cancel_callback():
+                return None
+            station_id = int(row["id"] if isinstance(row, dict) else row)
+            filename = self._exporter.station_xml_filename(station_id, used)
+            path = target_dir / filename
+            if progress_callback:
+                progress_callback(idx, total, f"Writing {filename}…")
+            inv = self._exporter.build_station_inventory(
+                station_id,
+                output_path=str(path),
+                validate=True,
+                progress_callback=None,
+                cancel_callback=cancel_callback,
+            )
+            if inv is None:
+                return None
+            written.append(str(path))
+        return written
 
     def build_download(
         self,
         selected_rows: List[Any],
         *,
-        layout: StationXMLExportLayout,
         progress_callback: ProgressCallback = None,
         cancel_callback: CancelCallback = None,
     ) -> Optional[Tuple[bytes, str]]:
         if not selected_rows:
             raise ValueError("Nessuna stazione selezionata")
 
-        if layout == StationXMLExportLayout.ZIP_PER_STATION:
-            ids = [int(r["id"]) for r in selected_rows]
+        ids = [int(r["id"] if isinstance(r, dict) else r) for r in selected_rows]
+        if len(ids) > 1:
             payload = self._exporter.build_zip_bytes_for_station_ids(
                 ids,
                 progress_callback=progress_callback,
@@ -86,13 +84,12 @@ class StationXMLWebExportController:
                 return None
             return payload, "stations_export.zip"
 
-        target_id: Optional[int] = selected_rows[0]["id"] if len(selected_rows) == 1 else None
-        inv = self._exporter.build_inventory(
-            target_id,
+        station_id = ids[0]
+        payload = self._exporter.build_stationxml_bytes(
+            station_id,
             progress_callback=progress_callback,
             cancel_callback=cancel_callback,
         )
-        if inv is None:
+        if payload is None:
             return None
-        payload = self._exporter.inventory_to_stationxml_bytes(inv)
-        return payload, "inventory_export.xml"
+        return payload, self._exporter.station_xml_filename(station_id)

@@ -19,6 +19,10 @@ ProgressCallback = Optional[Callable[[int, int, str], None]]
 CancelCallback = Optional[Callable[[], bool]]
 
 
+class StationXMLImportError(RuntimeError):
+    """Raised when StationXML parsing or persistence fails with actionable detail."""
+
+
 class StationXMLParser:
     def __init__(self, net_ctrl, sta_ctrl, cha_ctrl, equ_ctrl):
         self.net_ctrl = net_ctrl
@@ -195,9 +199,13 @@ class StationXMLParser:
                 progress_callback, total, total, "Import completed successfully."
             )
             return True
+        except StationXMLImportError:
+            raise
         except Exception as e:
-            logger.error(f"Critical error during import: {e}")
-            return False
+            logger.exception("Errore critico durante l'importazione StationXML")
+            raise StationXMLImportError(
+                f"Importazione StationXML fallita: {e}"
+            ) from e
 
     def _get_or_create_operator(self, obspy_obj):
         """Extracts the operator from a Network or Station and saves it if new."""
@@ -617,9 +625,21 @@ class StationXMLParser:
             elif hasattr(saved_s, 'id'): s_id = saved_s.id
             else:
                 try:
-                    res = self.eq_ctrl.dao.db.get_connection().execute("SELECT id FROM sensor_catalog WHERE model=?", (sensor_model,)).fetchone()
-                    s_id = res['id'] if res else None
-                except:
+                    with self.eq_ctrl.dao.db.get_connection() as conn:
+                        res = conn.execute(
+                            "SELECT id FROM sensor_catalog WHERE model=?",
+                            (sensor_model,),
+                        ).fetchone()
+                        s_id = res['id'] if res else None
+                except Exception as exc:
+                    logger.warning(
+                        "Fallback lookup sensore fallito per modello %r "
+                        "(manufacturer=%r, channel=%r): %s",
+                        sensor_model,
+                        sensor_mfg,
+                        getattr(obspy_cha, "code", "?"),
+                        exc,
+                    )
                     s_id = None
 
         # ==========================================
@@ -709,9 +729,21 @@ class StationXMLParser:
                 d_id = saved_d.id
             else:
                 try:
-                    res = self.eq_ctrl.dao.db.get_connection().execute("SELECT id FROM datalogger_catalog WHERE model=?", (dl_model,)).fetchone()
-                    d_id = res['id'] if res else None
-                except:
+                    with self.eq_ctrl.dao.db.get_connection() as conn:
+                        res = conn.execute(
+                            "SELECT id FROM datalogger_catalog WHERE model=?",
+                            (dl_model,),
+                        ).fetchone()
+                        d_id = res['id'] if res else None
+                except Exception as exc:
+                    logger.warning(
+                        "Fallback lookup datalogger fallito per modello %r "
+                        "(manufacturer=%r, channel=%r): %s",
+                        dl_model,
+                        dl_mfg,
+                        getattr(obspy_cha, "code", "?"),
+                        exc,
+                    )
                     d_id = None
         
         pa_id = None

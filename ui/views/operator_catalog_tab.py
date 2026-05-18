@@ -27,10 +27,12 @@ class OperatorCatalogTab(QWidget):
         left_layout.addWidget(QLabel("<b>Operators / Managers</b>"))
         
         self.op_list = QListWidget()
+        self.op_list.setToolTip("Seleziona una riga per caricare agenzia, contatti e riferimenti dell'operatore responsabile dei metadati FDSN.")
         self.op_list.itemClicked.connect(self._load_selected_operator)
         left_layout.addWidget(self.op_list)
         
         self.new_btn = QPushButton("➕ New Operator")
+        self.new_btn.setToolTip("Prepara una nuova agenzia/operatore responsabile della gestione e manutenzione di reti o stazioni sismiche.")
         self.new_btn.setStyleSheet("background-color: #1976D2; color: white; font-weight: bold;")
         self.new_btn.clicked.connect(self._prepare_new_operator)
         left_layout.addWidget(self.new_btn)
@@ -42,10 +44,20 @@ class OperatorCatalogTab(QWidget):
         form = QFormLayout(info_group)
         
         self.agency_input = QLineEdit()
+        self.agency_input.setPlaceholderText("INGV")
+        self.agency_input.setToolTip("Nome dell'agenzia responsabile della rete sismica, stazione o distribuzione dei metadati FDSN.")
         self.name_input = QLineEdit()
+        self.name_input.setPlaceholderText("Metadata Office")
+        self.name_input.setToolTip("Referente tecnico o ufficio responsabile della qualità dei metadati StationXML.")
         self.email_input = QLineEdit()
+        self.email_input.setPlaceholderText("metadata@example.org")
+        self.email_input.setToolTip("Contatto operativo per correzioni di inventario, response metadata o richieste FDSN.")
         self.web_input = QLineEdit()
+        self.web_input.setPlaceholderText("https://www.example.org")
+        self.web_input.setToolTip("URL istituzionale dell'operatore o del data center responsabile della rete.")
         self.phone_input = QLineEdit()
+        self.phone_input.setPlaceholderText("39-3331234567")
+        self.phone_input.setToolTip("Numero telefonico in formato FDSN country-subscriber, ad esempio 39-3331234567.")
         
         form.addRow("Agency / Entity:", self.agency_input)
         form.addRow("Contact Name:", self.name_input)
@@ -56,14 +68,18 @@ class OperatorCatalogTab(QWidget):
         editor_layout.addWidget(info_group)
         
         self.save_btn = QPushButton("💾 SAVE TO CATALOG")
+        self.save_btn.setToolTip("Persiste l'operatore nel database SQLite per associare ownership e manutenzione a reti e stazioni.")
         self.save_btn.setStyleSheet("background-color: #2E7D32; color: white; font-weight: bold; height: 35px;")
         self.save_btn.clicked.connect(self._on_save_clicked)
         editor_layout.addWidget(self.save_btn)
         
         danger_layout = QHBoxLayout()
         self.clone_btn = QPushButton("👯 Clone"); self.clone_btn.setStyleSheet("background-color: #8E24AA; color: white;"); self.clone_btn.clicked.connect(self._on_clone_clicked); self.clone_btn.setEnabled(False)
+        self.clone_btn.setToolTip("Clona l'operatore creando una nuova riga database con ID distinto e suffisso (Copy).")
         self.replace_btn = QPushButton("🔄 Replace"); self.replace_btn.setStyleSheet("background-color: #F57C00; color: white;"); self.replace_btn.clicked.connect(self._on_replace_clicked); self.replace_btn.setEnabled(False)
+        self.replace_btn.setToolTip("Sposta riferimenti di reti e stazioni verso un operatore master preservando integrità e tracciabilità.")
         self.delete_btn = QPushButton("🗑️ Delete"); self.delete_btn.setStyleSheet("background-color: #C62828; color: white;"); self.delete_btn.clicked.connect(self._on_delete_clicked); self.delete_btn.setEnabled(False)
+        self.delete_btn.setToolTip("Elimina l'operatore solo se nessuna rete o stazione lo referenzia ancora.")
         danger_layout.addWidget(self.clone_btn); danger_layout.addWidget(self.replace_btn); danger_layout.addWidget(self.delete_btn)
         editor_layout.addLayout(danger_layout)
         

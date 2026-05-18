@@ -188,6 +188,11 @@ class StationXMLExporter:
         progress_callback: ProgressCallback = None,
         cancel_callback: CancelCallback = None,
     ) -> Optional[Inventory]:
+        if target_station_id is None:
+            raise ValueError(
+                "Global inventory export is no longer supported. "
+                "Use build_station_inventory(station_id) for per-station StationXML."
+            )
         inv = Inventory(networks=[], source="StationXML Manager FDSN")
 
         sensors_db = {s.id: s for s in self.eq_ctrl.get_all_sensors()}
@@ -608,7 +613,7 @@ class StationXMLExporter:
     def _safe_xml_filename(self, station_code: str, used: Set[str]) -> str:
         """FDSN-safe filename {code}.xml, disambiguated if the same code appears twice in the ZIP."""
         base = (station_code or "station").strip() or "station"
-        safe = "".join(c if c.isalnum() or c in ("-", "_", ".") else "_" for c in base)[:32]
+        safe = "".join(c if c.isalnum() or c in ("-", "_", ".") else "_" for c in base.upper())[:32]
         name = f"{safe}.xml"
         if name not in used:
             used.add(name)
@@ -620,6 +625,54 @@ class StationXMLExporter:
                 used.add(cand)
                 return cand
             i += 1
+
+    def _station_export_code(self, station_id: int) -> str:
+        """Return station code when possible for per-station filenames."""
+        for net in self.net_ctrl.get_all_networks():
+            for sta in self.sta_ctrl.get_stations_by_network(net.id):
+                if sta.id == station_id:
+                    return str(sta.code or "").upper()
+        return f"id{station_id}"
+
+    def station_xml_filename(self, station_id: int, used: Optional[Set[str]] = None) -> str:
+        """Filename for one station export: STATION.xml, sanitized and optionally unique."""
+        used_names = used if used is not None else set()
+        return self._safe_xml_filename(self._station_export_code(station_id), used_names)
+
+    def build_station_inventory(
+        self,
+        station_id: int,
+        *,
+        output_path: Optional[str] = None,
+        validate: bool = True,
+        progress_callback: ProgressCallback = None,
+        cancel_callback: CancelCallback = None,
+    ) -> Optional[Inventory]:
+        """Build an ObsPy Inventory containing exactly one station and its parent network."""
+        return self.build_inventory(
+            target_station_id=station_id,
+            output_path=output_path,
+            validate=validate,
+            progress_callback=progress_callback,
+            cancel_callback=cancel_callback,
+        )
+
+    def build_stationxml_bytes(
+        self,
+        station_id: int,
+        *,
+        progress_callback: ProgressCallback = None,
+        cancel_callback: CancelCallback = None,
+    ) -> Optional[bytes]:
+        """Build and serialize one station StationXML document."""
+        inv = self.build_station_inventory(
+            station_id,
+            progress_callback=progress_callback,
+            cancel_callback=cancel_callback,
+        )
+        if inv is None:
+            return None
+        return self.inventory_to_stationxml_bytes(inv)
 
     def build_zip_bytes_for_station_ids(
         self,
@@ -658,15 +711,14 @@ class StationXMLExporter:
                     total,
                     f"Station {idx + 1}/{n} (id={sid}) — building XML…",
                 )
-                inv = self.build_inventory(
+                inv = self.build_station_inventory(
                     sid,
                     progress_callback=None,
                     cancel_callback=cancel_callback,
                 )
                 if inv is None:
                     return None
-                code = self._first_station_code_in_inventory(inv) or f"id{sid}"
-                fname = self._safe_xml_filename(code, used_names)
+                fname = self.station_xml_filename(sid, used_names)
                 zf.writestr(fname, self.inventory_to_stationxml_bytes(inv))
 
         if cancel_callback and cancel_callback():

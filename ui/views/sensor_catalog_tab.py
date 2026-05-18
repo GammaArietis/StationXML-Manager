@@ -37,21 +37,25 @@ class SensorCatalogTab(QWidget):
         left_widget = QWidget(); left_layout = QVBoxLayout(left_widget)
         left_layout.addWidget(QLabel("<b>Sensors in Catalog</b>"))
         self.search_input = QLineEdit()
-        self.search_input.setPlaceholderText("Cerca per marca/modello...")
+        self.search_input.setPlaceholderText("Cerca sensori per marca, modello o risposta NRL...")
+        self.search_input.setToolTip("Filtra il catalogo sensori usando manufacturer/model o identificativi NRL per individuare rapidamente risposte strumentali equivalenti.")
         self.search_input.textChanged.connect(self._filter_model_list)
         left_layout.addWidget(self.search_input)
         self.model_list = QListWidget();
+        self.model_list.setToolTip("Doppio clic o selezione di una riga per caricare i metadati dettagliati del sensore nel pannello di editing laterale.")
         self.model_list.itemClicked.connect(self._load_selected_sensor)
         self.model_list.itemDoubleClicked.connect(self._on_nrl_clicked)
         left_layout.addWidget(self.model_list)
         
         btns = QHBoxLayout()
         self.new_btn = QPushButton("➕ New"); self.new_btn.setStyleSheet("background-color: #1976D2; color: white; font-weight: bold;")
+        self.new_btn.setToolTip("Prepara un nuovo modello sensore con risposta strumentale, unità fisiche e poli/zeri da salvare nel catalogo centralizzato.")
         self.new_btn.clicked.connect(self._prepare_new_model)
         
         self.nrl_btn = QPushButton("🌐 NRL");
+        self.nrl_btn.setToolTip("Navigazione del catalogo ufficiale Nominal Response Library per importare poli, zeri, gain e unità fisiche del sensore.")
         self.nrl_btn.clicked.connect(self._on_nrl_clicked)
-        self.arol_btn = QPushButton("🌐 AROL");self.arol_btn.clicked.connect(self._on_import_arol_clicked)
+        self.arol_btn = QPushButton("🌐 AROL"); self.arol_btn.setToolTip("Navigazione della libreria AROL per importare definizioni strumentali e risposte nominali."); self.arol_btn.clicked.connect(self._on_import_arol_clicked)
         
         btns.addWidget(self.new_btn)
         btns.addWidget(self.nrl_btn)
@@ -66,16 +70,30 @@ class SensorCatalogTab(QWidget):
         info_form = QFormLayout(info_group)
         
         self.mfg_input = QLineEdit()
+        self.mfg_input.setPlaceholderText("Nanometrics")
+        self.mfg_input.setToolTip("Costruttore del sensore sismico come riportato in NRL, AROL o documentazione metrologica.")
         self.model_input = QLineEdit()
+        self.model_input.setPlaceholderText("Trillium 120PA")
+        self.model_input.setToolTip("Modello commerciale o nominale del sensore, usato per deduplicazione e associazione ai canali.")
         self.type_input = QComboBox(); self.type_input.addItems(["SENSOR", "VBB", "BB", "SP", "SM"]); self.type_input.setEditable(True)
+        self.type_input.setToolTip("Classificazione sismologica del sensore: VBB/BB/SP/SM influenza band code e interpretazione della risposta.")
         self.desc_input = QTextEdit(); self.desc_input.setMaximumHeight(50)
+        self.desc_input.setPlaceholderText("Broadband velocity sensor, 120 s corner period")
+        self.desc_input.setToolTip("Descrizione tecnica del sensore: banda, principio fisico, periodo proprio o note di risposta.")
         self.sens_input = QDoubleSpinBox(); self.sens_input.setRange(0, 1e15); self.sens_input.setDecimals(2)
+        self.sens_input.setToolTip("Sensibilità nominale del sensore alla frequenza di normalizzazione, espressa nelle unità fisiche dichiarate.")
         self.freq_input = QDoubleSpinBox(); self.freq_input.setRange(0, 10000); self.freq_input.setDecimals(4)
+        self.freq_input.setToolTip("Frequenza di normalizzazione della risposta strumentale in Hertz (Hz).")
         
         units_layout = QHBoxLayout()
         self.in_units = QLineEdit("m/s"); self.out_units = QLineEdit("V")
+        self.in_units.setPlaceholderText("m/s o m/s**2")
+        self.in_units.setToolTip("Unità fisica in ingresso: m/s identifica velocimetri, m/s**2 identifica accelerometri secondo logica FDSN.")
+        self.out_units.setPlaceholderText("V")
+        self.out_units.setToolTip("Unità elettrica in uscita dal sensore prima della catena di acquisizione.")
         units_layout.addWidget(self.in_units); units_layout.addWidget(QLabel("→")); units_layout.addWidget(self.out_units)
         self.pz_type = QComboBox(); self.pz_type.addItems(["LAPLACE (RADIANS/SECOND)", "LAPLACE (HERTZ)"])
+        self.pz_type.setToolTip("Dominio matematico dei poli/zeri: rad/s o Hz, fondamentale per calcolare corner frequency e risposta Bode.")
         
         info_form.addRow("Manufacturer:", self.mfg_input)
         info_form.addRow("Model:", self.model_input)
@@ -89,6 +107,7 @@ class SensorCatalogTab(QWidget):
         editor_layout.addWidget(info_group)
 
         pz_group = QGroupBox("Poles and Zeros")
+        pz_group.setToolTip("Tabelle dei poli e zeri complessi della risposta del sensore usati per Bode plot, corner frequency e deduplicazione matematica.")
         pz_layout = QHBoxLayout(pz_group)
         z_lay = QVBoxLayout(); z_lay.addWidget(QLabel("<b>Zeros</b>")); self.zt = self._create_pz_table(); z_lay.addWidget(self.zt)
         p_lay = QVBoxLayout(); p_lay.addWidget(QLabel("<b>Poles</b>")); self.pt = self._create_pz_table(); p_lay.addWidget(self.pt)
@@ -96,17 +115,24 @@ class SensorCatalogTab(QWidget):
         
         pz_btns = QHBoxLayout()
         az = QPushButton("+ Zero"); az.clicked.connect(lambda: self._add_row(self.zt))
+        az.setToolTip("Aggiunge uno zero complesso della risposta del sensore nel dominio Laplace.")
         ap = QPushButton("+ Pole"); ap.clicked.connect(lambda: self._add_row(self.pt))
+        ap.setToolTip("Aggiunge un polo complesso della risposta del sensore, usato per corner frequency e Bode plot.")
         dp = QPushButton("- Remove Row"); dp.clicked.connect(self._remove_selected_row)
+        dp.setToolTip("Rimuove il polo/zero selezionato dalla risposta del sensore.")
         pz_btns.addWidget(az); pz_btns.addWidget(ap); pz_btns.addWidget(dp); editor_layout.addLayout(pz_btns)
 
         self.save_btn = QPushButton("💾 SAVE TO CATALOG"); self.save_btn.setStyleSheet("background-color: #2E7D32; color: white; height: 35px; font-weight: bold;")
+        self.save_btn.setToolTip("Persiste il modello sensore nel database SQLite con poli, zeri, unità fisiche e sensibilità nominale.")
         self.save_btn.clicked.connect(self._on_save_clicked); editor_layout.addWidget(self.save_btn)
         
         danger_layout = QHBoxLayout()
         self.clone_btn = QPushButton("👯 Clone"); self.clone_btn.setStyleSheet("background-color: #8E24AA; color: white;"); self.clone_btn.clicked.connect(self._on_clone_clicked); self.clone_btn.setEnabled(False)
+        self.clone_btn.setToolTip("Clona il record sensore creando una nuova riga database senza riusare l'ID originale.")
         self.replace_btn = QPushButton("🔄 Replace"); self.replace_btn.setStyleSheet("background-color: #F57C00; color: white;"); self.replace_btn.clicked.connect(self._on_replace_clicked); self.replace_btn.setEnabled(False)
+        self.replace_btn.setToolTip("Sostituisce riferimenti canale verso un modello sensore master preservando l'integrità del DB sismico.")
         self.delete_btn = QPushButton("🗑️ Delete"); self.delete_btn.setStyleSheet("background-color: #C62828; color: white;"); self.delete_btn.clicked.connect(self._on_delete_clicked); self.delete_btn.setEnabled(False)
+        self.delete_btn.setToolTip("Elimina il sensore solo se non referenziato da canali o vincoli applicativi.")
         danger_layout.addWidget(self.clone_btn); danger_layout.addWidget(self.replace_btn); danger_layout.addWidget(self.delete_btn)
         editor_layout.addLayout(danger_layout); self.splitter.addWidget(editor_widget)
 
@@ -121,6 +147,7 @@ class SensorCatalogTab(QWidget):
 
     def _create_pz_table(self):
         t = QTableWidget(0, 2); t.setHorizontalHeaderLabels(["Real", "Imaginary"])
+        t.setToolTip("Doppio clic per modificare parte reale e immaginaria dei poli/zeri della risposta strumentale.")
         t.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch); return t
 
     def _add_row(self, t, r=0.0, i=0.0):

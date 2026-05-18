@@ -1,7 +1,8 @@
 from PyQt6.QtWidgets import (QMainWindow, QWidget, QHBoxLayout, QVBoxLayout,
                              QPushButton, QStackedWidget, QMessageBox, QFileDialog, QSplitter, QLabel,
-                             QDialog, QRadioButton, QComboBox, QDialogButtonBox, QProgressDialog, QApplication,
-                             QGroupBox, QButtonGroup, QLineEdit)
+                             QDialog, QDialogButtonBox, QProgressDialog, QApplication,
+                             QGroupBox, QLineEdit, QListWidget, QListWidgetItem,
+                             QAbstractItemView)
 from PyQt6.QtCore import Qt
 import logging
 import time
@@ -59,36 +60,40 @@ class MainWindow(QMainWindow):
         # Creation buttons.
         creation_layout = QHBoxLayout()
         self.add_net_btn = QPushButton("+ Network")
+        self.add_net_btn.setToolTip("Crea una nuova rete sismica FDSN permanente o temporanea nel database SQLite.")
         self.add_sta_btn = QPushButton("+ Station")
+        self.add_sta_btn.setToolTip("Crea una nuova stazione sismica sotto la rete selezionata usando coordinate WGS84 e metadati FDSN.")
         self.add_cha_btn = QPushButton("+ Channel")
+        self.add_cha_btn.setToolTip("Crea un nuovo canale sismico sotto la stazione selezionata con codice SEED e catena strumentale.")
         self.catalog_btn = QPushButton("⚙️ Equipment Catalog")
+        self.catalog_btn.setToolTip("Apre il catalogo centralizzato di sensori, datalogger, preamplificatori e operatori usato per costruire risposte StationXML coerenti.")
         
         # Tools menu.
         menubar = self.menuBar()
         tools_menu = menubar.addMenu("&Tools")
 
         bulk_enrich_action = QAction("🌍 Enrich Current Network Stations", self)
-        bulk_enrich_action.setStatusTip("Download geographic and geological data for all stations in the selected network")
+        bulk_enrich_action.setStatusTip("Arricchisce tutte le stazioni della rete selezionata con geografia WGS84 e litologia di sito.")
         bulk_enrich_action.triggered.connect(self._bulk_enrich_network_stations)
         tools_menu.addAction(bulk_enrich_action)
         
         dedup_action = QAction("🔍 Find and Merge Duplicates (Math-Match)", self)
-        dedup_action.setStatusTip("Group identical instruments by physical/mathematical parameters")
+        dedup_action.setStatusTip("Raggruppa strumenti identici tramite hash matematici di poli, zeri, coefficienti e stadi.")
         dedup_action.triggered.connect(self._open_math_deduplicator)
         tools_menu.addAction(dedup_action)
         
         nrl_update_action = QAction("🔄 Update Metadata from Local NRL", self)
-        nrl_update_action.setStatusTip("Reload Poles/Zeros for all stations tagged 'NRL: '")
+        nrl_update_action.setStatusTip("Ricarica da NRL poli, zeri e response stages per strumenti collegati a percorsi nominali.")
         nrl_update_action.triggered.connect(self._handle_global_nrl_update)
         tools_menu.addAction(nrl_update_action)
         
         bulk_sync_action = QAction("🚀 Sync Red Stations with Yasmine", self)
-        bulk_sync_action.setStatusTip("Massively send all updated XML files to the Yasmine server")
+        bulk_sync_action.setStatusTip("Invia a Yasmine gli StationXML per-stazione delle stazioni modificate.")
         bulk_sync_action.triggered.connect(self._handle_bulk_yasmine_sync)
         tools_menu.addAction(bulk_sync_action)
 
         recalc_sens_action = QAction("🧮 Recalculate All Sensitivities", self)
-        recalc_sens_action.setStatusTip("Recalculate total sensitivity for all channels")
+        recalc_sens_action.setStatusTip("Ricalcola la sensibilità totale di tutti i canali moltiplicando i gain degli stadi strumentali.")
         recalc_sens_action.triggered.connect(self._handle_recalculate_all_sensitivities)
         tools_menu.addAction(recalc_sens_action)
         
@@ -108,10 +113,12 @@ class MainWindow(QMainWindow):
         # Import/Export buttons.
         io_layout = QHBoxLayout()
         self.import_btn = QPushButton("📥 Import XML")
+        self.import_btn.setToolTip("Importa un inventario FDSN StationXML tramite ObsPy propagando errori dettagliati di parsing o validazione.")
         self.import_btn.setStyleSheet("background-color: #1976D2; color: white; font-weight: bold;")
         self.import_btn.clicked.connect(self._import_xml)
 
         self.export_btn = QPushButton("💾 Export XML")
+        self.export_btn.setToolTip("Esporta StationXML per singola stazione: XML diretto per ogni stazione selezionata nella cartella di destinazione.")
         self.export_btn.setStyleSheet("background-color: #2e7d32; color: white; font-weight: bold;")
         self.export_btn.clicked.connect(self._export_xml)
 
@@ -122,6 +129,7 @@ class MainWindow(QMainWindow):
         self.tree_nav = TreeNav(self.net_ctrl, self.sta_ctrl, self.cha_ctrl)
         self.tree_search_input = QLineEdit()
         self.tree_search_input.setPlaceholderText("Filtra stazione...")
+        self.tree_search_input.setToolTip("Filtra l'albero Rete/Stazione/Canale per codice stazione mantenendo selezione e nodi espansi quando possibile.")
         self.tree_search_input.textChanged.connect(self.tree_nav.set_filter_text)
         
         left_layout.addLayout(creation_layout)
@@ -134,6 +142,7 @@ class MainWindow(QMainWindow):
         
         # Workspace index 0: welcome.
         welcome_label = QLabel("Select an item on the left to begin.")
+        welcome_label.setToolTip("Selezionare una rete, stazione o canale dall'albero per caricare i metadati dettagliati nel pannello di editing laterale.")
         welcome_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.workspace.addWidget(welcome_label)
         
@@ -323,50 +332,49 @@ class MainWindow(QMainWindow):
         QMessageBox.critical(self, "Import error", f"An error occurred during import:\n{err}")
             
     def _export_xml(self):
-        """Shows export options and saves StationXML (single file or ZIP per station)."""
+        """Shows station selection and writes one StationXML file per station."""
         dialog = QDialog(self)
-        dialog.setWindowTitle("Export Options")
+        dialog.setWindowTitle("Export Stations")
         layout = QVBoxLayout(dialog)
 
-        grp_scope = QGroupBox("Scope")
+        grp_scope = QGroupBox("Stations")
         scope_layout = QVBoxLayout(grp_scope)
-        radio_all = QRadioButton("Export entire database (all networks and stations)")
-        radio_all.setChecked(True)
-        radio_single = QRadioButton("Export a single station (choose below):")
-        combo_stations = QComboBox()
-        combo_stations.setEnabled(False)
+        scope_layout.addWidget(QLabel("Select one or more stations. Each station will be saved as STATION.xml."))
+        station_list = QListWidget()
+        station_list.setSelectionMode(QAbstractItemView.SelectionMode.NoSelection)
 
         networks = self.net_ctrl.get_all_networks()
         for net in networks:
             stations = self.sta_ctrl.get_stations_by_network(net.id)
             for sta in stations:
                 label = f"{net.code}.{sta.code} ({sta.site_name or 'No site name'})"
-                combo_stations.addItem(label, sta.id)
+                item = QListWidgetItem(label)
+                item.setData(Qt.ItemDataRole.UserRole, {"id": sta.id, "net": net.code, "sta": sta.code})
+                item.setFlags(item.flags() | Qt.ItemFlag.ItemIsUserCheckable)
+                item.setCheckState(Qt.CheckState.Unchecked)
+                station_list.addItem(item)
 
-        if combo_stations.count() == 0:
-            combo_stations.addItem("No stations available")
-            radio_single.setEnabled(False)
+        if station_list.count() == 0:
+            QMessageBox.warning(self, "Export", "No stations available for export.")
+            return
 
-        def toggle_combo():
-            combo_stations.setEnabled(radio_single.isChecked())
+        selection_buttons = QHBoxLayout()
+        select_all_btn = QPushButton("🔘 Seleziona Tutto")
+        deselect_all_btn = QPushButton("⚪ Deseleziona Tutto")
+        selection_buttons.addWidget(select_all_btn)
+        selection_buttons.addWidget(deselect_all_btn)
+        selection_buttons.addStretch(1)
 
-        radio_single.toggled.connect(toggle_combo)
-        scope_layout.addWidget(radio_all)
-        scope_layout.addWidget(radio_single)
-        scope_layout.addWidget(combo_stations)
+        def _set_all_station_checks(state: Qt.CheckState) -> None:
+            for i in range(station_list.count()):
+                station_list.item(i).setCheckState(state)
+
+        select_all_btn.clicked.connect(lambda: _set_all_station_checks(Qt.CheckState.Checked))
+        deselect_all_btn.clicked.connect(lambda: _set_all_station_checks(Qt.CheckState.Unchecked))
+
+        scope_layout.addLayout(selection_buttons)
+        scope_layout.addWidget(station_list)
         layout.addWidget(grp_scope)
-
-        grp_format = QGroupBox("Output format")
-        fmt_layout = QVBoxLayout(grp_format)
-        radio_fmt_single = QRadioButton("Single StationXML file (.xml) — classic inventory")
-        radio_fmt_single.setChecked(True)
-        radio_fmt_zip = QRadioButton("ZIP archive: one .xml per station ({station_code}.xml inside the archive)")
-        fmt_layout.addWidget(radio_fmt_single)
-        fmt_layout.addWidget(radio_fmt_zip)
-        fmt_group = QButtonGroup(dialog)
-        fmt_group.addButton(radio_fmt_single)
-        fmt_group.addButton(radio_fmt_zip)
-        layout.addWidget(grp_format)
 
         buttons = QDialogButtonBox(
             QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
@@ -382,64 +390,19 @@ class MainWindow(QMainWindow):
             QMessageBox.information(self, "Export", "An export is already in progress.")
             return
 
-        def _all_station_ids() -> list:
-            ids: list = []
-            for net in self.net_ctrl.get_all_networks():
-                for sta in self.sta_ctrl.get_stations_by_network(net.id):
-                    ids.append(sta.id)
-            return ids
+        selected_rows = [
+            station_list.item(i).data(Qt.ItemDataRole.UserRole)
+            for i in range(station_list.count())
+            if station_list.item(i).checkState() == Qt.CheckState.Checked
+        ]
+        if not selected_rows:
+            QMessageBox.warning(self, "Export", "Select at least one station for export.")
+            return
 
-        use_zip = radio_fmt_zip.isChecked()
-
-        if use_zip:
-            if radio_all.isChecked():
-                station_ids = _all_station_ids()
-            else:
-                sid = combo_stations.currentData()
-                if sid is None:
-                    QMessageBox.warning(self, "Export", "No station selected for export.")
-                    return
-                station_ids = [int(sid)]
-            if not station_ids:
-                QMessageBox.warning(self, "Export", "No stations to export.")
-                return
-            default_name = "stations_export.zip"
-            file_path, _ = QFileDialog.getSaveFileName(
-                self,
-                "Save ZIP archive",
-                default_name,
-                "ZIP Archives (*.zip);;All Files (*)",
-            )
-            if not file_path:
-                return
-            spec = {"mode": "zip", "path": file_path, "station_ids": station_ids, "zip": True}
-        else:
-            target_station_id = None
-            if radio_single.isChecked() and combo_stations.count() > 0:
-                target_station_id = combo_stations.currentData()
-                if target_station_id is None:
-                    QMessageBox.warning(self, "Export", "No station selected for export.")
-                    return
-
-            default_name = (
-                f"inventory_{combo_stations.currentText().split(' ')[0]}.xml"
-                if target_station_id
-                else "inventory_full.xml"
-            )
-            file_path, _ = QFileDialog.getSaveFileName(
-                self,
-                "Save StationXML file",
-                default_name,
-                "StationXML Files (*.xml);;All Files (*)",
-            )
-            if not file_path:
-                return
-            spec = {
-                "mode": "single",
-                "path": file_path,
-                "target_station_id": target_station_id,
-                "zip": False,
-            }
+        output_dir = QFileDialog.getExistingDirectory(self, "Select output folder")
+        if not output_dir:
+            return
+        spec = {"mode": "folder", "path": output_dir, "selected_rows": selected_rows, "zip": False}
 
         self._export_progress_dialog = QProgressDialog(self)
         self._export_progress_dialog.setWindowTitle("StationXML export")
@@ -477,28 +440,24 @@ class MainWindow(QMainWindow):
 
         cancel = is_cancelled if is_cancelled is not None else (lambda: False)
 
-        if spec["mode"] == "single":
-            inv = exporter.build_inventory(
-                spec.get("target_station_id"),
-                output_path=spec["path"],
-                validate=True,
+        if spec["mode"] == "folder":
+            written = self._export_web.write_station_xml_files_to_directory(
+                spec["selected_rows"],
+                spec["path"],
                 progress_callback=cb,
                 cancel_callback=cancel,
             )
-            if inv is None:
+            if written is None:
                 return {"ok": False, "cancelled": True, "zip": False}
-            return {"ok": True, "cancelled": False, "path": spec["path"], "zip": False}
+            return {
+                "ok": True,
+                "cancelled": False,
+                "path": spec["path"],
+                "zip": False,
+                "count": len(written),
+            }
 
-        data = exporter.build_zip_bytes_for_station_ids(
-            spec["station_ids"],
-            progress_callback=cb,
-            cancel_callback=cancel,
-        )
-        if data is None:
-            return {"ok": False, "cancelled": True, "zip": True}
-        with open(spec["path"], "wb") as fh:
-            fh.write(data)
-        return {"ok": True, "cancelled": False, "path": spec["path"], "zip": True}
+        raise ValueError(f"Unknown export mode: {spec['mode']}")
 
     def _on_stationxml_export_progress(self, payload):
         current, total, message = payload
@@ -535,6 +494,7 @@ class MainWindow(QMainWindow):
             self._export_web.exporter,
             result["path"],
             is_zip=result.get("zip", False),
+            file_count=result.get("count"),
         )
 
     def _on_stationxml_export_error(self, err: str):
@@ -545,13 +505,21 @@ class MainWindow(QMainWindow):
         self.export_btn.setEnabled(True)
         QMessageBox.critical(self, "Export error", f"An error occurred during export:\n{err}")
 
-    def _show_export_result_dialog(self, exporter: StationXMLExporter, file_path: str, *, is_zip: bool) -> None:
+    def _show_export_result_dialog(
+        self,
+        exporter: StationXMLExporter,
+        file_path: str,
+        *,
+        is_zip: bool,
+        file_count: int | None = None,
+    ) -> None:
         """Shared success / warning dialog after export."""
+        kind = "ZIP archive" if is_zip else "StationXML files"
+        target_text = f"{file_count} file(s) saved in:\n{file_path}" if file_count else f"{kind} generated in:\n{file_path}"
         if exporter.validation_warnings:
             unrecognized = ", ".join(exporter.validation_warnings)
-            kind = "ZIP archive" if is_zip else "StationXML file"
             msg = (
-                f"{kind} generated in:\n{file_path}\n\n"
+                f"{target_text}\n\n"
                 "⚠️ WARNING:\nNon-standard units of measure detected:\n"
                 f"[{unrecognized}]\n\n"
                 "The file is valid, but the FDSN validator might flag errors on these units."
@@ -561,7 +529,7 @@ class MainWindow(QMainWindow):
             QMessageBox.information(
                 self,
                 "Success",
-                f"Export completed successfully with no FDSN unit warnings!\nSaved to:\n{file_path}",
+                f"Export completed successfully with no FDSN unit warnings!\n{target_text}",
             )
 
     def _bulk_enrich_network_stations(self):
@@ -713,7 +681,7 @@ class MainWindow(QMainWindow):
         exporter = StationXMLExporter(
             self.net_ctrl, self.sta_ctrl, self.cha_ctrl, self.equ_ctrl
         )
-        inv = exporter.build_inventory(target_station_id=station_id)
+        inv = exporter.build_station_inventory(station_id)
 
         out_stream = io.BytesIO()
         inv.write(out_stream, format="STATIONXML", validate=True)

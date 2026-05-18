@@ -44,11 +44,13 @@ class StationTab(QWidget):
         
         # 1. Base Text Fields
         self.code_input = QLineEdit()
-        self.code_input.setPlaceholderText("E.g. ROME")
+        self.code_input.setPlaceholderText("ZOE o MDN")
+        self.code_input.setToolTip("Codice identificativo internazionale della stazione sismica (da 3 a 5 caratteri maiuscoli).")
         self.code_input.setMaxLength(10)
         
         self.site_input = QLineEdit()
-        self.site_input.setPlaceholderText("E.g. Rome - INGV Headquarters")
+        self.site_input.setPlaceholderText("Palermo, Sicily, Italy")
+        self.site_input.setToolTip("Descrizione geografica o toponimo del sito di installazione del sensore sismico.")
         
         # --- FDSN COMMENTS TABLE ---
         comm_group = QGroupBox("Comments (FDSN)")
@@ -56,22 +58,26 @@ class StationTab(QWidget):
         
         self.comm_table = QTableWidget(0, 5)
         self.comm_table.setHorizontalHeaderLabels(["Text", "Start (YYYY-MM-DD)", "End", "Subject", "Author (Name/Agency)"])
+        self.comm_table.setToolTip("Doppio clic o selezione di una riga per caricare annotazioni FDSN della stazione con intervallo UTC.")
         self.comm_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         comm_lay.addWidget(self.comm_table)
         
         btns = QHBoxLayout()
-        add_btn = QPushButton("+ Add Comment"); add_btn.clicked.connect(self._add_comment_row)
-        rem_btn = QPushButton("- Remove Row"); rem_btn.clicked.connect(self._remove_comment_row)
+        add_btn = QPushButton("+ Add Comment"); add_btn.setToolTip("Aggiunge una nota FDSN su manutenzione, rumore di sito, relocation o qualità del metadata stazione."); add_btn.clicked.connect(self._add_comment_row)
+        rem_btn = QPushButton("- Remove Row"); rem_btn.setToolTip("Rimuove la nota FDSN selezionata dalla serializzazione StationXML della stazione."); rem_btn.clicked.connect(self._remove_comment_row)
         btns.addWidget(add_btn); btns.addWidget(rem_btn)
         comm_lay.addLayout(btns)
 
         self.operator_combo = QComboBox()
+        self.operator_combo.setToolTip("Agenzia responsabile della gestione, manutenzione e qualità dei metadati della stazione.")
 
         self.restricted_combo = QComboBox()
         self.restricted_combo.addItems(["open", "closed", "partial"])
+        self.restricted_combo.setToolTip("Stato FDSN restrictedStatus applicato alla stazione e alle sue epoche operative.")
 
         self.vault_input = QComboBox()
         self.vault_input.setEditable(True)
+        self.vault_input.setToolTip("Tipologia di installazione fisica del sensore: vault, borehole, superficie o altra infrastruttura sismologica.")
         self.vault_input.addItems([
             "Vault", "Borehole", "Surface", "Cave",
             "Underwater", "Tunnel", "Building", "Bunker"
@@ -79,6 +85,7 @@ class StationTab(QWidget):
 
         self.geology_input = QComboBox()
         self.geology_input.setEditable(True)
+        self.geology_input.setToolTip("Litologia locale del sito sismico, utile per interpretare risposta di sito, rumore e accoppiamento sensore-suolo.")
         self.geology_input.addItems([
             "Rock", "Sedimentary Rock", "Metamorphic Rock", "Igneous Rock",
             "Alluvium", "Consolidated Sediment", "Unconsolidated Sediment",
@@ -86,6 +93,7 @@ class StationTab(QWidget):
         ])
 
         self.btn_fetch_geology = QPushButton("🌍 Get from Lat/Lon")
+        self.btn_fetch_geology.setToolTip("Interroga servizi geologici esterni usando coordinate WGS84 per stimare la litologia del sito sismico.")
         self.btn_fetch_geology.setStyleSheet("background-color: #0288D1; color: white; font-weight: bold;")
         self.btn_fetch_geology.clicked.connect(self._auto_fill_geology)
         
@@ -98,26 +106,32 @@ class StationTab(QWidget):
         self.lat_input = QDoubleSpinBox()
         self.lat_input.setDecimals(5)
         self.lat_input.setRange(-90.0, 90.0)
+        self.lat_input.setToolTip("Coordinata geografica espressa in gradi decimali secondo lo standard geodetico WGS84. Esempio: 41.8902.")
         
         self.lon_input = QDoubleSpinBox()
         self.lon_input.setDecimals(5)
         self.lon_input.setRange(-180.0, 180.0)
+        self.lon_input.setToolTip("Coordinata geografica espressa in gradi decimali secondo lo standard geodetico WGS84. Esempio: 12.4922.")
         
         self.elev_input = QDoubleSpinBox()
         self.elev_input.setDecimals(1)
         self.elev_input.setRange(-15000.0, 10000.0)
         self.elev_input.setSuffix(" m")
+        self.elev_input.setToolTip("Elevazione altimetrica del caposaldo della stazione espressa in metri sul livello medio del mare (m s.l.m.).")
 
         self.water_level_input = QDoubleSpinBox()
         self.water_level_input.setDecimals(1)
         self.water_level_input.setRange(-15000.0, 10000.0)
         self.water_level_input.setSuffix(" m")
+        self.water_level_input.setToolTip("Quota del livello idrico rispetto al riferimento della stazione, in metri, per installazioni in pozzo o ambienti sommersi.")
 
         # Advanced geographic fields
         self.site_desc_input = QLineEdit()
-        self.site_desc_input.setPlaceholderText("Street, district, or landmark")
+        self.site_desc_input.setPlaceholderText("Palermo, Sicily, Italy")
+        self.site_desc_input.setToolTip("Descrizione geografica o toponimo del sito di installazione del sensore sismico.")
         
         self.btn_fetch_geography = QPushButton("📍 Auto-fill Locations from Lat/Lon")
+        self.btn_fetch_geography.setToolTip("Ricava toponimi e campi geografici dalle coordinate WGS84 per migliorare la descrizione StationXML del sito.")
         self.btn_fetch_geography.setStyleSheet("background-color: #F57C00; color: white; font-weight: bold;")
         self.btn_fetch_geography.clicked.connect(self._auto_fill_geography)
         
@@ -127,19 +141,25 @@ class StationTab(QWidget):
         desc_layout.addWidget(self.btn_fetch_geography)
 
         self.town_input = QLineEdit()
-        self.town_input.setPlaceholderText("E.g. Erice")
+        self.town_input.setPlaceholderText("Palermo")
+        self.town_input.setToolTip("Comune o località amministrativa associata alle coordinate WGS84 della stazione.")
         self.county_input = QLineEdit()
-        self.county_input.setPlaceholderText("E.g. Trapani")
+        self.county_input.setPlaceholderText("Palermo")
+        self.county_input.setToolTip("Provincia o contea usata per contestualizzare il sito di installazione sismica.")
         self.region_input = QLineEdit()
-        self.region_input.setPlaceholderText("E.g. Sicily")
+        self.region_input.setPlaceholderText("Sicily")
+        self.region_input.setToolTip("Regione geografica o amministrativa del sito sismico.")
         self.country_input = QLineEdit()
-        self.country_input.setPlaceholderText("E.g. Italy")
+        self.country_input.setPlaceholderText("Italy")
+        self.country_input.setToolTip("Paese associato alla localizzazione WGS84 della stazione.")
 
         # 3. Dates
         start_layout = QHBoxLayout()
         self.start_check = QCheckBox("Set")
+        self.start_check.setToolTip("Abilita la data UTC di inizio validità dell'epoca stazione.")
         self.start_input = QDateTimeEdit(QDateTime.currentDateTime())
         self.start_input.setDisplayFormat("yyyy-MM-ddTHH:mm:ss")
+        self.start_input.setToolTip("Data e ora di inizio validità dell'epoca strumentale espresse in tempo coordinato universale (UTC).")
         self.start_input.setCalendarPopup(True)
         self.start_input.setEnabled(False)
         self.start_check.toggled.connect(self.start_input.setEnabled)
@@ -148,8 +168,10 @@ class StationTab(QWidget):
         
         end_layout = QHBoxLayout()
         self.end_check = QCheckBox("Set")
+        self.end_check.setToolTip("Spuntando questo campo viene chiusa l'epoca della stazione con una data UTC esplicita per preservare la storia operativa FDSN.")
         self.end_input = QDateTimeEdit(QDateTime.currentDateTime())
         self.end_input.setDisplayFormat("yyyy-MM-ddTHH:mm:ss")
+        self.end_input.setToolTip("Data e ora di fine validità dell'epoca strumentale espresse in tempo coordinato universale (UTC).")
         self.end_input.setCalendarPopup(True)
         self.end_input.setEnabled(False)
         self.end_check.toggled.connect(self.end_input.setEnabled)
@@ -195,24 +217,28 @@ class StationTab(QWidget):
         btn_layout = QHBoxLayout()
         
         self.delete_btn = QPushButton("Delete Station")
+        self.delete_btn.setToolTip("Elimina la stazione e i canali associati rispettando i vincoli gerarchici del database SQLite.")
         self.delete_btn.setStyleSheet("background-color: #c62828; color: white; font-weight: bold;")
         self.delete_btn.setFixedWidth(130)
         self.delete_btn.clicked.connect(self._on_delete_clicked)
         self.delete_btn.hide()
         
         self.sync_yasmine_btn = QPushButton("☁️ Send to Yasmine")
+        self.sync_yasmine_btn.setToolTip("Esporta la singola stazione in StationXML e la sincronizza con l'archivio Yasmine mantenendo lo stato di allineamento.")
         self.sync_yasmine_btn.setStyleSheet("background-color: #673AB7; color: white; font-weight: bold;")
         self.sync_yasmine_btn.setFixedWidth(150)
         self.sync_yasmine_btn.clicked.connect(self._on_sync_yasmine_clicked)
         self.sync_yasmine_btn.hide()
 
         self.auto_channels_btn = QPushButton("⚡ Auto-Generate 3 Channels")
+        self.auto_channels_btn.setToolTip("Genera una terna SEED Z/N/E coerente con sample rate, risposta del sensore e convenzioni FDSN.")
         self.auto_channels_btn.setStyleSheet("background-color: #00897B; color: white; font-weight: bold;")
         self.auto_channels_btn.setFixedWidth(210)
         self.auto_channels_btn.clicked.connect(self._on_auto_generate_channels_clicked)
         self.auto_channels_btn.hide()
         
         self.save_btn = QPushButton("Save Station")
+        self.save_btn.setToolTip("Persiste le modifiche correnti sul database SQLite attivando i relativi vincoli di integrità.")
         self.save_btn.setFixedWidth(150)
         self.save_btn.clicked.connect(self._on_save_clicked)
         
@@ -471,36 +497,45 @@ class StationTab(QWidget):
 
         dl_combo = QComboBox()
         dl_combo.setEditable(True)
+        dl_combo.setToolTip("Seleziona un datalogger validato dall'inventario centralizzato; il sample rate determina il Band Code SEED proposto.")
         for d in self.eq_ctrl.get_all_dataloggers():
             dl_combo.addItem(f"{d.manufacturer} {d.model}", d.id)
 
         sensor_combo = QComboBox()
         sensor_combo.setEditable(True)
+        sensor_combo.setToolTip("Seleziona un modello validato dall'inventario centralizzato. La classificazione fisica del sensore guida Instrument Code e Sensor Type FDSN.")
         for s in self.eq_ctrl.get_all_sensors():
             sensor_combo.addItem(f"{s.manufacturer} {s.model}", s.id)
 
         depth_input = QDoubleSpinBox()
         depth_input.setRange(0, 10000)
         depth_input.setSuffix(" m")
+        depth_input.setToolTip("Profondità del sensore rispetto al riferimento stazione, espressa in metri.")
 
         sample_rate_label = QLineEdit()
         sample_rate_label.setReadOnly(True)
+        sample_rate_label.setPlaceholderText("100.0 Hz")
+        sample_rate_label.setToolTip("Frequenza finale di campionamento estratta dalla catena di decimazione del datalogger, espressa in Hertz (Hz).")
 
         inst_code = QComboBox()
         inst_code.setEditable(True)
         inst_code.addItems(["H", "L", "N", "G", "M"])
+        inst_code.setToolTip("Seconda lettera SEED: H per velocimetri, N per accelerometri, secondo input units e standard FDSN.")
 
         band_code = QComboBox()
         band_code.setEditable(True)
         band_code.addItems(["F", "C", "H", "B", "M", "L", "V", "U", "R", "E", "S", "G"])
+        band_code.setToolTip("Prima lettera SEED: codifica la banda di frequenza del canale in funzione del sample rate e della risposta fisica dello strumento.")
 
         sensor_type = QComboBox()
         sensor_type.addItem("Broad Band (BB)", True)
         sensor_type.addItem("Short Period (SP)", False)
+        sensor_type.setToolTip("Classificazione broadband o short-period usata per proporre il Band Code SEED; resta modificabile manualmente prima della generazione.")
 
         start_time_input = QDateTimeEdit(QDateTime.currentDateTime())
         start_time_input.setDisplayFormat("yyyy-MM-ddTHH:mm:ss")
         start_time_input.setCalendarPopup(True)
+        start_time_input.setToolTip("Data e ora di inizio validità dei tre canali generati, in tempo coordinato universale (UTC).")
 
         def _update_sample_rate_preview():
             datalogger_id = dl_combo.currentData()

@@ -27,14 +27,17 @@ class NetworkTab(QWidget):
         form_layout = QFormLayout()
         
         self.code_input = QLineEdit()
-        self.code_input.setPlaceholderText("E.g. IV")
+        self.code_input.setPlaceholderText("IV o IU")
+        self.code_input.setToolTip("Codice univoco della rete sismica permanente o temporanea registrato presso FDSN (2 caratteri).")
         self.code_input.setMaxLength(10)
         
         self.desc_input = QLineEdit()
-        self.desc_input.setPlaceholderText("E.g. Italian National Seismic Network")
+        self.desc_input.setPlaceholderText("Italian National Seismic Network")
+        self.desc_input.setToolTip("Nome esteso o istituzione responsabile della gestione e manutenzione della rete sismica.")
 
         self.doi_input = QLineEdit()
-        self.doi_input.setPlaceholderText("E.g. 10.13127/SD/X0ZHL9RE6W")
+        self.doi_input.setPlaceholderText("10.13127/SD/X0ZHL9RE6W")
+        self.doi_input.setToolTip("Identificatore DOI persistente della rete o del dataset secondo le pratiche di citazione FDSN.")
         
         # --- FDSN COMMENTS GROUP ---
         comm_group = QGroupBox("Network Comments (FDSN)")
@@ -42,27 +45,34 @@ class NetworkTab(QWidget):
         
         self.comm_table = QTableWidget(0, 5)
         self.comm_table.setHorizontalHeaderLabels(["Text", "Start (YYYY-MM-DD)", "End", "Subject", "Author (Name/Agency)"])
+        self.comm_table.setToolTip("Doppio clic o selezione di una riga per caricare o correggere annotazioni FDSN con intervallo UTC nel metadata network.")
         self.comm_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         comm_lay.addWidget(self.comm_table)
         
         btns = QHBoxLayout()
         add_btn = QPushButton("+ Add Comment")
+        add_btn.setToolTip("Aggiunge una nota FDSN con finestra temporale UTC per documentare eventi operativi della rete.")
         add_btn.clicked.connect(self._add_comment_row)
         rem_btn = QPushButton("- Remove Row")
+        rem_btn.setToolTip("Rimuove la nota FDSN selezionata dalla serializzazione StationXML della rete.")
         rem_btn.clicked.connect(self._remove_comment_row)
         btns.addWidget(add_btn)
         btns.addWidget(rem_btn)
         comm_lay.addLayout(btns)
 
         self.operator_combo = QComboBox()
+        self.operator_combo.setToolTip("Agenzia responsabile della gestione operativa, manutenzione e distribuzione dei metadati della rete.")
 
         self.restricted_combo = QComboBox()
         self.restricted_combo.addItems(["open", "closed", "partial"])
+        self.restricted_combo.setToolTip("Stato FDSN restrictedStatus: definisce se metadati e dati associati sono pubblici, chiusi o parzialmente vincolati.")
         
         start_layout = QHBoxLayout()
         self.start_check = QCheckBox("Set")
+        self.start_check.setToolTip("Abilita la serializzazione della data di inizio validità della rete in tempo coordinato universale (UTC).")
         self.start_input = QDateTimeEdit(QDateTime.currentDateTime())
         self.start_input.setDisplayFormat("yyyy-MM-ddTHH:mm:ss")
+        self.start_input.setToolTip("Data e ora di inizio validità dell'epoca strumentale espresse in tempo coordinato universale (UTC).")
         self.start_input.setCalendarPopup(True)
         self.start_input.setEnabled(False)
         self.start_check.toggled.connect(self.start_input.setEnabled)
@@ -71,8 +81,10 @@ class NetworkTab(QWidget):
         
         end_layout = QHBoxLayout()
         self.end_check = QCheckBox("Set")
+        self.end_check.setToolTip("Spuntando questo campo viene chiusa l'epoca FDSN della rete con una data UTC esplicita.")
         self.end_input = QDateTimeEdit(QDateTime.currentDateTime())
         self.end_input.setDisplayFormat("yyyy-MM-ddTHH:mm:ss")
+        self.end_input.setToolTip("Data e ora di fine validità dell'epoca strumentale espresse in tempo coordinato universale (UTC).")
         self.end_input.setCalendarPopup(True)
         self.end_input.setEnabled(False)
         self.end_check.toggled.connect(self.end_input.setEnabled)
@@ -93,12 +105,14 @@ class NetworkTab(QWidget):
         btn_layout = QHBoxLayout()
         
         self.delete_btn = QPushButton("Delete Network")
+        self.delete_btn.setToolTip("Elimina la rete e la gerarchia sismica associata rispettando i vincoli di integrità del database SQLite.")
         self.delete_btn.setStyleSheet("background-color: #c62828; color: white; font-weight: bold;")
         self.delete_btn.setFixedWidth(120)
         self.delete_btn.clicked.connect(self._on_delete_clicked)
         self.delete_btn.hide()
         
         self.save_btn = QPushButton("Save Network")
+        self.save_btn.setToolTip("Persiste le modifiche correnti sul database SQLite attivando i relativi vincoli di integrità.")
         self.save_btn.setFixedWidth(150)
         self.save_btn.clicked.connect(self._on_save_clicked)
         

@@ -31,7 +31,8 @@ class PreamplifierCatalogTab:
                 self.model_list = ui.list().classes('w-full border rounded bg-white overflow-y-auto shadow-inner').style('flex: 1 1 0;')
                 
                 with ui.row().classes('w-full gap-1 mt-4 shrink-0'):
-                    ui.button('➕ New', on_click=self._prepare_new_model).props('flat size=sm color=blue').classes('flex-grow border bg-white')
+                    new_btn = ui.button('➕ New', on_click=self._prepare_new_model).props('flat size=sm color=blue').classes('flex-grow border bg-white')
+                    new_btn.tooltip('Prepara un nuovo preamplificatore o condizionatore analogico con stadi, gain e risposta in frequenza.')
 
             # --- COLONNA 2: EDITOR CENTRALE (Layout Bloccato) ---
             with ui.column().classes('h-full p-8 bg-white flex flex-col no-wrap overflow-hidden'):
@@ -41,29 +42,34 @@ class PreamplifierCatalogTab:
                 with ui.column().classes('w-full flex-grow overflow-y-auto pr-2'):
                     with ui.card().classes('w-full p-6 mb-6 shadow-sm border-l-8 border-orange-500 shrink-0'):
                         with ui.row().classes('w-full gap-4'):
-                            self.mfg_input = ui.input('Manufacturer').classes('w-1/3')
-                            self.model_input = ui.input('Model').classes('flex-grow')
+                            self.mfg_input = ui.input('Manufacturer').classes('w-1/3').props('placeholder="Kinemetrics / Custom Lab" hint="Costruttore o laboratorio responsabile del preamplificatore analogico."')
+                            self.model_input = ui.input('Model').classes('flex-grow').props('placeholder="EpiSensor Preamp / Analog Gain Stage" hint="Modello del preamplificatore o stadio di condizionamento tra sensore e datalogger."')
                     
-                    self.desc_input = ui.textarea('Description').classes('w-full mb-6 shrink-0').props('rows=2 outlined')
+                    self.desc_input = ui.textarea('Description').classes('w-full mb-6 shrink-0').props('rows=2 outlined placeholder="Analog conditioning stage with unity gain" hint="Descrizione tecnica dello stadio analogico, gain, filtri e condizioni di accoppiamento sensore-datalogger."')
 
                     ui.label('Analog Conditioning Stages').classes('text-lg font-bold text-slate-700 mb-2 shrink-0')
                     self.stages_cont = ui.column().classes('w-full gap-2 border rounded p-4 bg-slate-50 shadow-inner mb-2')
                     
-                    ui.button('➕ Add Analog Stage', on_click=self._add_stage).props('outline color=orange size=sm').classes('shrink-0 mb-4')
+                    add_stage_btn = ui.button('➕ Add Analog Stage', on_click=self._add_stage).props('outline color=orange size=sm').classes('shrink-0 mb-4')
+                    add_stage_btn.tooltip('Aggiunge uno stadio analogico con gain, unità e poli/zeri alla risposta del preamplificatore.')
 
                 # AREA AZIONI (Footer sempre visibile)
                 with ui.row().classes('w-full justify-between items-center pt-6 border-t shrink-0'):
                     with ui.row().classes('gap-2'):
                         self.clone_btn = ui.button('👯 Clone', on_click=self._on_clone_clicked).props('outline color=purple')
+                        self.clone_btn.tooltip('Clona il preamplificatore creando una nuova riga catalogo senza riusare l ID originale.')
                         self.clone_btn.disable()
                         
                         self.replace_btn = ui.button('🔄 Replace', on_click=self._on_replace_clicked).props('outline color=orange')
+                        self.replace_btn.tooltip('Sposta i riferimenti dei canali verso un preamplificatore master normalizzando il catalogo.')
                         self.replace_btn.disable()
                         
                         self.delete_btn = ui.button('🗑️ Delete', on_click=self._on_delete_clicked).props('outline color=red')
+                        self.delete_btn.tooltip('Elimina il preamplificatore solo se non referenziato da canali o vincoli applicativi.')
                         self.delete_btn.disable()
                         
-                    ui.button('💾 SAVE PREAMP', on_click=self._on_save_clicked, color='green').classes('px-10 h-12 font-bold shadow-md')
+                    save_btn = ui.button('💾 SAVE PREAMP', on_click=self._on_save_clicked, color='green').classes('px-10 h-12 font-bold shadow-md')
+                    save_btn.tooltip('Persiste il preamplificatore nel database SQLite con stadi analogici, gain e risposta complessa.')
 
             # --- COLONNA 3: DETTAGLIO STAGE & PLOT ---
             with ui.column().classes('h-full p-6 bg-slate-50 border-l overflow-y-auto flex flex-col no-wrap'):
@@ -73,15 +79,15 @@ class PreamplifierCatalogTab:
                 with self.stage_editor_cont:
                     ui.label('Select a stage to edit.').classes('text-slate-400 italic text-center w-full mt-4').bind_visibility_from(self, 'current_stage', backward=lambda x: x is None)
                     
-                    self.s_name = ui.input('Stage Name', on_change=self._sync_to_list).classes('w-full')
+                    self.s_name = ui.input('Stage Name', on_change=self._sync_to_list).classes('w-full').props('placeholder="Analog Stage 1" hint="Nome dello stadio analogico nel flusso di risposta StationXML."')
                     self.s_name.set_visibility(False)
                     
                     with ui.row().classes('w-full gap-2'):
-                        self.s_gain = ui.number('Gain (V/V)', format='%.4e', on_change=self._on_gain_change).classes('flex-grow')
+                        self.s_gain = ui.number('Gain (V/V)', format='%.4e', on_change=self._on_gain_change).classes('flex-grow').props('placeholder="1.0000e+00" hint="Gain lineare tensione/tensione dello stadio analogico, incluso nella sensibilità totale."')
                         self.s_gain.set_visibility(False)
-                        self.s_in_u = ui.input('In Units').classes('w-1/4')
+                        self.s_in_u = ui.input('In Units').classes('w-1/4').props('placeholder="V" hint="Unità in ingresso allo stadio analogico del preamplificatore."')
                         self.s_in_u.set_visibility(False)
-                        self.s_out_u = ui.input('Out Units').classes('w-1/4')
+                        self.s_out_u = ui.input('Out Units').classes('w-1/4').props('placeholder="V" hint="Unità in uscita dallo stadio analogico verso il datalogger."')
                         self.s_out_u.set_visibility(False)
                     
                     self.s_pz_title = ui.label('Stage Poles & Zeros').classes('font-bold mt-2')
@@ -94,6 +100,7 @@ class PreamplifierCatalogTab:
                         self.s_pt_col.set_visibility(False)
                     
                     self.apply_btn = ui.button('Apply & Refresh Plot', on_click=self._apply_stage_changes).props('color=orange').classes('w-full mt-2')
+                    self.apply_btn.tooltip('Applica gain e poli/zeri dello stadio analogico aggiornando la risposta totale in frequenza.')
                     self.apply_btn.set_visibility(False)
 
                 ui.label('Total Frequency Response').classes('font-bold text-slate-500 mt-8 mb-2 uppercase text-[10px] shrink-0')
@@ -150,7 +157,8 @@ class PreamplifierCatalogTab:
                     ui.label(f"S{stage.stage_sequence}").classes('font-bold w-8 text-orange-600')
                     ui.label(stage.name or "Analog Stage").classes('flex-grow text-sm font-medium')
                     ui.label(f"Gain: {stage.stage_gain}").classes('w-24 text-xs text-slate-500 text-right')
-                    ui.button(icon='delete', on_click=lambda e, s=stage: self._delete_stage(s)).props('flat dense color=red size=sm')
+                    del_stage_btn = ui.button(icon='delete', on_click=lambda e, s=stage: self._delete_stage(s)).props('flat dense color=red size=sm')
+                    del_stage_btn.tooltip('Rimuove questo stadio analogico dalla risposta del preamplificatore.')
 
     def _edit_stage(self, stage):
         self._is_loading = True
@@ -175,18 +183,21 @@ class PreamplifierCatalogTab:
         with self.s_zt_col:
             ui.label('Zeros').classes('text-[10px] font-bold text-center w-full uppercase text-slate-400')
             for z in (stage.zeros or []): self._add_pz_row(self.s_zt_col, self.s_zeros_ui, z.real_val, z.imag_val)
-            ui.button('+ Z', on_click=lambda: self._add_pz_row(self.s_zt_col, self.s_zeros_ui)).props('flat dense size=sm color=orange')
+            z_btn = ui.button('+ Z', on_click=lambda: self._add_pz_row(self.s_zt_col, self.s_zeros_ui)).props('flat dense size=sm color=orange')
+            z_btn.tooltip('Aggiunge uno zero complesso allo stadio analogico selezionato.')
         with self.s_pt_col:
             ui.label('Poles').classes('text-[10px] font-bold text-center w-full uppercase text-slate-400')
             for p in (stage.poles or []): self._add_pz_row(self.s_pt_col, self.s_poles_ui, p.real_val, p.imag_val)
-            ui.button('+ P', on_click=lambda: self._add_pz_row(self.s_pt_col, self.s_poles_ui)).props('flat dense size=sm color=orange')
+            p_btn = ui.button('+ P', on_click=lambda: self._add_pz_row(self.s_pt_col, self.s_poles_ui)).props('flat dense size=sm color=orange')
+            p_btn.tooltip('Aggiunge un polo complesso allo stadio analogico selezionato.')
 
     def _add_pz_row(self, container, registry, r=0.0, i=0.0):
         with container:
             with ui.row().classes('w-full items-center no-wrap gap-1 border-b pb-1 mb-1') as row:
-                rv = ui.number(value=r, on_change=lambda: self._update_plot()).props('dense size=xs step=any').classes('w-14')
-                iv = ui.number(value=i, on_change=lambda: self._update_plot()).props('dense size=xs step=any').classes('w-14')
-                ui.button(icon='remove', on_click=lambda: self._remove_pz_row(row, registry, (rv, iv))).props('flat dense color=red size=sm')
+                rv = ui.number(value=r, on_change=lambda: self._update_plot()).props('dense size=xs step=any hint="Parte reale del polo/zero complesso dello stadio analogico."').classes('w-14')
+                iv = ui.number(value=i, on_change=lambda: self._update_plot()).props('dense size=xs step=any hint="Parte immaginaria del polo/zero complesso dello stadio analogico."').classes('w-14')
+                del_pz_btn = ui.button(icon='remove', on_click=lambda: self._remove_pz_row(row, registry, (rv, iv))).props('flat dense color=red size=sm')
+                del_pz_btn.tooltip('Rimuove questo polo/zero dalla risposta dello stadio analogico.')
                 registry.append((rv, iv))
 
     def _remove_pz_row(self, row, registry, item):

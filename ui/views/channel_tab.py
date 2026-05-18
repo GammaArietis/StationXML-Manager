@@ -43,13 +43,16 @@ class ChannelTab(QWidget):
         identifiers_form = QFormLayout(identifiers_group)
 
         self.code_input = QLineEdit()
-        self.code_input.setPlaceholderText("E.g. HHZ")
+        self.code_input.setPlaceholderText("HHZ, BHN, LHE")
+        self.code_input.setToolTip("Codice di tre caratteri del canale sismico secondo lo standard SEED (Banda, Strumento, Orientamento).")
         self.loc_input = QLineEdit()
         self.loc_input.setPlaceholderText('Empty or "--" for default location')
+        self.loc_input.setToolTip('Codice location FDSN a due caratteri; usare vuoto o "--" per installazione principale.')
 
         self.depth_input = QDoubleSpinBox()
         self.depth_input.setRange(0, 10000)
         self.depth_input.setSuffix(" m")
+        self.depth_input.setToolTip("Profondità del sensore rispetto al riferimento stazione, espressa in metri.")
 
         identifiers_form.addRow("Channel Code (e.g. HHZ):", self.code_input)
         identifiers_form.addRow("Location Code:", self.loc_input)
@@ -57,6 +60,7 @@ class ChannelTab(QWidget):
 
         self.types_combo = QComboBox()
         self.types_combo.setEditable(True)
+        self.types_combo.setToolTip("Classificazione FDSN del canale: continuità del flusso e dominio fisico del dato, ad esempio GEOPHYSICAL o HEALTH.")
         self.types_combo.addItems([
             "CONTINUOUS,GEOPHYSICAL",
             "TRIGGERED,GEOPHYSICAL",
@@ -76,6 +80,7 @@ class ChannelTab(QWidget):
         self.restricted_combo = QComboBox()
         self.restricted_combo.addItems(["open", "closed", "partial"])
         self.restricted_combo.setCurrentIndex(0)
+        self.restricted_combo.setToolTip("Stato FDSN restrictedStatus applicato all'epoca canale e ai dati sismici associati.")
 
         identifiers_form.addRow("Channel Types (FDSN):", self.types_combo)
         identifiers_form.addRow("Restricted Status:", self.restricted_combo)
@@ -84,13 +89,16 @@ class ChannelTab(QWidget):
         
         self.comm_table = QTableWidget(0, 5)
         self.comm_table.setHorizontalHeaderLabels(["Text", "Start (YYYY-MM-DD)", "End", "Subject", "Author (Name/Agency)"])
+        self.comm_table.setToolTip("Doppio clic o selezione di una riga per caricare annotazioni FDSN del canale con intervallo UTC.")
         self.comm_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         comm_lay.addWidget(self.comm_table)
         
         btns = QHBoxLayout()
         add_btn = QPushButton("+ Add Comment")
+        add_btn.setToolTip("Aggiunge una nota FDSN su calibrazione, sostituzione strumento, orientamento o qualità del segnale.")
         add_btn.clicked.connect(self._add_comment_row)
         rem_btn = QPushButton("- Remove Row")
+        rem_btn.setToolTip("Rimuove la nota FDSN selezionata dalla serializzazione StationXML del canale.")
         rem_btn.clicked.connect(self._remove_comment_row)
         btns.addWidget(add_btn)
         btns.addWidget(rem_btn)
@@ -101,32 +109,35 @@ class ChannelTab(QWidget):
         self.sample_rate.setRange(0, 5000)
         self.sample_rate.setValue(100.0)
         self.sample_rate.setSuffix(" Hz")
+        self.sample_rate.setToolTip("Frequenza di campionamento digitalizzata espressa in Hertz (Hz).")
 
         self.clock_drift = QDoubleSpinBox()
         self.clock_drift.setRange(-1.0, 1.0)
         self.clock_drift.setDecimals(6)
         self.clock_drift.setSingleStep(0.0001)
         self.clock_drift.setSuffix(" s/sample")
-        self.clock_drift.setToolTip("Clock drift (often 0.0 or 0.0001)")
+        self.clock_drift.setToolTip("Deriva nominale dell'orologio del datalogger espressa in secondi per campione o secondo il metadato disponibile.")
 
         self.cal_units_combo = QComboBox()
         self.cal_units_combo.setEditable(True)
         self.cal_units_combo.addItems(["", "V", "A", "COUNTS", "m/s", "m/s**2"])
-        self.cal_units_combo.setToolTip("Units of measure used for calibration (optional)")
+        self.cal_units_combo.setToolTip("Unità fisiche usate per la calibrazione: m/s per velocimetri, m/s**2 per accelerometri, COUNTS per segnali digitali.")
 
         # Orientation
         self.azimuth = QDoubleSpinBox()
         self.azimuth.setRange(0, 360)
-        self.azimuth.setToolTip("Degrees clockwise from North (0-360)")
+        self.azimuth.setToolTip("Azimuth sismologico: gradi in senso orario dal Nord geografico WGS84 (0-360).")
         self.dip = QDoubleSpinBox()
         self.dip.setRange(-90, 90)
-        self.dip.setToolTip("Vertical angle: -90 (Up), 0 (Horizontal), +90 (Down)")
+        self.dip.setToolTip("Angolo verticale del componente: -90 Up, 0 orizzontale, +90 Down secondo convenzione FDSN/SEED.")
 
         # Total sensitivity + recalculate (same row as web: field + action button)
         self.overall_sens_input = QLineEdit()
-        self.overall_sens_input.setPlaceholderText("Leave empty for automatic calculation")
+        self.overall_sens_input.setPlaceholderText("1.234567e+09")
+        self.overall_sens_input.setToolTip("Sensibilità totale canale; se vuota viene calcolata moltiplicando i gain degli stadi strumentali.")
         apply_c_double_validator(self.overall_sens_input)
         self.calc_sens_btn = QPushButton("Recalculate Total Sensitivity")
+        self.calc_sens_btn.setToolTip("Ricalcola la sensibilità totale combinando sensor, preamplificatore e datalogger secondo la catena strumentale.")
         self.calc_sens_btn.setStyleSheet("background-color: #0277BD; color: white; font-weight: bold;")
         self.calc_sens_btn.clicked.connect(self._on_calc_sensitivity_clicked)
         sens_layout = QHBoxLayout()
@@ -139,8 +150,10 @@ class ChannelTab(QWidget):
         # Dates
         start_layout = QHBoxLayout()
         self.start_check = QCheckBox("Set")
+        self.start_check.setToolTip("Abilita la data UTC di inizio validità dell'epoca strumentale del canale.")
         self.start_input = QDateTimeEdit(QDateTime.currentDateTime())
         self.start_input.setDisplayFormat("yyyy-MM-ddTHH:mm:ss")
+        self.start_input.setToolTip("Data e ora di inizio validità dell'epoca strumentale espresse in tempo coordinato universale (UTC).")
         self.start_input.setCalendarPopup(True)
         self.start_input.setEnabled(False)
         self.start_check.toggled.connect(self.start_input.setEnabled)
@@ -149,8 +162,10 @@ class ChannelTab(QWidget):
 
         end_layout = QHBoxLayout()
         self.end_check = QCheckBox("Set")
+        self.end_check.setToolTip("Spuntando questo campo, viene iniettato il timestamp UTC corrente (Smart Default) per chiudere visivamente l'epoca e predisporre la terna alla sincronizzazione.")
         self.end_input = QDateTimeEdit(QDateTime.currentDateTime())
         self.end_input.setDisplayFormat("yyyy-MM-ddTHH:mm:ss")
+        self.end_input.setToolTip("Data e ora di fine validità dell'epoca strumentale espresse in tempo coordinato universale (UTC).")
         self.end_input.setCalendarPopup(True)
         self.end_input.setEnabled(False)
         self.end_check.toggled.connect(self.end_input.setEnabled)
@@ -159,20 +174,27 @@ class ChannelTab(QWidget):
 
         # Catalogs and Serial Inputs
         self.sensor_combo = QComboBox()
+        self.sensor_combo.setToolTip("Seleziona un modello validato dall'inventario centralizzato. Qualsiasi modifica a questa strumentazione sul canale corrente verrà automaticamente estesa ai canali fratelli della terna (Z, N, E) tramite Triad Sync per preservare l'integrità del set di sensori.")
         self.sensor_serial_input = QLineEdit()
-        self.sensor_serial_input.setPlaceholderText("E.g. 1234")
+        self.sensor_serial_input.setPlaceholderText("1234")
+        self.sensor_serial_input.setToolTip("Numero seriale fisico del sensore installato, utile per tracciabilità metrologica e manutenzione.")
 
         self.datalogger_combo = QComboBox()
+        self.datalogger_combo.setToolTip("Seleziona un modello validato dall'inventario centralizzato. Il datalogger definisce gain digitale, decimazioni, delay, correction e sample rate del canale.")
         self.datalogger_serial_input = QLineEdit()
-        self.datalogger_serial_input.setPlaceholderText("E.g. 5678")
+        self.datalogger_serial_input.setPlaceholderText("5678")
+        self.datalogger_serial_input.setToolTip("Numero seriale del digitalizzatore associato alla catena di acquisizione del canale.")
 
         # Pre-Amplifier Section
         self.preamp_combo = QComboBox()
+        self.preamp_combo.setToolTip("Seleziona un preamplificatore validato dall'inventario centralizzato per rappresentare lo stadio analogico tra sensore e datalogger.")
         self.preamp_sn_input = QLineEdit()
-        self.preamp_sn_input.setPlaceholderText("E.g. SN-999")
+        self.preamp_sn_input.setPlaceholderText("SN-999")
+        self.preamp_sn_input.setToolTip("Numero seriale del preamplificatore o condizionatore analogico installato.")
         self.preamp_gain_input = QDoubleSpinBox()
         self.preamp_gain_input.setRange(0.0001, 1000000.0)
         self.preamp_gain_input.setValue(1.0)
+        self.preamp_gain_input.setToolTip("Gain lineare dello stadio preamplificatore applicato alla sensibilità totale del canale.")
         self._configure_searchable_combo(self.sensor_combo)
         self._configure_searchable_combo(self.datalogger_combo)
         self._configure_searchable_combo(self.preamp_combo)
@@ -234,18 +256,21 @@ class ChannelTab(QWidget):
         btn_layout = QHBoxLayout()
         
         self.delete_btn = QPushButton("Delete Channel")
+        self.delete_btn.setToolTip("Elimina l'epoca canale corrente dal database rispettando i vincoli di integrità della stazione.")
         self.delete_btn.setStyleSheet("background-color: #c62828; color: white; font-weight: bold;")
         self.delete_btn.setFixedWidth(130)
         self.delete_btn.clicked.connect(self._on_delete_clicked)
         self.delete_btn.hide()
 
         self.clone_btn = QPushButton("Clone Epoch")
+        self.clone_btn.setToolTip("Duplica l'epoca del canale per creare una nuova finestra temporale StationXML mantenendo la catena strumentale di partenza.")
         self.clone_btn.setStyleSheet("background-color: #1976D2; color: white; font-weight: bold;")
         self.clone_btn.setFixedWidth(130)
         self.clone_btn.clicked.connect(self._on_clone_clicked)
         self.clone_btn.hide()
         
         self.save_btn = QPushButton("Save Channel")
+        self.save_btn.setToolTip("Persiste le modifiche correnti sul database SQLite attivando i vincoli di integrità e aggiornando in modo atomico i canali fratelli.")
         self.save_btn.setFixedWidth(150)
         self.save_btn.clicked.connect(self._on_save_clicked)
         
