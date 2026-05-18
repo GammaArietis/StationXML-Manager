@@ -101,6 +101,8 @@ class DataloggerCatalogTab(QWidget):
             "Stage", "Type", "Gain", "Rate In (Hz)", "Rate Out (Hz)", "Decim.",
             "Delay (s)", "Correction (s)",
         ])
+        self.stages_table.horizontalHeaderItem(6).setToolTip("Estimated Delay and Applied Correction in seconds")
+        self.stages_table.horizontalHeaderItem(7).setToolTip("Estimated Delay and Applied Correction in seconds")
         self.stages_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.stages_table.setEditTriggers(
             QAbstractItemView.EditTrigger.DoubleClicked

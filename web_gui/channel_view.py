@@ -45,7 +45,9 @@ class ChannelView:
                 self.sr_in = ui.number('Sample Rate (Hz)', value=channel.sample_rate or 100.0).classes('w-1/5')
                 self.drift_in = ui.number('Clock Drift (s/s)', value=getattr(channel, 'clock_drift', 0.0) or 0.0, format='%.6f').classes('w-1/5')
                 self.azi_in = ui.number('Azimuth (°)', value=channel.azimuth or 0.0).classes('w-1/5')
+                self.azi_in.tooltip('Degrees clockwise from North (0-360)')
                 self.dip_in = ui.number('Dip (°)', value=channel.dip or -90.0).classes('w-1/5')
+                self.dip_in.tooltip('Vertical angle: -90 (Up), 0 (Horizontal), +90 (Down)')
 
             with ui.row().classes('w-full gap-4 mt-4 items-center'):
                 self.cal_units_in = ui.select(["", "V", "A", "COUNTS", "m/s", "m/s**2"], label='Calibration Units', value=getattr(channel, 'calibration_units', ""), with_input=True).classes('w-1/4')
@@ -237,8 +239,14 @@ class ChannelView:
         channel.comments = json.dumps(c_list) if c_list else None
         
         try:
-            self.cha_ctrl.save_channel(channel)
+            result = self.cha_ctrl.save_channel_with_triad_sync(channel)
+            synced_channels = result.get("synced_channels", []) if isinstance(result, dict) else []
             ui.notify(f"Channel {code} saved successfully!", type='positive')
+            if synced_channels:
+                ui.notify(
+                    "Data di fine sincronizzata per i canali fratelli.",
+                    type="info",
+                )
             self.on_save()
         except Exception as e:
             ui.notify(f"Save error: {e}", type='negative')

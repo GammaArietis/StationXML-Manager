@@ -86,6 +86,11 @@ class MainWindow(QMainWindow):
         bulk_sync_action.setStatusTip("Massively send all updated XML files to the Yasmine server")
         bulk_sync_action.triggered.connect(self._handle_bulk_yasmine_sync)
         tools_menu.addAction(bulk_sync_action)
+
+        recalc_sens_action = QAction("🧮 Recalculate All Sensitivities", self)
+        recalc_sens_action.setStatusTip("Recalculate total sensitivity for all channels")
+        recalc_sens_action.triggered.connect(self._handle_recalculate_all_sensitivities)
+        tools_menu.addAction(recalc_sens_action)
         
         self.add_sta_btn.setEnabled(False)
         self.add_cha_btn.setEnabled(False)
@@ -137,7 +142,7 @@ class MainWindow(QMainWindow):
         self.workspace.addWidget(self.network_tab)
         
         # Workspace index 2: station form.
-        self.station_tab = StationTab(self.sta_ctrl, self.equ_ctrl)
+        self.station_tab = StationTab(self.sta_ctrl, self.equ_ctrl, self.cha_ctrl)
         self.workspace.addWidget(self.station_tab)
         
         # Workspace index 3: channel form.
@@ -891,6 +896,20 @@ class MainWindow(QMainWindow):
             f"Stazioni aggiornate su Yasmine e nel DB locale: {updated_count}",
         )
         self._bulk_yasmine_progress = None
+
+    def _handle_recalculate_all_sensitivities(self):
+        try:
+            updated = self.cha_ctrl.recalculate_all_sensitivities()
+            app_signals.channel_updated.emit()
+            app_signals.station_updated.emit()
+            QMessageBox.information(
+                self,
+                "Sensitivities Recalculated",
+                f"Updated {updated} channel sensitivities.",
+            )
+        except Exception as e:
+            logger.error("Global sensitivity recalculation failed: %s", e)
+            QMessageBox.critical(self, "Error", f"Unable to recalculate sensitivities:\n{e}")
 
     def _on_bulk_yasmine_sync_failed(self, error_message):
         logger.error(f"Bulk Yasmine sync failed: {error_message}")

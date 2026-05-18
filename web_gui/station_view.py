@@ -1,6 +1,7 @@
 import io
 import json
 import traceback
+from datetime import datetime
 from typing import Callable, Optional
 
 from nicegui import ui, run
@@ -11,6 +12,11 @@ from exporter.stationxml_builder import StationXMLExporter
 from utils.geocoding_client import fetch_geography_from_coords
 from utils.geology_client import fetch_geology_from_coords
 from utils.yasmine_client import YasmineClient
+from utils.fdsn_seed_codes import (
+    get_fdsn_band_code,
+    get_instrument_code,
+    is_broadband_from_poles,
+)
 
 
 class StationView:
@@ -222,6 +228,130 @@ class StationView:
                 traceback.print_exc()
                 ui.notify(f"Errore Yasmine: {e}", type="negative", multi_line=True)
 
+        def _open_auto_channels_dialog():
+            if not station.id:
+                ui.notify("Salva la stazione prima di generare i canali.", type="warning")
+                return
+
+            dl_options = {
+                d.id: f"{d.manufacturer} {d.model}"
+                for d in self.eq_ctrl.get_all_dataloggers()
+                if d.id is not None
+            }
+            sensor_options = {
+                s.id: f"{s.manufacturer} {s.model}"
+                for s in self.eq_ctrl.get_all_sensors()
+                if s.id is not None
+            }
+            if not dl_options or not sensor_options:
+                ui.notify("Servono almeno un datalogger e un sensore nel catalogo.", type="warning")
+                return
+
+            with ui.dialog() as dialog, ui.card().classes("p-6 w-[min(520px,92vw)]"):
+                ui.label("⚡ Auto-Generate 3 Channels").classes("text-xl font-bold mb-4")
+                sample_rate_display = ui.input("Detected Sample Rate", value="N/A").props("readonly").classes("w-full mt-2")
+
+                def _update_sample_rate_preview(_=None):
+                    if not dl_sel.value:
+                        sample_rate_display.value = "N/A"
+                    else:
+                        sample_rate = self.cha_ctrl.get_datalogger_sample_rate(int(dl_sel.value))
+                        is_bb = sensor_type.value == "bb"
+                        proposed_band = get_fdsn_band_code(
+                            sample_rate,
+                            is_bb,
+                            instrument_code=inst_in.value,
+                        )
+                        band_sel.value = proposed_band
+                        band_sel.update()
+                        sample_rate_display.value = f"{sample_rate:.6g} Hz"
+                    sample_rate_display.update()
+
+                dl_sel = ui.select(
+                    dl_options,
+                    label="Datalogger",
+                    with_input=True,
+                    on_change=_update_sample_rate_preview,
+                ).classes("w-full")
+
+                sensor_sel = ui.select(
+                    sensor_options,
+                    label="Sensor",
+                    with_input=True,
+                    on_change=lambda e: _sync_sensor_fdsn_defaults(e),
+                ).classes("w-full mt-2")
+                depth_in = ui.number("Depth", value=0.0).classes("w-full mt-2")
+                start_time_in = ui.input(
+                    "Start Time",
+                    value=datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
+                ).props("type=datetime-local").classes("w-full mt-2")
+                band_sel = ui.select(
+                    ["F", "C", "H", "B", "M", "L", "V", "U", "R", "E", "S", "G"],
+                    label="Band Code (1st Letter)",
+                    value="H",
+                ).classes("w-full mt-2")
+                inst_in = ui.input(
+                    "Instrument Code",
+                    value="H",
+                    on_change=_update_sample_rate_preview,
+                ).props("maxlength=1").classes("w-full mt-2")
+                sensor_type = ui.select(
+                    {"bb": "Broad Band (BB)", "sp": "Short Period (SP)"},
+                    label="Sensor Type",
+                    value="bb",
+                    on_change=_update_sample_rate_preview,
+                ).classes("w-full mt-2")
+
+                def _sync_sensor_fdsn_defaults(_=None):
+                    if not sensor_sel.value:
+                        return
+                    sensor = self.eq_ctrl.get_sensor(int(sensor_sel.value))
+                    if not sensor:
+                        return
+                    inst_in.value = get_instrument_code(getattr(sensor, "input_units", ""))
+                    inst_in.update()
+                    is_bb = is_broadband_from_poles(
+                        getattr(sensor, "poles", []),
+                        pz_transfer_function_type=getattr(
+                            sensor,
+                            "pz_transfer_function_type",
+                            "LAPLACE (RADIANS/SECOND)",
+                        ),
+                    )
+                    sensor_type.value = "bb" if is_bb else "sp"
+                    sensor_type.update()
+                    _update_sample_rate_preview()
+                _sync_sensor_fdsn_defaults()
+                _update_sample_rate_preview()
+
+                def _generate():
+                    if not dl_sel.value or not sensor_sel.value:
+                        ui.notify("Seleziona datalogger e sensore.", type="warning")
+                        return
+                    try:
+                        created = self.cha_ctrl.auto_generate_triaxial_channels(
+                            station.id,
+                            int(dl_sel.value),
+                            int(sensor_sel.value),
+                            float(depth_in.value or 0.0),
+                            (inst_in.value or "H").strip(),
+                            sensor_type.value == "bb",
+                            datetime_local_to_db(True, start_time_in.value),
+                            band_code=band_sel.value,
+                        )
+                        dialog.close()
+                        ui.notify(f"Creati {len(created)} canali.", type="positive")
+                        self.on_save()
+                    except Exception as e:
+                        traceback.print_exc()
+                        ui.notify(f"Errore generazione canali: {e}", type="negative")
+
+                with ui.row().classes("w-full justify-end gap-2 mt-4"):
+                    ui.button("Annulla", on_click=dialog.close).props("flat")
+                    ui.button("Genera", color="teal", on_click=_generate).classes("font-bold")
+
+            dialog.open()
+
         async def _confirm_delete():
             await self.delete(station.id)
 
@@ -235,6 +365,7 @@ class StationView:
             with ui.row().classes("gap-4"):
                 ui.button("🗑️ Delete Station", color="red", on_click=_confirm_delete).props("outline")
                 ui.button("☁️ Send to Yasmine", color="deep-purple", on_click=_run_yasmine_sync).props("outline")
+                ui.button("⚡ Auto-Generate 3 Channels", color="teal", on_click=_open_auto_channels_dialog).props("outline")
             ui.button("💾 Save Station", on_click=lambda: self.save(station), color="green").classes("px-10 font-bold h-12")
 
     def save(self, station):

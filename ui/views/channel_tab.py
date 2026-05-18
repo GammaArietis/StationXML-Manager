@@ -113,8 +113,10 @@ class ChannelTab(QWidget):
         # Orientation
         self.azimuth = QDoubleSpinBox()
         self.azimuth.setRange(0, 360)
+        self.azimuth.setToolTip("Degrees clockwise from North (0-360)")
         self.dip = QDoubleSpinBox()
         self.dip.setRange(-90, 90)
+        self.dip.setToolTip("Vertical angle: -90 (Up), 0 (Horizontal), +90 (Down)")
 
         # Total sensitivity + recalculate (same row as web: field + action button)
         self.overall_sens_input = QLineEdit()
@@ -570,9 +572,20 @@ class ChannelTab(QWidget):
         )
         
         try:
-            if self.cha_ctrl.save_channel(new_cha):
+            result = self.cha_ctrl.save_channel_with_triad_sync(new_cha)
+            saved_channel = result.get("channel") if isinstance(result, dict) else None
+            synced_channels = result.get("synced_channels", []) if isinstance(result, dict) else []
+            if saved_channel:
                 QMessageBox.information(self, "Success", f"Channel {code} saved!")
+                if synced_channels:
+                    QMessageBox.information(
+                        self,
+                        "Sincronizzazione",
+                        "Data di fine sincronizzata automaticamente per i canali "
+                        "fratelli della terna.",
+                    )
                 app_signals.channel_updated.emit()
+                app_signals.station_updated.emit()
                 self.delete_btn.show()
                 self.clone_btn.show()
         except Exception as e:

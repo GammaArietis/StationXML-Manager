@@ -5,7 +5,8 @@ from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QFormLayout,
                              QLineEdit, QPushButton, QMessageBox,
                              QDateTimeEdit, QCheckBox, QHBoxLayout,
                              QDoubleSpinBox, QComboBox, QFrame, QTextEdit,
-                             QTableWidget, QTableWidgetItem, QHeaderView, QGroupBox)
+                             QTableWidget, QTableWidgetItem, QHeaderView, QGroupBox,
+                             QDialog, QDialogButtonBox)
 from PyQt6.QtCore import Qt, QDateTime
 
 from utils.geology_client import fetch_geology_from_coords
@@ -14,6 +15,11 @@ from utils.geocoding_client import fetch_geography_from_coords
 from core.models.base_models import Station
 from utils.signals import app_signals
 from core.validators.geo_validators import ValidationError
+from utils.fdsn_seed_codes import (
+    get_fdsn_band_code,
+    get_instrument_code,
+    is_broadband_from_poles,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -21,10 +27,11 @@ class StationTab(QWidget):
     """
     Screen for inserting and editing data of a Seismic Station.
     """
-    def __init__(self, station_ctrl, equip_ctrl):
+    def __init__(self, station_ctrl, equip_ctrl, channel_ctrl=None):
         super().__init__()
         self.sta_ctrl = station_ctrl
         self.eq_ctrl = equip_ctrl
+        self.cha_ctrl = channel_ctrl
         self.current_station_id = None
         self.parent_network_id = None
         
@@ -198,6 +205,12 @@ class StationTab(QWidget):
         self.sync_yasmine_btn.setFixedWidth(150)
         self.sync_yasmine_btn.clicked.connect(self._on_sync_yasmine_clicked)
         self.sync_yasmine_btn.hide()
+
+        self.auto_channels_btn = QPushButton("⚡ Auto-Generate 3 Channels")
+        self.auto_channels_btn.setStyleSheet("background-color: #00897B; color: white; font-weight: bold;")
+        self.auto_channels_btn.setFixedWidth(210)
+        self.auto_channels_btn.clicked.connect(self._on_auto_generate_channels_clicked)
+        self.auto_channels_btn.hide()
         
         self.save_btn = QPushButton("Save Station")
         self.save_btn.setFixedWidth(150)
@@ -206,6 +219,7 @@ class StationTab(QWidget):
         btn_layout.addStretch()
         btn_layout.addWidget(self.delete_btn)
         btn_layout.addWidget(self.sync_yasmine_btn)
+        btn_layout.addWidget(self.auto_channels_btn)
         btn_layout.addWidget(self.save_btn)
         
         main_layout.addLayout(btn_layout)
@@ -306,6 +320,7 @@ class StationTab(QWidget):
             
         self.delete_btn.show()
         self.sync_yasmine_btn.show()
+        self.auto_channels_btn.show()
 
     def prepare_new_station(self, network_id: int):
         """Prepares an empty form to add a new station."""
@@ -342,6 +357,7 @@ class StationTab(QWidget):
         
         self.delete_btn.hide()
         self.sync_yasmine_btn.hide()
+        self.auto_channels_btn.hide()
 
     def _on_save_clicked(self):
         code = self.code_input.text().strip().upper()
@@ -416,6 +432,7 @@ class StationTab(QWidget):
                 app_signals.station_updated.emit()
                 self.delete_btn.show()
                 self.sync_yasmine_btn.show()
+                self.auto_channels_btn.show()
         except ValidationError as ve:
             QMessageBox.warning(self, "Validation Error", str(ve))
         except Exception as e:
@@ -435,9 +452,153 @@ class StationTab(QWidget):
                     self.code_input.clear()
                     self.delete_btn.hide()
                     self.sync_yasmine_btn.hide()
+                    self.auto_channels_btn.hide()
                     QMessageBox.information(self, "Deleted", "Station successfully removed.")
             except Exception as e:
                 QMessageBox.critical(self, "Error", f"Error during deletion: {e}")
+
+    def _on_auto_generate_channels_clicked(self):
+        if not self.current_station_id:
+            QMessageBox.warning(self, "Warning", "Save/select a station before generating channels.")
+            return
+        if not self.cha_ctrl:
+            QMessageBox.warning(self, "Warning", "Channel controller not available.")
+            return
+
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Auto-Generate 3 Channels")
+        layout = QFormLayout(dialog)
+
+        dl_combo = QComboBox()
+        dl_combo.setEditable(True)
+        for d in self.eq_ctrl.get_all_dataloggers():
+            dl_combo.addItem(f"{d.manufacturer} {d.model}", d.id)
+
+        sensor_combo = QComboBox()
+        sensor_combo.setEditable(True)
+        for s in self.eq_ctrl.get_all_sensors():
+            sensor_combo.addItem(f"{s.manufacturer} {s.model}", s.id)
+
+        depth_input = QDoubleSpinBox()
+        depth_input.setRange(0, 10000)
+        depth_input.setSuffix(" m")
+
+        sample_rate_label = QLineEdit()
+        sample_rate_label.setReadOnly(True)
+
+        inst_code = QComboBox()
+        inst_code.setEditable(True)
+        inst_code.addItems(["H", "L", "N", "G", "M"])
+
+        band_code = QComboBox()
+        band_code.setEditable(True)
+        band_code.addItems(["F", "C", "H", "B", "M", "L", "V", "U", "R", "E", "S", "G"])
+
+        sensor_type = QComboBox()
+        sensor_type.addItem("Broad Band (BB)", True)
+        sensor_type.addItem("Short Period (SP)", False)
+
+        start_time_input = QDateTimeEdit(QDateTime.currentDateTime())
+        start_time_input.setDisplayFormat("yyyy-MM-ddTHH:mm:ss")
+        start_time_input.setCalendarPopup(True)
+
+        def _update_sample_rate_preview():
+            datalogger_id = dl_combo.currentData()
+            if datalogger_id is None:
+                sample_rate_label.setText("N/A")
+                return
+            sample_rate = self.cha_ctrl.get_datalogger_sample_rate(datalogger_id)
+            is_bb = bool(sensor_type.currentData())
+            proposed_band = get_fdsn_band_code(
+                sample_rate,
+                is_bb,
+                instrument_code=inst_code.currentText(),
+            )
+            idx_band = band_code.findText(proposed_band)
+            if idx_band < 0:
+                band_code.addItem(proposed_band)
+                idx_band = band_code.findText(proposed_band)
+            if idx_band >= 0:
+                band_code.setCurrentIndex(idx_band)
+            sample_rate_label.setText(f"{sample_rate:.6g} Hz")
+
+        dl_combo.currentIndexChanged.connect(_update_sample_rate_preview)
+
+        def _sync_sensor_fdsn_defaults():
+            sensor_id = sensor_combo.currentData()
+            if sensor_id is None:
+                return
+            sensor = self.eq_ctrl.get_sensor(sensor_id)
+            if not sensor:
+                return
+
+            code = get_instrument_code(getattr(sensor, "input_units", ""))
+            idx_code = inst_code.findText(code)
+            if idx_code < 0:
+                inst_code.addItem(code)
+                idx_code = inst_code.findText(code)
+            if idx_code >= 0:
+                inst_code.setCurrentIndex(idx_code)
+
+            is_bb = is_broadband_from_poles(
+                getattr(sensor, "poles", []),
+                pz_transfer_function_type=getattr(
+                    sensor, "pz_transfer_function_type", "LAPLACE (RADIANS/SECOND)"
+                ),
+            )
+            idx_type = sensor_type.findData(bool(is_bb))
+            if idx_type >= 0:
+                sensor_type.setCurrentIndex(idx_type)
+            _update_sample_rate_preview()
+
+        sensor_combo.currentIndexChanged.connect(_sync_sensor_fdsn_defaults)
+        sensor_type.currentIndexChanged.connect(_update_sample_rate_preview)
+        inst_code.currentTextChanged.connect(_update_sample_rate_preview)
+        _sync_sensor_fdsn_defaults()
+        _update_sample_rate_preview()
+
+        layout.addRow("Datalogger:", dl_combo)
+        layout.addRow("Detected Sample Rate:", sample_rate_label)
+        layout.addRow("Band Code (1st Letter):", band_code)
+        layout.addRow("Sensor:", sensor_combo)
+        layout.addRow("Depth:", depth_input)
+        layout.addRow("Start Time:", start_time_input)
+        layout.addRow("Instrument Code:", inst_code)
+        layout.addRow("Sensor Type:", sensor_type)
+
+        buttons = QDialogButtonBox(
+            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
+        )
+        buttons.accepted.connect(dialog.accept)
+        buttons.rejected.connect(dialog.reject)
+        layout.addRow(buttons)
+
+        if dialog.exec() != QDialog.DialogCode.Accepted:
+            return
+
+        if dl_combo.currentData() is None or sensor_combo.currentData() is None:
+            QMessageBox.warning(self, "Warning", "Select both datalogger and sensor.")
+            return
+
+        try:
+            created = self.cha_ctrl.auto_generate_triaxial_channels(
+                self.current_station_id,
+                dl_combo.currentData(),
+                sensor_combo.currentData(),
+                depth_input.value(),
+                inst_code.currentText().strip(),
+                bool(sensor_type.currentData()),
+                start_time_input.dateTime().toString("yyyy-MM-ddTHH:mm:ss"),
+                band_code=band_code.currentText().strip(),
+            )
+        except Exception as e:
+            logger.error("Auto-generate channels failed: %s", e)
+            QMessageBox.critical(self, "Error", f"Unable to generate channels:\n{e}")
+            return
+
+        app_signals.channel_updated.emit()
+        app_signals.station_updated.emit()
+        QMessageBox.information(self, "Channels Created", f"Created {len(created)} channel(s).")
 
     def _on_sync_yasmine_clicked(self):
         if not self.current_station_id:

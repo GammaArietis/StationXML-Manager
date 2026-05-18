@@ -632,6 +632,15 @@ def index():
             traceback.print_exc()
             ui.notify(f'Errore critico durante il sync: {str(e)}', type='negative')
 
+    async def handle_recalculate_all_sensitivities():
+        try:
+            updated = await run.io_bound(cha_ctrl.recalculate_all_sensitivities)
+            ui.notify(f"Sensitività ricalcolate per {updated} canali.", type="positive")
+            build_tree()
+        except Exception as e:
+            traceback.print_exc()
+            ui.notify(f"Errore ricalcolo sensibilità: {e}", type="negative")
+
     # --- 5. HEADER ---
     with ui.header().classes('bg-slate-800 text-white shadow-lg flex-col p-0'):
         with ui.row().classes('w-full p-4 items-center'):
@@ -644,6 +653,7 @@ def index():
             ui.button('🌍 Enrich Net', on_click=handle_enrich_net).props('flat color=blue-3 size=sm')
             ui.button('🔄 Update NRL', on_click=handle_update_nrl).props('flat color=green-3 size=sm')
             ui.button('🚀 Sync Yasmine', on_click=handle_bulk_sync_yasmine).props('flat color=purple-3 size=sm')
+            ui.button('🧮 Recalc Sens', on_click=handle_recalculate_all_sensitivities).props('flat color=cyan-3 size=sm')
             ui.button('🔍 Find Duplicates', on_click=lambda: MathDeduplicatorDialog(eq_ctrl, build_tree).open()).props('flat color=orange-3 size=sm')
 
     # --- 6. SPLITTER ---

@@ -6,6 +6,11 @@ from core.services.channel_service import ChannelService
 from database.daos.channel_dao import ChannelDAO
 from database.daos.station_dao import StationDAO
 from core.state import AppState
+from utils.fdsn_seed_codes import (
+    get_fdsn_band_code,
+    get_instrument_code,
+    is_broadband_from_poles,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -64,6 +69,109 @@ class ChannelController:
         except Exception as e:
             logger.error("Error saving channel: %s", e)
             raise
+
+    def save_channel_with_triad_sync(self, channel: Channel) -> dict:
+        try:
+            saved, synced = self._service.save_channel_with_triad_sync(channel)
+            return {"channel": saved, "synced_channels": synced}
+        except Exception as e:
+            logger.error("Error saving channel with triad sync: %s", e)
+            raise
+
+    def get_datalogger_sample_rate(self, datalogger_id: int) -> float:
+        if not self.eq_ctrl:
+            return 100.0
+        dl = self.eq_ctrl.get_datalogger(datalogger_id)
+        if not dl:
+            return 100.0
+        filters = sorted(getattr(dl, "filters", []) or [], key=lambda f: f.stage_number)
+        for filt in reversed(filters):
+            out_rate = getattr(filt, "output_sample_rate", None)
+            if out_rate and float(out_rate) > 0:
+                return float(out_rate)
+            in_rate = getattr(filt, "input_sample_rate", None)
+            dec = getattr(filt, "decimation_factor", None) or 1
+            if in_rate and float(in_rate) > 0 and dec:
+                return float(in_rate) / float(dec)
+        return 100.0
+
+    def _final_sample_rate_from_datalogger(self, datalogger_id: int) -> float:
+        return self.get_datalogger_sample_rate(datalogger_id)
+
+    def auto_generate_triaxial_channels(
+        self,
+        station_id: int,
+        datalogger_id: int,
+        sensor_id: int,
+        depth: float,
+        instrument_code: str,
+        is_broadband: bool,
+        start_time: str | None = None,
+        band_code: str | None = None,
+    ) -> List[Channel]:
+        sample_rate = self._final_sample_rate_from_datalogger(datalogger_id)
+        sensor = self.eq_ctrl.get_sensor(sensor_id) if self.eq_ctrl else None
+        if sensor is not None:
+            auto_broadband = is_broadband_from_poles(
+                getattr(sensor, "poles", []),
+                pz_transfer_function_type=getattr(
+                    sensor, "pz_transfer_function_type", "LAPLACE (RADIANS/SECOND)"
+                ),
+            )
+            if is_broadband is None:
+                is_broadband = auto_broadband
+
+        inst = (instrument_code or "").strip().upper()[:1]
+        if not inst and sensor is not None:
+            inst = get_instrument_code(getattr(sensor, "input_units", ""))
+        inst = inst or "H"
+        band = (band_code or "").strip().upper()[:1]
+        if not band:
+            band = get_fdsn_band_code(
+                sample_rate,
+                bool(is_broadband),
+                instrument_code=inst,
+            )
+        axes = [
+            ("Z", 0.0, -90.0),
+            ("N", 0.0, 0.0),
+            ("E", 90.0, 0.0),
+        ]
+
+        saved_channels: List[Channel] = []
+        for axis, azimuth, dip in axes:
+            channel = Channel(
+                station_id=station_id,
+                code=f"{band}{inst}{axis}",
+                location_code="",
+                depth=depth,
+                sample_rate=sample_rate,
+                azimuth=azimuth,
+                dip=dip,
+                start_date=start_time,
+                sensor_id=sensor_id,
+                datalogger_id=datalogger_id,
+                restricted_status="open",
+            )
+            channel.overall_sensitivity = self.calculate_total_sensitivity(channel)
+            saved = self.save_channel(channel)
+            if saved:
+                saved_channels.append(saved)
+        return saved_channels
+
+    def recalculate_all_sensitivities(self) -> int:
+        count = 0
+        for station in self.station_dao.get_all():
+            if not getattr(station, "id", None):
+                continue
+            for channel in self.get_channels_by_station(station.id):
+                new_value = self.calculate_total_sensitivity(channel)
+                if new_value is None:
+                    continue
+                channel.overall_sensitivity = new_value
+                if self.save_channel(channel):
+                    count += 1
+        return count
 
     def delete_channel(self, channel_id: int) -> bool:
         return self._service.delete_channel(channel_id)

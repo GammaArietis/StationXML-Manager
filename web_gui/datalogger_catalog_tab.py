@@ -89,7 +89,9 @@ class DataloggerCatalogTab:
                     with ui.row().classes('w-full gap-2 mt-2'):
                         self.f_decimation = ui.number('Decimation', on_change=_auto_calc_out).classes('w-[32%]')
                         self.f_delay = ui.number('Delay (s)').classes('w-[32%]')
+                        self.f_delay.tooltip('Estimated Delay and Applied Correction in seconds')
                         self.f_correction = ui.number('Correction (s)').classes('w-[32%]')
+                        self.f_correction.tooltip('Estimated Delay and Applied Correction in seconds')
 
                     self.f_coeffs = ui.textarea('Coefficients (JSON)').classes('w-full mt-2 font-mono text-xs').props('rows=5 outlined')
                     ui.button('Apply to Stage & Plot', on_click=self._apply_stage_changes).props('color=blue').classes('w-full')

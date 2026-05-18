@@ -7,6 +7,7 @@ from database.daos.equipment_dao import EquipmentDAO
 
 from utils.nrl_client import NRLManager
 from utils.arol_client import AROLClient
+from utils.fdsn_seed_codes import get_corner_frequency_from_poles
 
 
 class EquipmentController:
@@ -124,24 +125,14 @@ class EquipmentController:
         if "T" in unit_up or "TESLA" in unit_up:
             return "MAGNETOMETER"
         if "M/S" in unit_up and sensor.poles:
-            import math
-
-            valid_poles = []
-            for p in sensor.poles:
-                real_val = getattr(p, "real_val", getattr(p, "real", 0.0))
-                imag_val = getattr(p, "imag_val", getattr(p, "imag", 0.0))
-                magnitude = math.sqrt(real_val**2 + imag_val**2)
-                if magnitude > 1e-6:
-                    valid_poles.append(magnitude)
-            if valid_poles:
-                min_mag = min(valid_poles)
-                is_hertz = "HERTZ" in str(sensor.pz_transfer_function_type or "").upper()
-                fc = min_mag if is_hertz else (min_mag / (2 * math.pi))
+            fc = get_corner_frequency_from_poles(
+                sensor.poles,
+                pz_transfer_function_type=sensor.pz_transfer_function_type,
+            )
+            if fc is not None:
                 if fc <= 0.02:
                     return "VBB"
-                if fc <= 0.2:
+                if fc <= 0.1:
                     return "BB"
-                if fc >= 1.0:
-                    return "SP"
-                return "BB"
+                return "SP"
         return "SENSOR"
