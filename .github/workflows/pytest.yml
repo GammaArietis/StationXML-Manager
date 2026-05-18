@@ -1,44 +1,55 @@
 # Pytest su push verso main (obspy/ObsPy + resto da requirements.txt; pytest da requirements-dev.txt).
 name: pytest
 
-on:  
-  push:    
-    branches: [main]  
-  pull_request:    
+on:
+  push:
+    branches: [main]
+  pull_request:
     branches: [main]
 
-# Aggiungiamo esplicitamente i permessi di lettura per evitare l'errore Git 128 sul checkout
 permissions:
   contents: read
 
-jobs:  
-  tests:    
-    runs-on: ubuntu-latest    
-    env:      
-      # Evita richieste display se moduli Qt vengono caricati in headless CI      
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    env:
+      # Evita richieste display se moduli Qt vengono caricati in headless CI
       QT_QPA_PLATFORM: offscreen
-      # Forza l'uso di Node.js 24 per silenziare il warning di deprecazione di Node 20
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
-      
-    steps:      
-      - name: Checkout        
+      # Evita che configurazioni Git di sistema del runner interferiscano con checkout/submodules/LFS.
+      GIT_CONFIG_NOSYSTEM: "1"
+
+    steps:
+      - name: Harden Git configuration before checkout
+        shell: bash
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config --global --unset-all url.https://github.com/.insteadOf || true
+          git config --global --unset-all url.git@github.com:.insteadOf || true
+          git config --global --unset-all core.sshCommand || true
+          git config --global --unset-all http.extraheader || true
+
+      - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Spesso risolve errori 128 forzando il download completo della history
+          clean: true
+          fetch-depth: 0
+          submodules: recursive
+          lfs: true
 
-      - name: Set up Python        
-        uses: actions/setup-python@v5        
-        with:          
-          python-version: "3.11"          
-          cache: pip          
-          cache-dependency-path: |            
-            requirements.txt            
-            requirements-dev.txt      
-            
-      - name: Install dependencies (obspy + pytest)        
-        run: |          
-          python -m pip install --upgrade pip          
-          pip install -r requirements.txt -r requirements-dev.txt      
-          
-      - name: Run pytest        
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
+
+      - name: Install dependencies (obspy + pytest)
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: Run pytest
         run: python -m pytest tests/ -v --tb=short
