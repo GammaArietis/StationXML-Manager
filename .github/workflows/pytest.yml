@@ -31,15 +31,36 @@ jobs:
           git config --global --unset-all core.sshCommand || true
           git config --global --unset-all http.extraheader || true
 
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          clean: true
-          fetch-depth: 0
-          # Non inizializzare submodules: utils/AROL_Library è un gitlink ma .gitmodules
-          # non definisce alcun URL, quindi `submodules: recursive` causa exit code 128.
-          submodules: false
-          lfs: true
+      - name: Manual checkout without broken submodules
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          rm -rf "$GITHUB_WORKSPACE/.git"
+          git init "$GITHUB_WORKSPACE"
+          cd "$GITHUB_WORKSPACE"
+
+          git config --local advice.detachedHead false
+          git config --local --add safe.directory "$GITHUB_WORKSPACE"
+          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
+          if [ "${GITHUB_EVENT_NAME}" = "pull_request" ]; then
+            git fetch --no-tags --prune --progress origin \
+              "+refs/pull/${{ github.event.pull_request.number }}/merge:refs/remotes/origin/pr-${{ github.event.pull_request.number }}-merge"
+            git checkout --force "refs/remotes/origin/pr-${{ github.event.pull_request.number }}-merge"
+          else
+            git fetch --no-tags --prune --progress origin "+${GITHUB_REF}:${GITHUB_REF}"
+            git checkout --force "$GITHUB_SHA"
+          fi
+
+          # Non eseguire `git submodule update`: utils/AROL_Library è un gitlink
+          # senza URL in .gitmodules e causa exit code 128 sul runner.
+          if command -v git-lfs >/dev/null 2>&1; then
+            git lfs install --local
+            git lfs pull || true
+          fi
 
       - name: Set up Python
         uses: actions/setup-python@v5
