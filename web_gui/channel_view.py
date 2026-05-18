@@ -70,15 +70,15 @@ class ChannelView:
             for p in self.eq_ctrl.get_all_preamplifiers(): preamps[p.id] = f"{p.manufacturer} {p.model}"
 
             with ui.row().classes('w-full gap-4 items-center'):
-                self.sensor_cb = ui.select(sensors, label='Sensor', value=channel.sensor_id).classes('w-1/2')
+                self.sensor_cb = ui.select(sensors, label='Sensor', value=channel.sensor_id, with_input=True).classes('w-1/2')
                 self.sensor_sn = ui.input('Sensor S/N', value=channel.sensor_serial_number or "").classes('w-1/3')
 
             with ui.row().classes('w-full gap-4 mt-2 items-center'):
-                self.logger_cb = ui.select(loggers, label='Datalogger', value=channel.datalogger_id).classes('w-1/2')
+                self.logger_cb = ui.select(loggers, label='Datalogger', value=channel.datalogger_id, with_input=True).classes('w-1/2')
                 self.logger_sn = ui.input('Datalogger S/N', value=channel.datalogger_serial_number or "").classes('w-1/3')
 
             with ui.row().classes('w-full gap-4 mt-2 items-center'):
-                self.preamp_cb = ui.select(preamps, label='Pre-Amplifier', value=getattr(channel, 'pre_amplifier_id', None)).classes('w-2/5')
+                self.preamp_cb = ui.select(preamps, label='Pre-Amplifier', value=getattr(channel, 'pre_amplifier_id', None), with_input=True).classes('w-2/5')
                 self.preamp_sn = ui.input('Pre-Amp S/N', value=getattr(channel, 'pre_amplifier_serial_number', "")).classes('w-1/5')
                 self.preamp_gain = ui.number('Pre-Amp Gain', value=getattr(channel, 'pre_amplifier_gain', 1.0) or 1.0).classes('w-1/5')
 

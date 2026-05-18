@@ -3,7 +3,8 @@ import logging
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QFormLayout, QLineEdit,
                              QPushButton, QMessageBox, QDoubleSpinBox, QComboBox,
                              QDateTimeEdit, QCheckBox, QHBoxLayout, QFrame, QTextEdit,
-                             QTableWidget, QTableWidgetItem, QHeaderView, QGroupBox)
+                             QTableWidget, QTableWidgetItem, QHeaderView, QGroupBox,
+                             QCompleter)
 from PyQt6.QtCore import Qt, QDateTime
 from core.models.base_models import Channel
 from utils.qt_numeric_input import apply_c_double_validator, parse_float_text
@@ -27,6 +28,9 @@ class ChannelTab(QWidget):
         self.sta_ctrl = station_ctrl
         self.current_channel_id = None
         self.parent_station_id = None
+        self._last_valid_sensor_id = None
+        self._last_valid_datalogger_id = None
+        self._last_valid_preamp_id = None
         self._setup_ui()
 
     def _setup_ui(self):
@@ -162,12 +166,6 @@ class ChannelTab(QWidget):
         self.datalogger_serial_input = QLineEdit()
         self.datalogger_serial_input.setPlaceholderText("E.g. 5678")
 
-        self.update_nrl_btn = QPushButton("Update NRL (this station)")
-        self.update_nrl_btn.setToolTip(
-            "Re-apply local NRL metadata for sensors/dataloggers used by this station."
-        )
-        self.update_nrl_btn.clicked.connect(self._on_update_nrl_station_clicked)
-
         # Pre-Amplifier Section
         self.preamp_combo = QComboBox()
         self.preamp_sn_input = QLineEdit()
@@ -175,6 +173,27 @@ class ChannelTab(QWidget):
         self.preamp_gain_input = QDoubleSpinBox()
         self.preamp_gain_input.setRange(0.0001, 1000000.0)
         self.preamp_gain_input.setValue(1.0)
+        self._configure_searchable_combo(self.sensor_combo)
+        self._configure_searchable_combo(self.datalogger_combo)
+        self._configure_searchable_combo(self.preamp_combo)
+        self.sensor_combo.currentIndexChanged.connect(
+            lambda _: self._remember_valid_combo_selection(self.sensor_combo, "sensor")
+        )
+        self.datalogger_combo.currentIndexChanged.connect(
+            lambda _: self._remember_valid_combo_selection(self.datalogger_combo, "datalogger")
+        )
+        self.preamp_combo.currentIndexChanged.connect(
+            lambda _: self._remember_valid_combo_selection(self.preamp_combo, "preamp")
+        )
+        self.sensor_combo.lineEdit().editingFinished.connect(
+            lambda: self._restore_combo_to_last_valid(self.sensor_combo, "sensor")
+        )
+        self.datalogger_combo.lineEdit().editingFinished.connect(
+            lambda: self._restore_combo_to_last_valid(self.datalogger_combo, "datalogger")
+        )
+        self.preamp_combo.lineEdit().editingFinished.connect(
+            lambda: self._restore_combo_to_last_valid(self.preamp_combo, "preamp")
+        )
         
         # --- FORM COMPOSITION ---
         form.addRow(identifiers_group)
@@ -198,7 +217,6 @@ class ChannelTab(QWidget):
         form.addRow("Sensor S/N:", self.sensor_serial_input)
         form.addRow("Datalogger:", self.datalogger_combo)
         form.addRow("Datalogger S/N:", self.datalogger_serial_input)
-        form.addRow("", self.update_nrl_btn)
 
         form.addRow("Pre-Amp Model:", self.preamp_combo)
         form.addRow("Pre-Amp S/N:", self.preamp_sn_input)
@@ -238,38 +256,49 @@ class ChannelTab(QWidget):
         
         layout.addLayout(btn_layout)
 
-    def _on_update_nrl_station_clicked(self):
-        if not self.parent_station_id:
-            QMessageBox.warning(self, "Warning", "Open a channel belonging to a station first.")
-            return
-        if not self.sta_ctrl:
-            QMessageBox.warning(self, "Warning", "Station controller not available.")
-            return
+    @staticmethod
+    def _configure_searchable_combo(combo: QComboBox) -> None:
+        combo.setEditable(True)
+        combo.setInsertPolicy(QComboBox.InsertPolicy.NoInsert)
+        completer = combo.completer()
+        if completer:
+            completer.setCompletionMode(QCompleter.CompletionMode.PopupCompletion)
+            completer.setFilterMode(Qt.MatchFlag.MatchContains)
 
-        from PyQt6.QtWidgets import QApplication
+    def _remember_valid_combo_selection(self, combo: QComboBox, role: str) -> None:
+        if combo.currentIndex() < 0:
+            return
+        data = combo.currentData()
+        if role == "sensor":
+            self._last_valid_sensor_id = data
+        elif role == "datalogger":
+            self._last_valid_datalogger_id = data
+        elif role == "preamp":
+            self._last_valid_preamp_id = data
 
-        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-        try:
-            changed = self.sta_ctrl.update_nrl_for_station(self.parent_station_id)
-            app_signals.equipment_updated.emit()
-            app_signals.station_updated.emit()
-            self.refresh_catalog_combos()
-            if changed:
-                QMessageBox.information(
-                    self,
-                    "NRL Updated",
-                    "Instruments for this station were refreshed from NRL.\n"
-                    "The station sync indicator is now red until you send to Yasmine.",
-                )
-            else:
-                QMessageBox.information(
-                    self, "NRL", "No catalog changes were required for this station."
-                )
-        except Exception as e:
-            logger.error("Station NRL refresh failed: %s", e)
-            QMessageBox.critical(self, "Error", f"NRL update failed:\n{e}")
-        finally:
-            QApplication.restoreOverrideCursor()
+    def _combo_current_data_or_last(self, combo: QComboBox, role: str):
+        if combo.currentIndex() >= 0:
+            self._remember_valid_combo_selection(combo, role)
+            return combo.currentData()
+        data = combo.currentData()
+        if data is not None:
+            self._remember_valid_combo_selection(combo, role)
+            return data
+        if role == "sensor":
+            return self._last_valid_sensor_id
+        if role == "datalogger":
+            return self._last_valid_datalogger_id
+        if role == "preamp":
+            return self._last_valid_preamp_id
+        return None
+
+    def _restore_combo_to_last_valid(self, combo: QComboBox, role: str) -> None:
+        if combo.currentIndex() >= 0:
+            self._remember_valid_combo_selection(combo, role)
+            return
+        last_id = self._combo_current_data_or_last(combo, role)
+        idx = combo.findData(last_id)
+        combo.setCurrentIndex(idx if idx >= 0 else 0)
 
     def _create_geo_layout(self):
         h_layout = QHBoxLayout()
@@ -388,10 +417,16 @@ class ChannelTab(QWidget):
         self.sensor_combo.blockSignals(False)
         self.datalogger_combo.blockSignals(False)
         self.preamp_combo.blockSignals(False)
+        self._remember_valid_combo_selection(self.sensor_combo, "sensor")
+        self._remember_valid_combo_selection(self.datalogger_combo, "datalogger")
+        self._remember_valid_combo_selection(self.preamp_combo, "preamp")
 
     def prepare_new_channel(self, station_id: int):
         self.current_channel_id = None
         self.parent_station_id = station_id
+        self._last_valid_sensor_id = None
+        self._last_valid_datalogger_id = None
+        self._last_valid_preamp_id = None
         self.code_input.clear()
         self.loc_input.clear()
         self.comm_table.setRowCount(0)
@@ -556,8 +591,8 @@ class ChannelTab(QWidget):
             dip=self.dip.value(),
             start_date=start_str,
             end_date=end_str,
-            sensor_id=self.sensor_combo.currentData(),
-            datalogger_id=self.datalogger_combo.currentData(),
+            sensor_id=self._combo_current_data_or_last(self.sensor_combo, "sensor"),
+            datalogger_id=self._combo_current_data_or_last(self.datalogger_combo, "datalogger"),
             overall_sensitivity=final_sens,
             sensor_serial_number=self.sensor_serial_input.text().strip() or None,
             datalogger_serial_number=self.datalogger_serial_input.text().strip() or None,
@@ -565,7 +600,7 @@ class ChannelTab(QWidget):
             restricted_status=self.restricted_combo.currentText(),
             clock_drift=self.clock_drift.value(),
             calibration_units=self.cal_units_combo.currentText().strip() or None,
-            pre_amplifier_id=self.preamp_combo.currentData(),
+            pre_amplifier_id=self._combo_current_data_or_last(self.preamp_combo, "preamp"),
             pre_amplifier_serial_number=self.preamp_sn_input.text().strip() or None,
             pre_amplifier_gain=self.preamp_gain_input.value(),
             comments=comments_json
@@ -607,9 +642,9 @@ class ChannelTab(QWidget):
                 QMessageBox.critical(self, "Error", f"Error: {e}")
                 
     def _on_calc_sensitivity_clicked(self):
-        s_id = self.sensor_combo.currentData()
-        p_id = self.preamp_combo.currentData()
-        d_id = self.datalogger_combo.currentData()
+        s_id = self._combo_current_data_or_last(self.sensor_combo, "sensor")
+        p_id = self._combo_current_data_or_last(self.preamp_combo, "preamp")
+        d_id = self._combo_current_data_or_last(self.datalogger_combo, "datalogger")
         
         if not s_id:
             QMessageBox.warning(self, "Warning", "Select at least one Sensor to calculate sensitivity.")
