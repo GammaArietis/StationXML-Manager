@@ -1,9 +1,10 @@
 import logging
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QFormLayout, QLineEdit,
                              QPushButton, QSplitter, QMessageBox, QLabel, QListWidget,
-                             QListWidgetItem, QGroupBox, QInputDialog)
+                             QListWidgetItem, QGroupBox)
 from PyQt6.QtCore import Qt
 from core.models.base_models import Operator
+from ui.components.searchable_dialog import SearchableItemDialog
 from utils.signals import app_signals
 
 logger = logging.getLogger(__name__)
@@ -158,10 +159,14 @@ class OperatorCatalogTab(QWidget):
         if not others:
             QMessageBox.information(self, "Replace", "No other operators in the catalog.")
             return
-        names = [self._operator_display_label(o) for o in others]
-        target, ok = QInputDialog.getItem(self, "Replace", "Replace with:", names, 0, False)
-        if ok and target:
-            new_id = others[names.index(target)].id
+        choices = [(self._operator_display_label(o), o.id) for o in others]
+        new_id, ok = SearchableItemDialog.get_item(
+            choices,
+            title="Replace Operator",
+            placeholder="Cerca...",
+            parent=self,
+        )
+        if ok and new_id:
             if self.eq_ctrl.replace_operator(oid, new_id):
                 self.refresh_list()
                 self._select_op_row_by_id(new_id)

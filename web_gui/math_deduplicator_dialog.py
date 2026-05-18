@@ -93,6 +93,11 @@ class MathDeduplicatorDialog:
                 on_click=self._generate_nrl_index,
             ).classes('bg-purple-700 text-white font-bold mb-4 w-64 shadow')
 
+            self.search_input = ui.input(
+                placeholder='Filtra duplicati per marca/modello...',
+                on_change=lambda _: self._scan_database(),
+            ).props('dense clearable').classes('w-full mb-4 shrink-0')
+
             # Tabs
             with ui.tabs().classes('w-full text-slate-700 font-bold') as tabs:
                 tab_sen = ui.tab('Sensors')
@@ -116,7 +121,7 @@ class MathDeduplicatorDialog:
             ui.separator().classes('my-4')
             with ui.row().classes('w-full items-center gap-4 bg-slate-200 p-4 rounded shadow-inner'):
                 ui.label('Master to keep:').classes('font-bold text-lg')
-                self.combo_master = ui.select(options={}, label='Seleziona il modello da mantenere').classes('flex-grow bg-white')
+                self.combo_master = ui.select(options={}, label='Seleziona il modello da mantenere', with_input=True).classes('flex-grow bg-white')
                 self.btn_merge = ui.button('🔗 Merge Group', on_click=self._perform_merge).classes('bg-green-700 text-white font-bold px-6')
                 self.btn_merge.disable()
 
@@ -204,6 +209,16 @@ class MathDeduplicatorDialog:
 
     def _scan_database(self):
         """Rigenera gli alberi UI."""
+        needle = ((self.search_input.value if hasattr(self, 'search_input') else '') or '').strip().lower()
+
+        def group_matches(items) -> bool:
+            if not needle:
+                return True
+            return any(
+                needle in f"{getattr(it, 'manufacturer', '')} {getattr(it, 'model', '')}".lower()
+                for it in items
+            )
+
         self.sensor_groups.clear()
         self.datalogger_groups.clear()
         self.preamp_groups.clear()
@@ -215,6 +230,8 @@ class MathDeduplicatorDialog:
             if h not in self.sensor_groups: self.sensor_groups[h] = []
             self.sensor_groups[h].append(s)
         for h, items in self.sensor_groups.items():
+            if not group_matches(items):
+                continue
             matched = h in self.nrl_cache.get('sensors', {})
             title = f"🌟 PERFECT NRL MATCH | {len(items)} loc." if matched else f"Gruppo ({len(items)} modelli)"
             group_node = {'id': f"grp_{h}", 'label': title, 'children': []}
@@ -230,6 +247,8 @@ class MathDeduplicatorDialog:
             if h not in self.datalogger_groups: self.datalogger_groups[h] = []
             self.datalogger_groups[h].append(d)
         for h, items in self.datalogger_groups.items():
+            if not group_matches(items):
+                continue
             matched = h in self.nrl_cache.get('dataloggers', {})
             title = f"🌟 PERFECT NRL MATCH | {len(items)} loc." if matched else f"Gruppo ({len(items)} modelli)"
             group_node = {'id': f"grp_{h}", 'label': title, 'children': []}
@@ -245,6 +264,8 @@ class MathDeduplicatorDialog:
             if h not in self.preamp_groups: self.preamp_groups[h] = []
             self.preamp_groups[h].append(p)
         for h, items in self.preamp_groups.items():
+            if not group_matches(items):
+                continue
             title = f"Gruppo ({len(items)} modelli)" if len(items) > 1 else "Modello Singolo"
             group_node = {'id': f"grp_{h}", 'label': title, 'children': []}
             for it in items:

@@ -11,6 +11,10 @@ class ChannelView:
         self.eq_ctrl = eq_ctrl
         self.on_save = on_save
 
+    @staticmethod
+    def _nrl_status_icon(item) -> str:
+        return '🟢' if getattr(item, 'nrl_path', None) else '🔴'
+
     def build_ui(self, channel: Channel):
         ui.label(f'〰️ Channel: {channel.code}').classes('text-3xl font-bold text-slate-800 mb-6')
         
@@ -52,11 +56,13 @@ class ChannelView:
         with ui.card().classes('w-full p-6 mb-4 shadow-sm bg-slate-50'):
             ui.label('Instrumentation & Serials').classes('text-lg font-bold mb-4 text-slate-700')
             
-            sensors = {None: '--- No Sensor ---'}
-            for s in self.eq_ctrl.get_all_sensors(): sensors[s.id] = f"{s.manufacturer} {s.model}"
+            sensors = {None: '⚪ --- No Sensor ---'}
+            for s in self.eq_ctrl.get_all_sensors():
+                sensors[s.id] = f"{self._nrl_status_icon(s)} {s.manufacturer} {s.model}"
             
-            loggers = {None: '--- No Datalogger ---'}
-            for l in self.eq_ctrl.get_all_dataloggers(): loggers[l.id] = f"{l.manufacturer} {l.model}"
+            loggers = {None: '⚪ --- No Datalogger ---'}
+            for l in self.eq_ctrl.get_all_dataloggers():
+                loggers[l.id] = f"{self._nrl_status_icon(l)} {l.manufacturer} {l.model}"
             
             preamps = {None: '--- No Pre-Amp ---'}
             for p in self.eq_ctrl.get_all_preamplifiers(): preamps[p.id] = f"{p.manufacturer} {p.model}"

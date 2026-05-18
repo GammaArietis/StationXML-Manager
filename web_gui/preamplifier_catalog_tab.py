@@ -342,7 +342,7 @@ class PreamplifierCatalogTab:
             return
         with ui.dialog() as d, ui.card().classes('w-96 p-6'):
             ui.label('Replace Preamplifier').classes('text-lg font-bold mb-4')
-            sel = ui.select(opts, label="Select replacement").classes('w-full')
+            sel = ui.select(opts, label="Select replacement", with_input=True).classes('w-full')
             with ui.row().classes('w-full justify-end mt-4'):
                 ui.button('Cancel', on_click=d.close).props('flat')
                 ui.button('Confirm', color='orange', on_click=lambda: (

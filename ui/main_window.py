@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import (QMainWindow, QWidget, QHBoxLayout, QVBoxLayout,
                              QPushButton, QStackedWidget, QMessageBox, QFileDialog, QSplitter, QLabel,
                              QDialog, QRadioButton, QComboBox, QDialogButtonBox, QProgressDialog, QApplication,
-                             QGroupBox, QButtonGroup)
+                             QGroupBox, QButtonGroup, QLineEdit)
 from PyQt6.QtCore import Qt
 import logging
 import time
@@ -115,9 +115,13 @@ class MainWindow(QMainWindow):
         
         # Tree navigation bound to entity controllers.
         self.tree_nav = TreeNav(self.net_ctrl, self.sta_ctrl, self.cha_ctrl)
+        self.tree_search_input = QLineEdit()
+        self.tree_search_input.setPlaceholderText("Filtra stazione...")
+        self.tree_search_input.textChanged.connect(self.tree_nav.set_filter_text)
         
         left_layout.addLayout(creation_layout)
         left_layout.addLayout(io_layout)
+        left_layout.addWidget(self.tree_search_input)
         left_layout.addWidget(self.tree_nav)
         
         # Right panel: workspace tabs.

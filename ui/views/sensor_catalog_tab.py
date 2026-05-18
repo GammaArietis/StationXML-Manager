@@ -4,12 +4,13 @@ import numpy as np
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QFormLayout, QLineEdit,
                              QPushButton, QTableWidget, QTableWidgetItem, QHeaderView,
                              QSplitter, QMessageBox, QLabel, QDoubleSpinBox, QListWidget,
-                             QListWidgetItem, QGroupBox, QInputDialog, QTextEdit, QComboBox)
+                             QListWidgetItem, QGroupBox, QTextEdit, QComboBox)
 from PyQt6.QtCore import Qt
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 from core.models.base_models import Sensor
+from ui.components.searchable_dialog import SearchableItemDialog
 from ui.views.nrl_dialog import NRLBrowserDialog
 from utils.qt_numeric_input import parse_pz_table_pairs
 from utils.signals import app_signals
@@ -35,6 +36,10 @@ class SensorCatalogTab(QWidget):
         # --- LEFT: List ---
         left_widget = QWidget(); left_layout = QVBoxLayout(left_widget)
         left_layout.addWidget(QLabel("<b>Sensors in Catalog</b>"))
+        self.search_input = QLineEdit()
+        self.search_input.setPlaceholderText("Cerca per marca/modello...")
+        self.search_input.textChanged.connect(self._filter_model_list)
+        left_layout.addWidget(self.search_input)
         self.model_list = QListWidget();
         self.model_list.itemClicked.connect(self._load_selected_sensor)
         self.model_list.itemDoubleClicked.connect(self._on_nrl_clicked)
@@ -328,10 +333,15 @@ class SensorCatalogTab(QWidget):
         if not others:
             QMessageBox.information(self, "Replace", "No other sensors in the catalog.")
             return
-        names = [f"{s.manufacturer} {s.model}" for s in others]
-        t, ok = QInputDialog.getItem(self, "Replace", "Replace with:", names, 0, False)
-        if ok and t:
-            if self.eq_ctrl.replace_equipment('sensor', sid, others[names.index(t)].id):
+        choices = [(f"{s.manufacturer} {s.model}", s.id) for s in others]
+        new_id, ok = SearchableItemDialog.get_item(
+            choices,
+            title="Replace Sensor",
+            placeholder="Cerca...",
+            parent=self,
+        )
+        if ok and new_id:
+            if self.eq_ctrl.replace_equipment('sensor', sid, new_id):
                 self._prepare_new_model(); self.refresh_list(); app_signals.equipment_updated.emit()
                 
     def refresh_list(self):
@@ -343,6 +353,15 @@ class SensorCatalogTab(QWidget):
             item = QListWidgetItem(f"{icon} {s.manufacturer} {s.model}")
             item.setData(Qt.ItemDataRole.UserRole, s)
             self.model_list.addItem(item)
+        self._filter_model_list(self.search_input.text())
+
+    def _filter_model_list(self, text: str):
+        needle = (text or "").strip().lower()
+        for i in range(self.model_list.count()):
+            item = self.model_list.item(i)
+            sensor = item.data(Qt.ItemDataRole.UserRole)
+            haystack = f"{getattr(sensor, 'manufacturer', '')} {getattr(sensor, 'model', '')}".lower()
+            item.setHidden(bool(needle and needle not in haystack))
 
     def _on_nrl_clicked(self):
         mfg = self.mfg_input.text().strip()

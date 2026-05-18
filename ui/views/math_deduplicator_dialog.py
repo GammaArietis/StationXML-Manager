@@ -7,7 +7,7 @@ import logging
 from pathlib import Path
 from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QTabWidget,
                              QWidget, QTreeWidget, QTreeWidgetItem, QPushButton,
-                             QLabel, QComboBox, QMessageBox, QProgressDialog)
+                             QLabel, QComboBox, QMessageBox, QProgressDialog, QLineEdit)
 from PyQt6.QtCore import Qt, QThread, pyqtSignal
 
 from utils.signals import app_signals
@@ -229,6 +229,11 @@ class MathDeduplicatorDialog(QDialog):
         self.btn_index.clicked.connect(self._generate_nrl_index)
         header_layout.addWidget(self.btn_index)
         layout.addLayout(header_layout)
+
+        self.search_input = QLineEdit()
+        self.search_input.setPlaceholderText("Filtra duplicati per marca/modello...")
+        self.search_input.textChanged.connect(self._filter_duplicate_trees)
+        layout.addWidget(self.search_input)
         
         self.tabs = QTabWidget()
         
@@ -558,6 +563,23 @@ class MathDeduplicatorDialog(QDialog):
         self.tree_sensors.resizeColumnToContents(0)
         self.tree_dataloggers.resizeColumnToContents(0)
         self.tree_preamps.resizeColumnToContents(0)
+        self._filter_duplicate_trees(self.search_input.text())
+
+    def _filter_duplicate_trees(self, text: str):
+        needle = (text or "").strip().lower()
+        for tree in (self.tree_sensors, self.tree_dataloggers, self.tree_preamps):
+            for i in range(tree.topLevelItemCount()):
+                group = tree.topLevelItem(i)
+                group_match = needle in group.text(0).lower() if needle else True
+                child_match = False
+                for j in range(group.childCount()):
+                    child = group.child(j)
+                    visible = not needle or needle in child.text(0).lower()
+                    child.setHidden(not visible)
+                    child_match = child_match or visible
+                group.setHidden(bool(needle and not (group_match or child_match)))
+                if needle and (group_match or child_match):
+                    group.setExpanded(True)
 
     def _on_group_selected(self, category):
         if category == 'sensor': tree = self.tree_sensors

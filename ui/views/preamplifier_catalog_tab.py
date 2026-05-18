@@ -4,12 +4,13 @@ import logging
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QFormLayout,
                              QLineEdit, QPushButton, QTableWidget, QTableWidgetItem,
                              QHeaderView, QSplitter, QMessageBox, QLabel, QDoubleSpinBox,
-                             QListWidget, QListWidgetItem, QComboBox, QGroupBox, QInputDialog)
+                             QListWidget, QListWidgetItem, QComboBox, QGroupBox)
 from PyQt6.QtCore import Qt
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 from core.models.base_models import Preamplifier, AnalogStage, PoleZero
+from ui.components.searchable_dialog import SearchableItemDialog
 from utils.qt_numeric_input import parse_pz_table_pairs
 from utils.signals import app_signals
 
@@ -284,10 +285,14 @@ class PreamplifierCatalogTab(QWidget):
         if not others:
             QMessageBox.information(self, "Replace", "No other preamplifiers in the catalog.")
             return
-        names = [f"{p.manufacturer} {p.model}" for p in others]
-        target, ok = QInputDialog.getItem(self, "Replace", "Replace with:", names, 0, False)
-        if ok and target:
-            new_id = others[names.index(target)].id
+        choices = [(f"{p.manufacturer} {p.model}", p.id) for p in others]
+        new_id, ok = SearchableItemDialog.get_item(
+            choices,
+            title="Replace Preamplifier",
+            placeholder="Cerca...",
+            parent=self,
+        )
+        if ok and new_id:
             if self.eq_ctrl.replace_equipment('preamplifier', pid, new_id):
                 self.refresh_list()
                 self._prepare_new_model()

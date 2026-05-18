@@ -198,7 +198,7 @@ class OperatorCatalogTab:
                 "Tutte le reti e le stazioni che usano l’operatore corrente punteranno al sostituto; "
                 "questa riga verrà eliminata dal catalogo."
             ).classes("text-sm text-slate-600 mb-4")
-            sel = ui.select(others, label="Operatore da mantenere").classes("w-full")
+            sel = ui.select(others, label="Operatore da mantenere", with_input=True).classes("w-full")
             with ui.row().classes("w-full justify-end mt-4 gap-2"):
                 ui.button("Annulla", on_click=d.close).props("flat")
                 ui.button(

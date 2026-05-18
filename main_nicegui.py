@@ -657,6 +657,10 @@ def index():
                     ui.button('+ Net', on_click=lambda: prepare_new('network')).props('outline size=sm').classes('flex-grow')
                     ui.button('+ Sta', on_click=lambda: prepare_new('station')).props('outline size=sm').classes('flex-grow')
                     ui.button('+ Cha', on_click=lambda: prepare_new('channel')).props('outline size=sm').classes('flex-grow')
+                tree_search = ui.input(
+                    placeholder='Filtra stazione...',
+                    on_change=lambda _: build_tree(),
+                ).props('dense clearable').classes('w-full px-2 pt-2')
                 tree_container = ui.column().classes('w-full p-2 overflow-y-auto')
         with main_splitter.after:
             workspace = ui.column().classes('w-full h-full p-8 bg-white overflow-y-auto')
@@ -667,6 +671,9 @@ def index():
     cha_view = ChannelView(cha_ctrl, eq_ctrl, lambda: build_tree())
 
     # --- 7. LOGICA ALBERO ---
+    tree_expanded_ids = set()
+    tree_selected_id = {'value': None}
+
     def prepare_new(entity_type):
         workspace.clear()
         with workspace:
@@ -690,6 +697,7 @@ def index():
 
     def handle_selection(event):
         if not event.value: return
+        tree_selected_id['value'] = event.value
         node = node_lookup.get(event.value)
         if node['type'] == 'network': app_state.current_network = node['data'].id
         elif node['type'] == 'station':
@@ -707,6 +715,7 @@ def index():
     def build_tree():
         tree_container.clear()
         node_lookup.clear()
+        filter_text = ((tree_search.value if 'tree_search' in locals() else '') or '').strip().lower()
         tree_data = []
         for net in net_ctrl.get_all_networks():
             net_id = f'n_{net.id}'
@@ -720,6 +729,9 @@ def index():
                 # Richiama il tuo controller per leggere il database "sync_state" separato
                 # get_sync_status() restituisce tre valori: sync_state_object, ICONA ("🟢" o "🔴"), yasmine_id
                 _, icon, _ = sta_ctrl.get_sync_status(sta)
+                station_label_text = f'{sta.code} {sta.site_name or ""}'.lower()
+                if filter_text and filter_text not in station_label_text:
+                    continue
                 
                 sta_node = {'id': sta_id, 'label': f'{icon} {sta.code}', 'children': []}
                 node_lookup[sta_id] = {'type': 'station', 'data': sta}
@@ -730,10 +742,27 @@ def index():
                     loc = cha.location_code if cha.location_code else "--"
                     sta_node['children'].append({'id': cha_id, 'label': f'〰️ {cha.code} ({loc})'})
                 net_node['children'].append(sta_node)
-            tree_data.append(net_node)
+            if net_node['children'] or not filter_text:
+                tree_data.append(net_node)
             
         with tree_container:
-            ui.tree(tree_data, label_key='label', on_select=handle_selection).props('dense')
+            tree = ui.tree(tree_data, label_key='label', on_select=handle_selection).props('dense')
+            if filter_text:
+                tree.expand()
+            elif tree_expanded_ids:
+                tree._props['expanded'] = list(tree_expanded_ids)
+            else:
+                tree.expand()
+            if tree_selected_id['value']:
+                tree._props['selected'] = tree_selected_id['value']
+
+            def _remember_expanded(e):
+                args = getattr(e, 'args', None)
+                if isinstance(args, list):
+                    tree_expanded_ids.clear()
+                    tree_expanded_ids.update(args)
+
+            tree.on('update:expanded', _remember_expanded)
 
     build_tree()
 

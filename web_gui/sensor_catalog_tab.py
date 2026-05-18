@@ -28,6 +28,10 @@ class SensorCatalogTab:
             # --- COLONNA 1: LISTA ---
             with ui.column().classes('bg-slate-50 p-4 border-r overflow-hidden flex flex-col no-wrap'):
                 ui.label('Sensors').classes('font-bold text-xs uppercase mb-2 shrink-0')
+                self.search_input = ui.input(
+                    placeholder='Cerca per marca/modello...',
+                    on_change=lambda _: self.refresh_list(),
+                ).props('dense clearable').classes('w-full mb-2 shrink-0')
                 self.model_list = ui.list().classes('w-full border rounded bg-white overflow-y-auto flex-grow shadow-inner')
                 with ui.row().classes('w-full mt-4 shrink-0 gap-1'):
                     ui.button('➕ New', on_click=self._prepare_new).props('outline size=sm').classes('flex-grow bg-white')
@@ -89,9 +93,13 @@ class SensorCatalogTab:
                 b.disable()
 
     def refresh_list(self):
+        needle = ((self.search_input.value if hasattr(self, 'search_input') else '') or '').strip().lower()
         self.model_list.clear()
         with self.model_list:
             for s in self.eq_ctrl.get_all_sensors():
+                searchable = f"{s.manufacturer} {s.model}".lower()
+                if needle and needle not in searchable:
+                    continue
                 icon = "🟢" if getattr(s, 'nrl_path', None) else "🔴"
                 ui.item(f"{icon} {s.manufacturer} {s.model}") \
                     .props('clickable v-ripple') \
@@ -217,7 +225,7 @@ class SensorCatalogTab:
             return
         with ui.dialog() as d, ui.card().classes('w-96 p-6'):
             ui.label('Replace Sensor').classes('text-lg font-bold mb-4')
-            sel = ui.select(others, label="Select replacement").classes('w-full')
+            sel = ui.select(others, label="Select replacement", with_input=True).classes('w-full')
             ui.button('Confirm Replace', color='orange', on_click=lambda: (
                 self.eq_ctrl.replace_equipment('sensor', sid, sel.value),
                 d.close(),

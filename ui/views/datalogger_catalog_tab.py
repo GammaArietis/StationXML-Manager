@@ -4,11 +4,12 @@ import csv
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QFormLayout, QLineEdit,
                              QPushButton, QTableWidget, QTableWidgetItem, QHeaderView,
                              QSplitter, QMessageBox, QLabel, QDoubleSpinBox, QListWidget,
-                             QListWidgetItem, QGroupBox, QFileDialog, QInputDialog, QTextEdit,
+                             QListWidgetItem, QGroupBox, QFileDialog, QTextEdit,
                              QAbstractItemView)
 from PyQt6.QtCore import Qt
 
 from core.models.base_models import Datalogger, ResponseFilter
+from ui.components.searchable_dialog import SearchableItemDialog
 from ui.views.fir_plot_dialog import FirPlotDialog
 from ui.views.nrl_dialog import NRLBrowserDialog
 from utils.qt_numeric_input import parse_float_text
@@ -36,6 +37,10 @@ class DataloggerCatalogTab(QWidget):
         left_layout = QVBoxLayout(left_widget)
         
         left_layout.addWidget(QLabel("<b>Dataloggers in Catalog</b>"))
+        self.search_input = QLineEdit()
+        self.search_input.setPlaceholderText("Cerca per marca/modello...")
+        self.search_input.textChanged.connect(self._filter_model_list)
+        left_layout.addWidget(self.search_input)
         self.model_list = QListWidget()
         self.model_list.itemClicked.connect(self._load_selected_dl)
         self.model_list.itemDoubleClicked.connect(self._on_nrl_clicked)
@@ -425,10 +430,15 @@ class DataloggerCatalogTab(QWidget):
         if not others:
             QMessageBox.information(self, "Replace", "No other dataloggers in the catalog.")
             return
-        names = [f"{d.manufacturer} {d.model}" for d in others]
-        target, ok = QInputDialog.getItem(self, "Replace", "Replace with:", names, 0, False)
-        if ok and target:
-            if self.eq_ctrl.replace_equipment('datalogger', did, others[names.index(target)].id):
+        choices = [(f"{d.manufacturer} {d.model}", d.id) for d in others]
+        new_id, ok = SearchableItemDialog.get_item(
+            choices,
+            title="Replace Datalogger",
+            placeholder="Cerca...",
+            parent=self,
+        )
+        if ok and new_id:
+            if self.eq_ctrl.replace_equipment('datalogger', did, new_id):
                 self._prepare_new_model(); self.refresh_list(); app_signals.equipment_updated.emit()
     
     def _fill_ui_from_datalogger(self, dl):
@@ -501,6 +511,18 @@ class DataloggerCatalogTab(QWidget):
             item = QListWidgetItem(f"{icon} {d.manufacturer} {d.model}")
             item.setData(Qt.ItemDataRole.UserRole, d)
             self.model_list.addItem(item)
+        self._filter_model_list(self.search_input.text())
+
+    def _filter_model_list(self, text: str):
+        needle = (text or "").strip().lower()
+        for i in range(self.model_list.count()):
+            item = self.model_list.item(i)
+            datalogger = item.data(Qt.ItemDataRole.UserRole)
+            haystack = (
+                f"{getattr(datalogger, 'manufacturer', '')} "
+                f"{getattr(datalogger, 'model', '')}"
+            ).lower()
+            item.setHidden(bool(needle and needle not in haystack))
 
     def _on_nrl_clicked(self):
         mfg = self.mfg_input.text().strip()
