@@ -1,9 +1,101 @@
 import sqlite3
 import logging
+import threading
+from contextlib import contextmanager
 from pathlib import Path
 
 # Configure a basic logger
 logger = logging.getLogger(__name__)
+
+
+_MUTATING_SQL_PREFIXES = (
+    "INSERT",
+    "UPDATE",
+    "DELETE",
+    "REPLACE",
+    "CREATE",
+    "ALTER",
+    "DROP",
+    "BEGIN",
+)
+
+
+class _LockedCursor(sqlite3.Cursor):
+    def execute(self, sql, parameters=(), /):
+        self.connection._acquire_write_lock_for_sql(sql)
+        return super().execute(sql, parameters)
+
+    def executemany(self, sql, seq_of_parameters, /):
+        self.connection._acquire_write_lock_for_sql(sql)
+        return super().executemany(sql, seq_of_parameters)
+
+    def executescript(self, sql_script, /):
+        self.connection._acquire_write_lock()
+        return super().executescript(sql_script)
+
+
+class _LockedConnection(sqlite3.Connection):
+    _write_lock = threading.RLock()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._write_lock_acquired = False
+
+    def _acquire_write_lock_for_sql(self, sql: object) -> None:
+        text = str(sql).lstrip().upper()
+        if text.startswith(_MUTATING_SQL_PREFIXES):
+            self._acquire_write_lock()
+
+    def _acquire_write_lock(self) -> None:
+        if not self._write_lock_acquired:
+            self._write_lock.acquire()
+            self._write_lock_acquired = True
+
+    def _release_write_lock(self) -> None:
+        if self._write_lock_acquired:
+            self._write_lock_acquired = False
+            self._write_lock.release()
+
+    def cursor(self, *args, **kwargs):
+        kwargs.setdefault("factory", _LockedCursor)
+        return super().cursor(*args, **kwargs)
+
+    def execute(self, sql, parameters=(), /):
+        self._acquire_write_lock_for_sql(sql)
+        return super().execute(sql, parameters)
+
+    def executemany(self, sql, seq_of_parameters, /):
+        self._acquire_write_lock_for_sql(sql)
+        return super().executemany(sql, seq_of_parameters)
+
+    def executescript(self, sql_script, /):
+        self._acquire_write_lock()
+        return super().executescript(sql_script)
+
+    def commit(self) -> None:
+        try:
+            super().commit()
+        finally:
+            self._release_write_lock()
+
+    def rollback(self) -> None:
+        try:
+            super().rollback()
+        finally:
+            self._release_write_lock()
+
+    def close(self) -> None:
+        try:
+            super().close()
+        finally:
+            self._release_write_lock()
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        try:
+            return super().__exit__(exc_type, exc_value, traceback)
+        finally:
+            self._release_write_lock()
+
 
 class DatabaseManager:
     """
@@ -32,6 +124,7 @@ class DatabaseManager:
                 detect_types=sqlite3.PARSE_DECLTYPES,
                 check_same_thread=False,
                 timeout=30.0,
+                factory=_LockedConnection,
             )
             
             # Return rows as dictionaries (much more convenient for the GUI)
@@ -44,6 +137,26 @@ class DatabaseManager:
         except sqlite3.Error as e:
             logger.error(f"Database connection error {self.db_path}: {e}")
             raise
+
+    @contextmanager
+    def write_transaction(self):
+        """
+        Open one SQLite write transaction protected by the process-wide write lock.
+
+        SELECT-only code should keep using get_connection(); this context is for
+        multi-step writes that must commit or roll back as one unit.
+        """
+        conn = self.get_connection()
+        conn._acquire_write_lock()
+        try:
+            conn.execute("BEGIN IMMEDIATE")
+            yield conn
+            conn.commit()
+        except Exception:
+            conn.rollback()
+            raise
+        finally:
+            conn.close()
 
     def initialize_database(self, schema_path: str | Path) -> None:
         """

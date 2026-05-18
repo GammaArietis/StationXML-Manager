@@ -17,6 +17,7 @@ from utils.geocoding_client import fetch_geography_from_coords
 from utils.geology_client import fetch_geology_from_coords
 import urllib.request
 import json
+from nicegui import app as nicegui_app
 from nicegui import ui, run
 import io
 from utils.yasmine_client import YasmineClient
@@ -45,38 +46,76 @@ from controllers.stationxml_export_controller import (
 )
 
 
-# --- 2. EMULAZIONE STATO (FIX: Accetta tutto e non crasha) ---
-class DummyAppState:
-    def __init__(self):
-        self.current_network = None
-        self.current_station = None
-        self.current_channel = None
+# --- 2. STATO WEB PER SESSIONE ---
+class SessionAppState:
+    """Proxy compatibile con i controller, backed by NiceGUI per-user storage."""
+
+    def __init__(self, storage):
+        self._storage = storage
+
+    @property
+    def current_network(self):
+        return self._storage.get('current_network_id')
+
+    @current_network.setter
+    def current_network(self, value):
+        self._storage['current_network_id'] = value
+        self._storage['current_station_id'] = None
+        self._storage['current_channel_id'] = None
+
+    @property
+    def current_station(self):
+        return self._storage.get('current_station_id')
+
+    @current_station.setter
+    def current_station(self, value):
+        self._storage['current_station_id'] = value
+        self._storage['current_channel_id'] = None
+
+    @property
+    def current_channel(self):
+        return self._storage.get('current_channel_id')
+
+    @current_channel.setter
+    def current_channel(self, value):
+        self._storage['current_channel_id'] = value
 
     def mark_clean(self, *args, **kwargs):
         """Accetta qualsiasi argomento per evitare TypeError dai controller."""
-        pass
+        self._storage['dirty'] = False
 
     def mark_dirty(self, *args, **kwargs):
         """Accetta qualsiasi argomento per evitare TypeError dai controller."""
-        pass
+        self._storage['dirty'] = True
 
-app_state = DummyAppState()
 
-# Inizializzazione Controller
-net_ctrl = NetworkController(net_dao, app_state)
-sta_ctrl = StationController(sta_dao, app_state)
-cha_ctrl = ChannelController(cha_dao, sta_dao, app_state)
-eq_ctrl = EquipmentController(equ_dao)
-
-sta_ctrl.set_channel_controller(cha_ctrl)
-sta_ctrl.set_equipment_controller(eq_ctrl)
-cha_ctrl.set_equipment_controller(eq_ctrl)
-
-export_web_ctrl = StationXMLWebExportController(net_ctrl, sta_ctrl, cha_ctrl, eq_ctrl)
+def _ensure_user_storage_defaults() -> None:
+    user_storage = nicegui_app.storage.user
+    user_storage.setdefault('current_network_id', None)
+    user_storage.setdefault('current_station_id', None)
+    user_storage.setdefault('current_channel_id', None)
+    user_storage.setdefault('tree_expanded_ids', [])
+    user_storage.setdefault('tree_selected_id', None)
+    user_storage.setdefault('dirty', False)
 
 
 @ui.page('/')
 def index():
+    _ensure_user_storage_defaults()
+    user_storage = nicegui_app.storage.user
+    app_state = SessionAppState(user_storage)
+
+    # Controller per-sessione: nessun riferimento mutabile cross-utente.
+    net_ctrl = NetworkController(net_dao, app_state)
+    sta_ctrl = StationController(sta_dao, app_state)
+    cha_ctrl = ChannelController(cha_dao, sta_dao, app_state)
+    eq_ctrl = EquipmentController(equ_dao)
+
+    sta_ctrl.set_channel_controller(cha_ctrl)
+    sta_ctrl.set_equipment_controller(eq_ctrl)
+    cha_ctrl.set_equipment_controller(eq_ctrl)
+
+    export_web_ctrl = StationXMLWebExportController(net_ctrl, sta_ctrl, cha_ctrl, eq_ctrl)
     node_lookup = {}
 
     # --- 3. LOGICA DI IMPORTAZIONE (FIX: Lettura byte e gestione errori) ---
@@ -681,9 +720,6 @@ def index():
     cha_view = ChannelView(cha_ctrl, eq_ctrl, lambda: build_tree())
 
     # --- 7. LOGICA ALBERO ---
-    tree_expanded_ids = set()
-    tree_selected_id = {'value': None}
-
     def prepare_new(entity_type):
         workspace.clear()
         with workspace:
@@ -707,13 +743,17 @@ def index():
 
     def handle_selection(event):
         if not event.value: return
-        tree_selected_id['value'] = event.value
+        user_storage['tree_selected_id'] = event.value
         node = node_lookup.get(event.value)
+        if not node:
+            return
         if node['type'] == 'network': app_state.current_network = node['data'].id
         elif node['type'] == 'station':
             app_state.current_network = node['data'].network_id
             app_state.current_station = node['data'].id
         elif node['type'] == 'channel':
+            if node.get('network_id') is not None:
+                app_state.current_network = node['network_id']
             app_state.current_station = node['data'].station_id
             app_state.current_channel = node['data'].id
         workspace.clear()
@@ -748,7 +788,11 @@ def index():
                 
                 for cha in cha_svc.get_channels_by_station(sta.id):
                     cha_id = f'c_{cha.id}'
-                    node_lookup[cha_id] = {'type': 'channel', 'data': cha}
+                    node_lookup[cha_id] = {
+                        'type': 'channel',
+                        'data': cha,
+                        'network_id': net.id,
+                    }
                     loc = cha.location_code if cha.location_code else "--"
                     sta_node['children'].append({'id': cha_id, 'label': f'〰️ {cha.code} ({loc})'})
                 net_node['children'].append(sta_node)
@@ -757,24 +801,32 @@ def index():
             
         with tree_container:
             tree = ui.tree(tree_data, label_key='label', on_select=handle_selection).props('dense')
+            tree_expanded_ids = set(user_storage.get('tree_expanded_ids') or [])
             if filter_text:
                 tree.expand()
             elif tree_expanded_ids:
                 tree._props['expanded'] = list(tree_expanded_ids)
             else:
                 tree.expand()
-            if tree_selected_id['value']:
-                tree._props['selected'] = tree_selected_id['value']
+            if user_storage.get('tree_selected_id'):
+                tree._props['selected'] = user_storage['tree_selected_id']
 
             def _remember_expanded(e):
                 args = getattr(e, 'args', None)
                 if isinstance(args, list):
-                    tree_expanded_ids.clear()
-                    tree_expanded_ids.update(args)
+                    user_storage['tree_expanded_ids'] = list(args)
 
             tree.on('update:expanded', _remember_expanded)
 
     build_tree()
 
 # --- 8. AVVIO ---
-ui.run_with(app, title="StationXML Manager", mount_path='/')
+ui.run_with(
+    app,
+    title="StationXML Manager",
+    mount_path='/',
+    storage_secret=os.environ.get(
+        'NICEGUI_STORAGE_SECRET',
+        'stationxml-manager-v1-web-session-storage-secret-2026',
+    ),
+)

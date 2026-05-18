@@ -45,47 +45,133 @@ class ChannelService:
         Save one channel and, when end_date is set, propagate it to sibling
         channels in the same triaxial prefix and start epoch.
         """
-        saved_cha = self.save_channel(channel)
-        if not saved_cha:
-            return None, []
-
         synced_codes: List[str] = []
-        new_end = (saved_cha.end_date or "").strip()
-        if not new_end:
-            return saved_cha, synced_codes
+        self._validate_channel(channel)
+        with self._cha.db.write_transaction() as conn:
+            saved_cha = self._save_channel_in_transaction(conn, channel)
+            if not saved_cha:
+                raise RuntimeError("Channel save failed inside triad transaction.")
 
-        code = (saved_cha.code or "").strip().upper()
-        if len(code) < 2:
-            return saved_cha, synced_codes
+            self._invalidate_station_sync_in_transaction(conn, saved_cha.station_id)
+            new_end = (saved_cha.end_date or "").strip()
+            if not new_end:
+                return saved_cha, synced_codes
 
-        prefix = code[:2]
-        start_date = self._normalize_epoch_for_compare(saved_cha.start_date)
-        print(
-            f"[BACKEND SYNC] Canale corrente: {saved_cha.code}, "
-            f"End Date da applicare: {saved_cha.end_date}"
-        )
-        for sibling in self._cha.get_by_station_id(saved_cha.station_id):
-            if sibling.id == saved_cha.id:
-                continue
-            sibling_code = (sibling.code or "").strip().upper()
-            if not sibling_code.startswith(prefix):
-                continue
-            if self._normalize_epoch_for_compare(sibling.start_date) != start_date:
-                continue
-            print(f"[BACKEND SYNC] Trovato canale fratello da aggiornare: {sibling.code}")
-            sibling.end_date = new_end
-            if self._cha.update(sibling):
-                synced_codes.append(sibling.code)
+            code = (saved_cha.code or "").strip().upper()
+            if len(code) < 2:
+                return saved_cha, synced_codes
 
-        if synced_codes:
-            self._sta.update_sync_hash(saved_cha.station_id, "MODIFIED_BY_CHANNEL")
+            prefix = code[:2]
+            start_date = self._normalize_epoch_for_compare(saved_cha.start_date)
             logger.info(
-                "Triad end_date synced from %s to siblings: %s",
+                "[BACKEND SYNC] Canale corrente: %s, End Date da applicare: %s",
                 saved_cha.code,
-                ", ".join(synced_codes),
+                saved_cha.end_date,
             )
 
-        return saved_cha, synced_codes
+            cursor = conn.execute(
+                "SELECT * FROM channel WHERE station_id = ? ORDER BY code, location_code",
+                (saved_cha.station_id,),
+            )
+            for row in cursor.fetchall():
+                sibling = self._cha._row_to_model(row)
+                if not sibling or sibling.id == saved_cha.id:
+                    continue
+                sibling_code = (sibling.code or "").strip().upper()
+                if not sibling_code.startswith(prefix):
+                    continue
+                if self._normalize_epoch_for_compare(sibling.start_date) != start_date:
+                    continue
+                logger.info(
+                    "[BACKEND SYNC] Trovato canale fratello da aggiornare: %s",
+                    sibling.code,
+                )
+                result = conn.execute(
+                    "UPDATE channel SET end_date = ? WHERE id = ?",
+                    (new_end, sibling.id),
+                )
+                if result.rowcount != 1:
+                    raise RuntimeError(
+                        f"Triad sync failed while updating sibling channel {sibling.code}."
+                    )
+                synced_codes.append(sibling.code)
+
+            if synced_codes:
+                logger.info(
+                    "Triad end_date synced from %s to siblings: %s",
+                    saved_cha.code,
+                    ", ".join(synced_codes),
+                )
+
+            return saved_cha, synced_codes
+
+    @staticmethod
+    def _validate_channel(channel: Channel) -> None:
+        if not (0 <= channel.azimuth <= 360):
+            raise ValueError("Azimuth must be between 0 and 360 degrees.")
+
+    def _save_channel_in_transaction(self, conn, channel: Channel) -> Optional[Channel]:
+        if channel.id is None:
+            cursor = conn.execute(
+                """
+                INSERT INTO channel (
+                    station_id, code, location_code, latitude, longitude, elevation,
+                    depth, sample_rate, azimuth, dip, sensor_id,
+                    datalogger_id, start_date, end_date, overall_sensitivity,
+                    sensor_serial_number, datalogger_serial_number, types,
+                    restricted_status, clock_drift, calibration_units, pre_amplifier_id,
+                    pre_amplifier_serial_number, pre_amplifier_gain, comments
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    channel.station_id, channel.code, channel.location_code,
+                    channel.latitude, channel.longitude, channel.elevation,
+                    channel.depth, channel.sample_rate, channel.azimuth,
+                    channel.dip, channel.sensor_id, channel.datalogger_id,
+                    channel.start_date, channel.end_date, channel.overall_sensitivity,
+                    channel.sensor_serial_number, channel.datalogger_serial_number,
+                    channel.types, getattr(channel, "restricted_status", None) or "open",
+                    channel.clock_drift, channel.calibration_units,
+                    channel.pre_amplifier_id, channel.pre_amplifier_serial_number,
+                    channel.pre_amplifier_gain, channel.comments,
+                ),
+            )
+            channel.id = cursor.lastrowid
+            return channel
+
+        result = conn.execute(
+            """
+            UPDATE channel SET
+                code=?, location_code=?, latitude=?, longitude=?, elevation=?,
+                depth=?, sample_rate=?, azimuth=?, dip=?, sensor_id=?,
+                datalogger_id=?, start_date=?, end_date=?, overall_sensitivity=?,
+                sensor_serial_number=?, datalogger_serial_number=?, types=?,
+                restricted_status=?, clock_drift=?, calibration_units=?, pre_amplifier_id=?,
+                pre_amplifier_serial_number=?, pre_amplifier_gain=?, comments=?
+            WHERE id=?
+            """,
+            (
+                channel.code, channel.location_code, channel.latitude,
+                channel.longitude, channel.elevation, channel.depth,
+                channel.sample_rate, channel.azimuth, channel.dip,
+                channel.sensor_id, channel.datalogger_id,
+                channel.start_date, channel.end_date, channel.overall_sensitivity,
+                channel.sensor_serial_number, channel.datalogger_serial_number,
+                channel.types, getattr(channel, "restricted_status", None) or "open",
+                channel.clock_drift, channel.calibration_units,
+                channel.pre_amplifier_id, channel.pre_amplifier_serial_number,
+                channel.pre_amplifier_gain, channel.comments, channel.id,
+            ),
+        )
+        return channel if result.rowcount == 1 else None
+
+    @staticmethod
+    def _invalidate_station_sync_in_transaction(conn, station_id: int) -> None:
+        conn.execute(
+            "UPDATE yasmine_sync_state SET local_xml_hash = ? WHERE station_id = ?",
+            ("MODIFIED_BY_CHANNEL", station_id),
+        )
 
     @staticmethod
     def _normalize_epoch_for_compare(value: object) -> str:
