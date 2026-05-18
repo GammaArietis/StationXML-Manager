@@ -18,6 +18,8 @@ jobs:
       QT_QPA_PLATFORM: offscreen
       # Evita che configurazioni Git di sistema del runner interferiscano con checkout/submodules/LFS.
       GIT_CONFIG_NOSYSTEM: "1"
+      # Opt-in al runtime Node.js 24 per evitare il warning di deprecazione Node 20 nelle actions.
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
     steps:
       - name: Harden Git configuration before checkout
@@ -34,7 +36,9 @@ jobs:
         with:
           clean: true
           fetch-depth: 0
-          submodules: recursive
+          # Non inizializzare submodules: utils/AROL_Library è un gitlink ma .gitmodules
+          # non definisce alcun URL, quindi `submodules: recursive` causa exit code 128.
+          submodules: false
           lfs: true
 
       - name: Set up Python
