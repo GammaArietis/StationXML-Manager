@@ -42,18 +42,16 @@ class ChannelService:
 
     def save_channel_with_triad_sync(self, channel: Channel) -> tuple[Optional[Channel], List[str]]:
         """
-        Save one channel and, when an existing epoch end_date changes, propagate it
-        to sibling channels in the same triaxial prefix and start epoch.
+        Save one channel and, when end_date is set, propagate it to sibling
+        channels in the same triaxial prefix and start epoch.
         """
-        old_channel = self._cha.get_by_id(channel.id) if channel.id is not None else None
         saved_cha = self.save_channel(channel)
         if not saved_cha:
             return None, []
 
         synced_codes: List[str] = []
         new_end = (saved_cha.end_date or "").strip()
-        old_end = (old_channel.end_date or "").strip() if old_channel else ""
-        if not old_channel or not new_end or new_end == old_end:
+        if not new_end:
             return saved_cha, synced_codes
 
         code = (saved_cha.code or "").strip().upper()
@@ -61,15 +59,20 @@ class ChannelService:
             return saved_cha, synced_codes
 
         prefix = code[:2]
-        start_date = saved_cha.start_date
+        start_date = self._normalize_epoch_for_compare(saved_cha.start_date)
+        print(
+            f"[BACKEND SYNC] Canale corrente: {saved_cha.code}, "
+            f"End Date da applicare: {saved_cha.end_date}"
+        )
         for sibling in self._cha.get_by_station_id(saved_cha.station_id):
             if sibling.id == saved_cha.id:
                 continue
             sibling_code = (sibling.code or "").strip().upper()
             if not sibling_code.startswith(prefix):
                 continue
-            if sibling.start_date != start_date:
+            if self._normalize_epoch_for_compare(sibling.start_date) != start_date:
                 continue
+            print(f"[BACKEND SYNC] Trovato canale fratello da aggiornare: {sibling.code}")
             sibling.end_date = new_end
             if self._cha.update(sibling):
                 synced_codes.append(sibling.code)
@@ -83,6 +86,19 @@ class ChannelService:
             )
 
         return saved_cha, synced_codes
+
+    @staticmethod
+    def _normalize_epoch_for_compare(value: object) -> str:
+        if value is None:
+            return ""
+        text = str(value).strip().replace("T", " ")
+        if not text:
+            return ""
+        if len(text) == 10:
+            return f"{text} 00:00:00"
+        if len(text) == 16:
+            return f"{text}:00"
+        return text[:19] if len(text) >= 19 else text
 
     def delete_channel(self, channel_id: int) -> bool:
         return self._cha.delete(channel_id)

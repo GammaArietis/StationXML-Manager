@@ -1,22 +1,112 @@
 import json
+from datetime import datetime
 
 from nicegui import ui
 
 from core.models.base_models import Channel
-from web_gui.date_form_helpers import datetime_local_to_db, iso_to_datetime_local_field
 
 class ChannelView:
     def __init__(self, cha_ctrl, eq_ctrl, on_save):
         self.cha_ctrl = cha_ctrl
         self.eq_ctrl = eq_ctrl
         self.on_save = on_save
+        self._start_date_raw_value = None
+        self._end_date_raw_value = None
 
     @staticmethod
     def _nrl_status_icon(item) -> str:
         return '🟢' if getattr(item, 'nrl_path', None) else '🔴'
 
+    @staticmethod
+    def _datetime_display_value(raw_value) -> str:
+        """Render stored ISO dates in a stable text format for NiceGUI binding."""
+        if raw_value is None:
+            return ""
+        value = str(raw_value).strip()
+        if not value:
+            return ""
+        value = value.replace("T", " ")
+        if len(value) == 16:
+            return f"{value}:00"
+        return value[:19] if len(value) >= 19 else value
+
+    @staticmethod
+    def _normalize_datetime_text(raw_value) -> str | None:
+        """Normalize text/picker values to YYYY-MM-DD HH:MM:SS, or None if empty."""
+        if raw_value is None:
+            return None
+        value = str(raw_value).strip().replace("T", " ")
+        if not value:
+            return None
+        if len(value) == 10:
+            value = f"{value} 00:00:00"
+        elif len(value) == 16:
+            value = f"{value}:00"
+        for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M"):
+            try:
+                return datetime.strptime(value, fmt).strftime("%Y-%m-%d %H:%M:%S")
+            except ValueError:
+                pass
+        raise ValueError("Use format YYYY-MM-DD HH:MM:SS")
+
+    @staticmethod
+    def _split_datetime_parts(raw_value) -> tuple[str | None, str | None]:
+        value = ChannelView._datetime_display_value(raw_value)
+        if not value:
+            return None, None
+        return value[:10], value[11:16] if len(value) >= 16 else None
+
+    def _set_datetime_date_part(self, attr_name: str, date_value: str | None) -> None:
+        if not date_value:
+            return
+        current = self._datetime_display_value(getattr(self, attr_name, ""))
+        time_part = current[11:19] if len(current) >= 19 else "00:00:00"
+        setattr(self, attr_name, f"{date_value} {time_part}")
+
+    def _set_datetime_time_part(self, attr_name: str, time_value: str | None) -> None:
+        if not time_value:
+            return
+        current = self._datetime_display_value(getattr(self, attr_name, ""))
+        date_part = current[:10] if len(current) >= 10 else datetime.now().strftime("%Y-%m-%d")
+        clean_time = str(time_value).strip()
+        if len(clean_time) == 5:
+            clean_time = f"{clean_time}:00"
+        setattr(self, attr_name, f"{date_part} {clean_time}")
+
+    def _build_datetime_input(self, label: str, attr_name: str, enabled_checkbox):
+        date_part, time_part = self._split_datetime_parts(getattr(self, attr_name, ""))
+        with ui.input(label).props(
+            'mask="####-##-## ##:##:##" placeholder="YYYY-MM-DD HH:MM:SS"'
+        ).classes('w-1/3') as input_field:
+            input_field.bind_value(self, attr_name)
+            with input_field.add_slot('append'):
+                with ui.button(icon='calendar_month').props('flat round dense'):
+                    with ui.menu():
+                        ui.date(
+                            value=date_part,
+                            on_change=lambda e: self._set_datetime_date_part(attr_name, e.value),
+                        )
+                        ui.time(
+                            value=time_part,
+                            on_change=lambda e: self._set_datetime_time_part(attr_name, e.value),
+                        ).props('format24h')
+        input_field.bind_enabled_from(enabled_checkbox, 'value')
+        return input_field
+
+    def _on_end_set_changed(self) -> None:
+        if self.end_set.value:
+            if not str(self._end_date_raw_value or "").strip():
+                current_ts = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                self._end_date_raw_value = current_ts
+                self.end_in.value = current_ts
+        else:
+            self._end_date_raw_value = ""
+            self.end_in.value = ""
+
     def build_ui(self, channel: Channel):
         ui.label(f'〰️ Channel: {channel.code}').classes('text-3xl font-bold text-slate-800 mb-6')
+        self._start_date_raw_value = self._datetime_display_value(channel.start_date)
+        self._end_date_raw_value = self._datetime_display_value(channel.end_date)
         
         # --- BLOCCO 1: IDENTIFICATIVI E TIPI ---
         with ui.card().classes('w-full p-6 mb-4 shadow-sm border-t-4 border-orange-500'):
@@ -91,21 +181,22 @@ class ChannelView:
                         'Set start date',
                         value=bool(channel.start_date and str(channel.start_date).strip()),
                     ).classes('shrink-0')
-                    self.start_in = ui.input(
-                        'Start Date',
-                        value=iso_to_datetime_local_field(channel.start_date),
-                    ).props('type=datetime-local').classes('w-1/3')
-                    self.start_in.bind_enabled_from(self.start_set, 'value')
+                    self.start_in = self._build_datetime_input(
+                        'Start Date (YYYY-MM-DD HH:MM:SS)',
+                        '_start_date_raw_value',
+                        self.start_set,
+                    )
                 with ui.row().classes('w-full gap-4 items-end'):
                     self.end_set = ui.checkbox(
                         'Set end date',
                         value=bool(channel.end_date and str(channel.end_date).strip()),
+                        on_change=lambda _: self._on_end_set_changed(),
                     ).classes('shrink-0')
-                    self.end_in = ui.input(
-                        'End Date',
-                        value=iso_to_datetime_local_field(channel.end_date),
-                    ).props('type=datetime-local').classes('w-1/3')
-                    self.end_in.bind_enabled_from(self.end_set, 'value')
+                    self.end_in = self._build_datetime_input(
+                        'End Date (YYYY-MM-DD HH:MM:SS)',
+                        '_end_date_raw_value',
+                        self.end_set,
+                    )
 
         # --- BLOCCO 5: COMMENTI FDSN ---
         with ui.card().classes('w-full p-6 mb-4 shadow-sm'):
@@ -171,8 +262,8 @@ class ChannelView:
         # Replica il comportamento del clone desktop: epoch senza date finché l'utente non le imposta
         self.start_set.value = False
         self.end_set.value = False
-        self.start_in.value = ""
-        self.end_in.value = ""
+        self._start_date_raw_value = ""
+        self._end_date_raw_value = ""
         ui.notify(
             "Date epoch azzerate. Spunta «Set start date», imposta l'inizio e salva per creare un nuovo epoch.",
             type="info",
@@ -201,8 +292,18 @@ class ChannelView:
         channel.sample_rate = self.sr_in.value
         channel.azimuth = self.azi_in.value
         channel.dip = self.dip_in.value
-        channel.start_date = datetime_local_to_db(bool(self.start_set.value), self.start_in.value)
-        channel.end_date = datetime_local_to_db(bool(self.end_set.value), self.end_in.value)
+        try:
+            channel.start_date = (
+                self._normalize_datetime_text(self._start_date_raw_value)
+                if self.start_set.value else None
+            )
+            channel.end_date = (
+                self._normalize_datetime_text(self._end_date_raw_value)
+                if self.end_set.value else None
+            )
+        except ValueError as e:
+            ui.notify(f"Invalid epoch date: {e}", type='negative')
+            return
         channel.sensor_id = self.sensor_cb.value
         channel.datalogger_id = self.logger_cb.value
         channel.overall_sensitivity = final_sens
@@ -240,11 +341,15 @@ class ChannelView:
         
         try:
             result = self.cha_ctrl.save_channel_with_triad_sync(channel)
+            saved_channel = result.get("channel") if isinstance(result, dict) else None
+            if not saved_channel:
+                ui.notify("Save failed: channel was not updated in the database.", type='negative')
+                return
             synced_channels = result.get("synced_channels", []) if isinstance(result, dict) else []
             ui.notify(f"Channel {code} saved successfully!", type='positive')
             if synced_channels:
                 ui.notify(
-                    "Data di fine sincronizzata per i canali fratelli.",
+                    f"Data sincronizzata anche per i canali fratelli: {', '.join(synced_channels)}.",
                     type="info",
                 )
             self.on_save()
