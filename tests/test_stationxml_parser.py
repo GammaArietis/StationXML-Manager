@@ -69,7 +69,9 @@ def test_stationxml_parser_imports_network_station_channel(app_stack, tmp_path: 
 
 
 def test_stationxml_parser_inherits_station_coordinates_on_channel(app_stack, tmp_path: Path):
-    xml_path = tmp_path / "no_channel_coords.xml"
+    # ObsPy drops channels without latitude, longitude, elevation and depth in XML.
+    # Real FDSN files often omit channel position; parsers may store 0,0 placeholders.
+    xml_path = tmp_path / "placeholder_channel_coords.xml"
     xml_path.write_text(
         """<?xml version='1.0' encoding='UTF-8'?>
 <FDSNStationXML xmlns="http://www.fdsn.org/xml/station/1" schemaVersion="1.2">
@@ -84,6 +86,9 @@ def test_stationxml_parser_inherits_station_coordinates_on_channel(app_stack, tm
       <Site><Name>OBS1</Name></Site>
       <WaterLevel>100.0</WaterLevel>
       <Channel code="HHZ" locationCode="00" startDate="2020-01-01T00:00:00Z">
+        <Latitude>0.0</Latitude>
+        <Longitude>0.0</Longitude>
+        <Elevation>0.0</Elevation>
         <Depth>0.0</Depth>
         <Azimuth>0.0</Azimuth>
         <Dip>-90.0</Dip>
