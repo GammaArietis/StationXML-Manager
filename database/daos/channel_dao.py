@@ -184,9 +184,9 @@ class ChannelDAO:
         if not row:
             return None
 
-        latitude = row["latitude"] if row["latitude"] is not None else 0.0
-        longitude = row["longitude"] if row["longitude"] is not None else 0.0
-        elevation = row["elevation"] if row["elevation"] is not None else 0.0
+        latitude = row["latitude"]
+        longitude = row["longitude"]
+        elevation = row["elevation"]
         depth = row["depth"] if row["depth"] is not None else 0.0
         azimuth = row["azimuth"] if row["azimuth"] is not None else 0.0
         dip = row["dip"] if row["dip"] is not None else 0.0

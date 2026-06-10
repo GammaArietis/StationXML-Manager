@@ -10,6 +10,7 @@ from core.models.base_models import (Network, Station, Operator, Sensor, Datalog
                                     PoleZero, Channel, ResponseFilter, Preamplifier, AnalogStage,
                                     coerce_fdsn_restricted_status)
                                     
+from utils.fdsn_coordinates import resolve_channel_position
 from utils.nrl_client import NRLManager
 
 logger = logging.getLogger(__name__)
@@ -185,7 +186,7 @@ class StationXMLParser:
                     for cha in sta:
                         if cancel_callback and cancel_callback():
                             return False
-                        self._process_channel(cha, db_sta.id)
+                        self._process_channel(cha, db_sta.id, sta)
                         current += 1
                         loc = getattr(cha, "location_code", "") or "--"
                         self._emit_progress(
@@ -326,7 +327,7 @@ class StationXMLParser:
             )
         return self.sta_ctrl.save_station(sta_model)
 
-    def _process_channel(self, obspy_cha, sta_id):
+    def _process_channel(self, obspy_cha, sta_id, obspy_sta):
         logger.info(f"  -> Parsing Channel: {obspy_cha.code}")
         start_date_str = self._format_date(obspy_cha.start_date)
         
@@ -367,14 +368,23 @@ class StationXMLParser:
 
         c_drift = getattr(obspy_cha, 'clock_drift_in_seconds_per_sample', 0.0)
 
+        ch_lat, ch_lon, ch_elev = resolve_channel_position(
+            getattr(obspy_cha, 'latitude', None),
+            getattr(obspy_cha, 'longitude', None),
+            getattr(obspy_cha, 'elevation', None),
+            obspy_sta.latitude,
+            obspy_sta.longitude,
+            obspy_sta.elevation,
+        )
+
         # 5. Model Creation and Saving
         cha_model = Channel(
             station_id=sta_id,
             code=obspy_cha.code,
             location_code=obspy_cha.location_code,
-            latitude=getattr(obspy_cha, 'latitude', 0.0),
-            longitude=getattr(obspy_cha, 'longitude', 0.0),
-            elevation=getattr(obspy_cha, 'elevation', 0.0),
+            latitude=ch_lat,
+            longitude=ch_lon,
+            elevation=ch_elev,
             depth=getattr(obspy_cha, 'depth', 0.0),
             azimuth=getattr(obspy_cha, 'azimuth', 0.0),
             dip=getattr(obspy_cha, 'dip', 0.0),

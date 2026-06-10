@@ -7,6 +7,7 @@ from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QFormLayout, QLineEdit,
                              QCompleter)
 from PyQt6.QtCore import Qt, QDateTime
 from core.models.base_models import Channel
+from utils.fdsn_coordinates import resolve_channel_position
 from utils.qt_numeric_input import apply_c_double_validator, parse_float_text
 from utils.signals import app_signals
 
@@ -54,9 +55,41 @@ class ChannelTab(QWidget):
         self.depth_input.setSuffix(" m")
         self.depth_input.setToolTip("Profondità del sensore rispetto al riferimento stazione, espressa in metri.")
 
+        self.lat_input = QDoubleSpinBox()
+        self.lat_input.setDecimals(5)
+        self.lat_input.setRange(-90.0, 90.0)
+        self.lat_input.setToolTip(
+            "Latitudine del canale in gradi decimali WGS84; se omessa in StationXML si eredita dalla stazione."
+        )
+        self.lon_input = QDoubleSpinBox()
+        self.lon_input.setDecimals(5)
+        self.lon_input.setRange(-180.0, 180.0)
+        self.lon_input.setToolTip("Longitudine del canale in gradi decimali WGS84.")
+        self.elev_input = QDoubleSpinBox()
+        self.elev_input.setDecimals(1)
+        self.elev_input.setRange(-15000.0, 10000.0)
+        self.elev_input.setSuffix(" m")
+        self.elev_input.setToolTip(
+            "Elevazione assoluta del sensore in metri sul livello medio del mare (m s.l.m.)."
+        )
+        self.copy_station_coords_btn = QPushButton("Copy from station")
+        self.copy_station_coords_btn.setToolTip(
+            "Copia latitudine, longitudine ed elevazione dalla stazione parent."
+        )
+        self.copy_station_coords_btn.clicked.connect(self._copy_station_coords_to_form)
+        coords_layout = QHBoxLayout()
+        coords_layout.setContentsMargins(0, 0, 0, 0)
+        coords_layout.addWidget(self.lat_input)
+        coords_layout.addWidget(self.lon_input)
+        coords_layout.addWidget(self.elev_input)
+        coords_layout.addWidget(self.copy_station_coords_btn)
+        coords_row = QWidget()
+        coords_row.setLayout(coords_layout)
+
         identifiers_form.addRow("Channel Code (e.g. HHZ):", self.code_input)
         identifiers_form.addRow("Location Code:", self.loc_input)
         identifiers_form.addRow("Depth:", self.depth_input)
+        identifiers_form.addRow("Lat / Lon / Elev:", coords_row)
 
         self.types_combo = QComboBox()
         self.types_combo.setEditable(True)
@@ -334,6 +367,37 @@ class ChannelTab(QWidget):
         container.setLayout(h_layout)
         return container
 
+    def _station_coords(self, station_id):
+        if not self.sta_ctrl or not station_id:
+            return None, None, None
+        station = self.sta_ctrl.get_station_by_id(station_id)
+        if not station:
+            return None, None, None
+        return station.latitude, station.longitude, station.elevation
+
+    def _set_position_inputs(self, lat, lon, elev):
+        self.lat_input.setValue(lat if lat is not None else 0.0)
+        self.lon_input.setValue(lon if lon is not None else 0.0)
+        self.elev_input.setValue(elev if elev is not None else 0.0)
+
+    def _copy_station_coords_to_form(self):
+        lat, lon, elev = self._station_coords(self.parent_station_id)
+        if lat is None and lon is None and elev is None:
+            QMessageBox.warning(self, "Warning", "Station coordinates not available.")
+            return
+        self._set_position_inputs(lat, lon, elev)
+
+    def _display_channel_coords(self, channel: Channel):
+        st_lat, st_lon, st_elev = self._station_coords(channel.station_id)
+        return resolve_channel_position(
+            channel.latitude,
+            channel.longitude,
+            channel.elevation,
+            st_lat,
+            st_lon,
+            st_elev,
+        )
+
     def _add_comment_row(self):
         row = self.comm_table.rowCount()
         self.comm_table.insertRow(row)
@@ -458,6 +522,8 @@ class ChannelTab(QWidget):
         self.types_combo.setCurrentIndex(0)
         self.restricted_combo.setCurrentIndex(0)
         self.depth_input.setValue(0.0)
+        lat, lon, elev = self._station_coords(station_id)
+        self._set_position_inputs(lat, lon, elev)
         self.sample_rate.setValue(100.0)
         self.azimuth.setValue(0.0)
         self.dip.setValue(-90.0)
@@ -496,6 +562,8 @@ class ChannelTab(QWidget):
             self.restricted_combo.setCurrentIndex(0)
 
         self.depth_input.setValue(channel.depth if channel.depth is not None else 0.0)
+        disp_lat, disp_lon, disp_elev = self._display_channel_coords(channel)
+        self._set_position_inputs(disp_lat, disp_lon, disp_elev)
         self.sample_rate.setValue(channel.sample_rate if channel.sample_rate is not None else 0.0)
         self.azimuth.setValue(channel.azimuth if channel.azimuth is not None else 0.0)
         self.dip.setValue(channel.dip if channel.dip is not None else 0.0)
@@ -610,6 +678,9 @@ class ChannelTab(QWidget):
             station_id=self.parent_station_id,
             code=code,
             location_code=final_loc,
+            latitude=self.lat_input.value(),
+            longitude=self.lon_input.value(),
+            elevation=self.elev_input.value(),
             depth=self.depth_input.value(),
             sample_rate=self.sample_rate.value(),
             azimuth=self.azimuth.value(),

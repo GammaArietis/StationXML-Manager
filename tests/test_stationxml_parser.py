@@ -64,3 +64,46 @@ def test_stationxml_parser_imports_network_station_channel(app_stack, tmp_path: 
     assert len(chans) == 1
     assert chans[0].code == "HHZ"
     assert chans[0].sample_rate == 100.0
+    assert abs(chans[0].latitude - 45.0) < 1e-6
+    assert abs(chans[0].longitude - 9.0) < 1e-6
+
+
+def test_stationxml_parser_inherits_station_coordinates_on_channel(app_stack, tmp_path: Path):
+    xml_path = tmp_path / "no_channel_coords.xml"
+    xml_path.write_text(
+        """<?xml version='1.0' encoding='UTF-8'?>
+<FDSNStationXML xmlns="http://www.fdsn.org/xml/station/1" schemaVersion="1.2">
+  <Source>PYTEST</Source>
+  <Module>ObsPy</Module>
+  <Created>2020-01-01T00:00:00Z</Created>
+  <Network code="YY" startDate="2020-01-01T00:00:00Z">
+    <Station code="OBS1" startDate="2020-01-01T00:00:00Z">
+      <Latitude>42.2364</Latitude>
+      <Longitude>14.9315</Longitude>
+      <Elevation>-100.0</Elevation>
+      <Site><Name>OBS1</Name></Site>
+      <WaterLevel>100.0</WaterLevel>
+      <Channel code="HHZ" locationCode="00" startDate="2020-01-01T00:00:00Z">
+        <Depth>0.0</Depth>
+        <Azimuth>0.0</Azimuth>
+        <Dip>-90.0</Dip>
+        <SampleRate>100.0</SampleRate>
+      </Channel>
+    </Station>
+  </Network>
+</FDSNStationXML>
+""",
+        encoding="utf-8",
+    )
+
+    ok = app_stack.parser.import_file(str(xml_path))
+    assert ok is True
+
+    stas = app_stack.sta_ctrl.get_stations_by_network(
+        app_stack.net_ctrl.get_all_networks()[0].id
+    )
+    chans = app_stack.cha_ctrl.get_channels_by_station(stas[0].id)
+    assert len(chans) == 1
+    assert abs(chans[0].latitude - 42.2364) < 1e-6
+    assert abs(chans[0].longitude - 14.9315) < 1e-6
+    assert abs(chans[0].elevation - (-100.0)) < 1e-6

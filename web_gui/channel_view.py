@@ -4,14 +4,17 @@ from datetime import datetime
 from nicegui import ui
 
 from core.models.base_models import Channel
+from utils.fdsn_coordinates import resolve_channel_position
 
 class ChannelView:
-    def __init__(self, cha_ctrl, eq_ctrl, on_save):
+    def __init__(self, cha_ctrl, eq_ctrl, on_save, sta_ctrl=None):
         self.cha_ctrl = cha_ctrl
         self.eq_ctrl = eq_ctrl
+        self.sta_ctrl = sta_ctrl
         self.on_save = on_save
         self._start_date_raw_value = None
         self._end_date_raw_value = None
+        self._parent_station_id = None
 
     @staticmethod
     def _nrl_status_icon(item) -> str:
@@ -105,10 +108,44 @@ class ChannelView:
             self._end_date_raw_value = ""
             self.end_in.value = ""
 
+    def _station_coords(self, station_id):
+        if not self.sta_ctrl or not station_id:
+            return None, None, None
+        station = self.sta_ctrl.get_station_by_id(station_id)
+        if not station:
+            return None, None, None
+        return station.latitude, station.longitude, station.elevation
+
+    def _display_channel_coords(self, channel: Channel):
+        st_lat, st_lon, st_elev = self._station_coords(channel.station_id)
+        return resolve_channel_position(
+            channel.latitude,
+            channel.longitude,
+            channel.elevation,
+            st_lat,
+            st_lon,
+            st_elev,
+        )
+
+    def _copy_station_coords_to_form(self):
+        lat, lon, elev = self._station_coords(self._parent_station_id)
+        if lat is None and lon is None and elev is None:
+            ui.notify("Station coordinates not available.", type='warning')
+            return
+        if lat is not None:
+            self.lat_in.value = lat
+        if lon is not None:
+            self.lon_in.value = lon
+        if elev is not None:
+            self.elev_in.value = elev
+        ui.notify("Coordinates copied from station.", type='info')
+
     def build_ui(self, channel: Channel):
         ui.label(f'〰️ Channel: {channel.code}').classes('text-3xl font-bold text-slate-800 mb-6')
+        self._parent_station_id = channel.station_id
         self._start_date_raw_value = self._datetime_display_value(channel.start_date)
         self._end_date_raw_value = self._datetime_display_value(channel.end_date)
+        disp_lat, disp_lon, disp_elev = self._display_channel_coords(channel)
         
         # --- BLOCCO 1: IDENTIFICATIVI E TIPI ---
         with ui.card().classes('w-full p-6 mb-4 shadow-sm border-t-4 border-orange-500'):
@@ -138,6 +175,37 @@ class ChannelView:
                     value=getattr(channel, 'restricted_status', None) or 'open',
                 ).classes('w-1/3')
                 self.restr_in.tooltip('Stato FDSN restrictedStatus applicato all epoca canale e ai dati sismici associati.')
+
+        with ui.card().classes('w-full p-6 mb-4 shadow-sm'):
+            ui.label('Position (FDSN)').classes('text-lg font-bold mb-4 text-slate-700')
+            with ui.row().classes('w-full gap-4 items-end'):
+                self.lat_in = ui.number(
+                    'Latitude',
+                    value=disp_lat if disp_lat is not None else 0.0,
+                    format='%.5f',
+                    step=0.00001,
+                ).classes('w-1/5').props(
+                    'placeholder="41.8902" '
+                    'hint="Quota del canale in gradi decimali WGS84; se omessa in StationXML si eredita dalla stazione."'
+                )
+                self.lon_in = ui.number(
+                    'Longitude',
+                    value=disp_lon if disp_lon is not None else 0.0,
+                    format='%.5f',
+                    step=0.00001,
+                ).classes('w-1/5').props(
+                    'placeholder="12.4922" '
+                    'hint="Longitudine del canale in gradi decimali WGS84."'
+                )
+                self.elev_in = ui.number(
+                    'Elevation (m)',
+                    value=disp_elev if disp_elev is not None else 0.0,
+                ).classes('w-1/5').props(
+                    'placeholder="-100.0" '
+                    'hint="Elevazione assoluta del sensore in metri sul livello medio del mare (m s.l.m.)."'
+                )
+                copy_btn = ui.button('Copy from station', on_click=self._copy_station_coords_to_form).props('outline')
+                copy_btn.tooltip('Copia latitudine, longitudine ed elevazione dalla stazione parent.')
 
         # --- BLOCCO 2: PARAMETRI TECNICI ---
         with ui.card().classes('w-full p-6 mb-4 shadow-sm'):
@@ -325,6 +393,9 @@ class ChannelView:
 
         channel.code = code
         channel.location_code = final_loc
+        channel.latitude = self.lat_in.value
+        channel.longitude = self.lon_in.value
+        channel.elevation = self.elev_in.value
         channel.depth = self.depth_in.value
         channel.sample_rate = self.sr_in.value
         channel.azimuth = self.azi_in.value

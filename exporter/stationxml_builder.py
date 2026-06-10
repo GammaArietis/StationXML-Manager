@@ -14,6 +14,8 @@ from obspy.core.inventory.util import Operator, Person, PhoneNumber
 from obspy import UTCDateTime
 from obspy.core.inventory import Comment
 
+from utils.fdsn_coordinates import resolve_channel_position
+
 logger = logging.getLogger(__name__)
 
 ProgressCallback = Optional[Callable[[int, int, str], None]]
@@ -285,9 +287,14 @@ class StationXMLExporter:
                         f"Channel {sta.code}.{cha.code} ({loc})…",
                     )
 
-                    lat = cha.latitude if cha.latitude is not None else sta.latitude
-                    lon = cha.longitude if cha.longitude is not None else sta.longitude
-                    elev = cha.elevation if cha.elevation is not None else sta.elevation
+                    lat, lon, elev = resolve_channel_position(
+                        cha.latitude,
+                        cha.longitude,
+                        cha.elevation,
+                        sta.latitude,
+                        sta.longitude,
+                        sta.elevation,
+                    )
                     
                     obspy_equip_sensor = None
                     obspy_response = None

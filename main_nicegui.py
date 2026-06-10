@@ -677,7 +677,7 @@ def index():
     # Viste modulari
     net_view = NetworkView(net_ctrl, eq_ctrl, lambda: build_tree())
     sta_view = StationView(sta_ctrl, eq_ctrl, net_ctrl, cha_ctrl, lambda: build_tree())
-    cha_view = ChannelView(cha_ctrl, eq_ctrl, lambda: build_tree())
+    cha_view = ChannelView(cha_ctrl, eq_ctrl, lambda: build_tree(), sta_ctrl)
 
     # --- 7. LOGICA ALBERO ---
     def prepare_new(entity_type):
