@@ -1,0 +1,3 @@
+[submodule "utils/AROL_Library"]
+	path = utils/AROL_Library
+	url = https://gitlab.com/resif/arol.git
