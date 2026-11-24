@@ -23,6 +23,10 @@ CancelCallback = Optional[Callable[[], bool]]
 
 
 class StationXMLExporter:
+    # Same station code within this distance is one site (CLTB moved MN -> IV).
+    # 0.05 degrees is about 5 km, enough for a resurvey, not for a different station.
+    SITE_MATCH_DEGREES = 0.05
+
     def __init__(self, net_ctrl, sta_ctrl, cha_ctrl, eq_ctrl):
         self.net_ctrl = net_ctrl
         self.sta_ctrl = sta_ctrl
@@ -46,13 +50,71 @@ class StationXMLExporter:
         except Exception as exc:
             logger.warning("export progress_callback failed: %s", exc)
 
+    def _same_site(self, anchor, other) -> bool:
+        """True when two rows are the same station kept under successive networks."""
+        if (anchor.code or "").strip().upper() != (other.code or "").strip().upper():
+            return False
+        if anchor.id is not None and anchor.id == other.id:
+            return True
+        try:
+            alat = float(anchor.latitude)
+            alon = float(anchor.longitude)
+            blat = float(other.latitude)
+            blon = float(other.longitude)
+        except (TypeError, ValueError):
+            return False
+        return (
+            abs(alat - blat) <= self.SITE_MATCH_DEGREES
+            and abs(alon - blon) <= self.SITE_MATCH_DEGREES
+        )
+
+    def sibling_station_ids(self, station_id: int) -> List[int]:
+        """Station rows that belong in one StationXML with this id."""
+        target = self.sta_ctrl.get_station_by_id(station_id)
+        if target is None:
+            return [station_id]
+        ids: List[int] = []
+        for net in self.net_ctrl.get_all_networks():
+            for sta in self.sta_ctrl.get_stations_by_network(net.id):
+                if sta.id is not None and self._same_site(target, sta):
+                    ids.append(sta.id)
+        if station_id not in ids:
+            ids.append(station_id)
+        return ids
+
+    def representative_station_ids(self, station_ids: List[int]) -> List[int]:
+        """One id per physical site, preserving the caller's order."""
+        covered = set()
+        chosen: List[int] = []
+        for station_id in station_ids:
+            group = set(self.sibling_station_ids(station_id))
+            if group & covered:
+                continue
+            covered |= group
+            chosen.append(station_id)
+        return chosen
+
+    @staticmethod
+    def _network_epoch_sort_key(stations, net) -> Tuple[bool, str, str]:
+        dates = [s.start_date for s in stations if s.start_date]
+        earliest = min(dates) if dates else ""
+        return (not dates, earliest, net.code or "")
+
     def _iter_export_networks(self, target_station_id: Optional[int]):
+        sibling_ids = None
+        if target_station_id is not None:
+            sibling_ids = set(self.sibling_station_ids(target_station_id))
+        selected = []
         for net in self.net_ctrl.get_all_networks():
             stations = self.sta_ctrl.get_stations_by_network(net.id)
-            if target_station_id is not None:
-                stations = [s for s in stations if s.id == target_station_id]
+            if sibling_ids is not None:
+                stations = [s for s in stations if s.id in sibling_ids]
             if not stations:
                 continue
+            selected.append((net, stations))
+        if sibling_ids is not None:
+            selected.sort(key=lambda item: self._network_epoch_sort_key(item[1], item[0]))
+        for net, stations in selected:
             yield net, stations
 
     def _count_export_units(self, target_station_id: Optional[int]) -> Tuple[int, int, int]:
@@ -655,7 +717,7 @@ class StationXMLExporter:
         progress_callback: ProgressCallback = None,
         cancel_callback: CancelCallback = None,
     ) -> Optional[Inventory]:
-        """Build an ObsPy Inventory containing exactly one station and its parent network."""
+        """Build one Inventory for this station, including every network epoch of the same site."""
         return self.build_inventory(
             target_station_id=station_id,
             output_path=output_path,
@@ -694,6 +756,7 @@ class StationXMLExporter:
         """
         if not station_ids:
             raise ValueError("station_ids must not be empty")
+        station_ids = self.representative_station_ids(station_ids)
         n = len(station_ids)
         total = n + 2
         cur = 0

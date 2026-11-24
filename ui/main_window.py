@@ -699,15 +699,22 @@ class MainWindow(QMainWindow):
         if new_yasmine_id is None:
             raise RuntimeError(f"Yasmine upload failed for {station.code}.")
 
-        if not self.sta_ctrl.mark_as_synced(station, str(new_yasmine_id)):
-            raise RuntimeError(
-                f"Unable to save Yasmine sync state for {station.code} in local DB."
-            )
+        synced_ids = []
+        for sid in exporter.sibling_station_ids(station_id):
+            sibling = self.sta_ctrl.get_station_by_id(sid)
+            if sibling is None:
+                continue
+            if not self.sta_ctrl.mark_as_synced(sibling, str(new_yasmine_id)):
+                raise RuntimeError(
+                    f"Unable to save Yasmine sync state for {sibling.code} in local DB."
+                )
+            synced_ids.append(sid)
 
         return {
             "station_id": station_id,
             "station_code": station.code,
             "new_yasmine_id": new_yasmine_id,
+            "synced_ids": synced_ids,
         }
 
     def _job_sync_station_to_yasmine(self, station_id, report_progress=None, is_cancelled=None):
@@ -796,6 +803,7 @@ class MainWindow(QMainWindow):
         consecutive_errors = 0
         interrupted_by_server = False
         total = len(red_station_ids)
+        covered_ids = set()
 
         for i, station_id in enumerate(red_station_ids):
             if is_cancelled and is_cancelled():
@@ -803,6 +811,17 @@ class MainWindow(QMainWindow):
 
             station = self.sta_ctrl.get_station_by_id(station_id)
             station_code = station.code if station else f"id={station_id}"
+            if station_id in covered_ids:
+                updated_count += 1
+                if report_progress:
+                    report_progress(
+                        {
+                            "current": i + 1,
+                            "total": total,
+                            "station_code": station_code,
+                        }
+                    )
+                continue
 
             if report_progress:
                 report_progress(
@@ -814,7 +833,8 @@ class MainWindow(QMainWindow):
                 )
 
             try:
-                self._perform_yasmine_sync_for_station(station_id)
+                payload = self._perform_yasmine_sync_for_station(station_id)
+                covered_ids.update(payload.get("synced_ids") or [station_id])
                 updated_count += 1
                 consecutive_errors = 0
                 app_signals.station_updated.emit()

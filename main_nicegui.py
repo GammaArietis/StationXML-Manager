@@ -559,6 +559,7 @@ def index():
             await yield_ui()
             remote_list = await run.io_bound(client.get_all_imported_xmls)
             success_count = 0
+            covered_ids = set()
             totale = len(red_stations)
             progress_bar.set_value(job_progress_fraction(0, totale))
             status_label.set_text(f"Pronto — 0/{totale} ({job_progress_percent(0, totale):.2f}%)")
@@ -566,6 +567,15 @@ def index():
 
             for i, station in enumerate(red_stations):
                 done = i + 1
+                if station.id in covered_ids:
+                    success_count += 1
+                    progress_bar.set_value(job_progress_fraction(done, totale))
+                    status_label.set_text(
+                        f"Già incluso: {station.code} — {done}/{totale} "
+                        f"({job_progress_percent(done, totale):.2f}%)"
+                    )
+                    await yield_ui()
+                    continue
                 pct = job_progress_percent(done - 1, totale)
                 status_label.set_text(
                     f"{station.code}: controllo duplicati — {done - 1}/{totale} ({pct:.2f}%)"
@@ -606,7 +616,12 @@ def index():
                 new_id = await run.io_bound(client.upload_xml, xml_bytes, station.code)
 
                 if new_id:
-                    await run.io_bound(sta_ctrl.mark_as_synced, station, new_id)
+                    for sid in exporter.sibling_station_ids(station.id):
+                        sibling = sta_ctrl.get_station_by_id(sid)
+                        if sibling is None:
+                            continue
+                        await run.io_bound(sta_ctrl.mark_as_synced, sibling, new_id)
+                        covered_ids.add(sid)
                     success_count += 1
 
                 progress_bar.set_value(job_progress_fraction(done, totale))

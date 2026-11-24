@@ -16,8 +16,8 @@ class StationXMLWebExportController:
     Encapsulates export rules used by the web UI.
 
     Export policy:
-      - one selected station -> one XML payload;
-      - multiple selected stations -> ZIP containing one XML per station.
+      - one physical site -> one XML, with every network epoch of that station;
+      - several sites -> ZIP containing one XML per site.
     """
 
     def __init__(self, net_ctrl, sta_ctrl, cha_ctrl, eq_ctrl) -> None:
@@ -38,6 +38,7 @@ class StationXMLWebExportController:
         """Write one StationXML file per selected station into output_dir."""
         if not selected_rows:
             raise ValueError("Nessuna stazione selezionata")
+        selected_rows = self._rows_one_per_site(selected_rows)
         target_dir = Path(output_dir)
         target_dir.mkdir(parents=True, exist_ok=True)
         used: set[str] = set()
@@ -73,7 +74,9 @@ class StationXMLWebExportController:
         if not selected_rows:
             raise ValueError("Nessuna stazione selezionata")
 
-        ids = [int(r["id"] if isinstance(r, dict) else r) for r in selected_rows]
+        ids = self._exporter.representative_station_ids(
+            [int(r["id"] if isinstance(r, dict) else r) for r in selected_rows]
+        )
         if len(ids) > 1:
             payload = self._exporter.build_zip_bytes_for_station_ids(
                 ids,
@@ -93,3 +96,11 @@ class StationXMLWebExportController:
         if payload is None:
             return None
         return payload, self._exporter.station_xml_filename(station_id)
+
+    def _rows_one_per_site(self, selected_rows: List[Any]) -> List[Any]:
+        by_id = {
+            int(row["id"] if isinstance(row, dict) else row): row
+            for row in selected_rows
+        }
+        unique_ids = self._exporter.representative_station_ids(list(by_id))
+        return [by_id[station_id] for station_id in unique_ids]

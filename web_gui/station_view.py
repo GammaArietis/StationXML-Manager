@@ -250,7 +250,13 @@ class StationView:
                 new_id = client.upload_xml(xml_bytes, db_sta.code)
                 if not new_id:
                     raise RuntimeError("Upload Yasmine fallito (nessun ID restituito).")
-                self.sta_ctrl.mark_as_synced(db_sta, str(new_id))
+                marked = False
+                for sid in exporter.sibling_station_ids(db_sta.id):
+                    sibling = self.sta_ctrl.get_station_by_id(sid)
+                    if sibling and self.sta_ctrl.mark_as_synced(sibling, str(new_id)):
+                        marked = marked or sibling.id == db_sta.id
+                if not marked:
+                    raise RuntimeError("Impossibile salvare lo stato di sync Yasmine.")
                 return str(new_id), f"{db_sta.code}.xml"
 
             try:
